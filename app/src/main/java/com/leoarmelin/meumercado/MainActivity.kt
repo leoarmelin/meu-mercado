@@ -1,66 +1,56 @@
 package com.leoarmelin.meumercado
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.material.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.google.mlkit.vision.barcode.BarcodeScannerOptions
-import com.google.mlkit.vision.barcode.BarcodeScanning
-import com.google.mlkit.vision.barcode.common.Barcode
-import com.leoarmelin.meumercado.components.CameraView
+import com.leoarmelin.meumercado.components.navigation.AppNavHost
 import com.leoarmelin.meumercado.handlers.PermissionsHandler
+import com.leoarmelin.meumercado.models.navigation.NavDestination
 import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
+import com.leoarmelin.meumercado.viewmodels.CameraViewModel
+import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 
 @androidx.camera.core.ExperimentalGetImage
 class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
-    private val permissionsHandler = PermissionsHandler(this, this)
-    var isPermissionGranted by mutableStateOf(false)
+    val permissionsHandler = PermissionsHandler(this, this)
+
+    private val cameraViewModel: CameraViewModel by viewModels()
+    private val navigationViewModel: NavigationViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val barcodeScannerOptions = BarcodeScannerOptions.Builder()
-            .setBarcodeFormats(
-                Barcode.FORMAT_QR_CODE,
-                Barcode.FORMAT_AZTEC
-            ).build()
-        val barcodeScanner = BarcodeScanning.getClient(barcodeScannerOptions)
-
         setContent {
             MeuMercadoTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
+                val scaffoldState = rememberScaffoldState()
+
+                Scaffold(
+                    scaffoldState = scaffoldState,
+                    modifier = Modifier.fillMaxSize()
                 ) {
-                    if (isPermissionGranted) {
-                        CameraView(
-                            modifier = Modifier.fillMaxSize(),
-                            barcodeScanner = barcodeScanner,
-                            barcodeSuccessCallback = { url -> Log.d("Aoba", "url:$url") },
-                            barcodeTypeCallback = { Log.d("Aoba", "Unexpected code type")},
-                            barcodeFailureCallback = { errorMessage -> Log.d("Aoba", "Failed: $errorMessage") }
-                        )
-                    } else {
-                        permissionsHandler.requestCameraPermission()
-                    }
+                    AppNavHost(
+                        cameraViewModel = cameraViewModel,
+                        navigationViewModel = navigationViewModel,
+                        scaffoldState = scaffoldState
+                    )
                 }
             }
         }
     }
 
     override fun onGrantedCameraAccess() {
-        isPermissionGranted = true
+        cameraViewModel.setCameraPermissionState(true)
+        navigationViewModel.setRoute(NavDestination.Camera.routeName)
     }
 
     override fun onNotGrantedCameraAccess() {
-        isPermissionGranted = false
+        cameraViewModel.setCameraPermissionState(false)
     }
 
     override fun onShowCameraUIAccess() {
