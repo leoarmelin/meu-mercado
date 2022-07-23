@@ -36,7 +36,7 @@ fun AppNavHost(
                     return@BackHandler
                 }
                 coroutineScope.launch {
-                    scaffoldState.snackbarHostState.showSnackbar("Press again to close the app.")
+                    scaffoldState.snackbarHostState.showSnackbar("Pressione novamente para fechar.")
                     closeCount = 0
                 }
             }
@@ -52,7 +52,10 @@ fun AppNavHost(
         }
 
         composable(NavDestination.Camera.routeName) {
-            CameraScreen(cameraViewModel)
+            CameraScreen(
+                cameraViewModel = cameraViewModel,
+                navigationViewModel = navigationViewModel
+            )
         }
     }
 
