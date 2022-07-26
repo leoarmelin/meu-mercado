@@ -1,4 +1,4 @@
-package com.leoarmelin.meumercado.components.navigation
+package com.leoarmelin.meumercado.ui.navigation
 
 import android.app.Activity
 import androidx.activity.compose.BackHandler

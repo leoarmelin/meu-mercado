@@ -9,7 +9,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.leoarmelin.meumercado.components.navigation.AppNavHost
+import com.leoarmelin.meumercado.ui.navigation.AppNavHost
 import com.leoarmelin.meumercado.handlers.PermissionsHandler
 import com.leoarmelin.meumercado.models.navigation.NavDestination
 import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
