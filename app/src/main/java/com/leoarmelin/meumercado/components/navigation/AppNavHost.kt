@@ -9,8 +9,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.leoarmelin.meumercado.models.navigation.NavDestination
-import com.leoarmelin.meumercado.screens.CameraScreen
-import com.leoarmelin.meumercado.screens.HomeScreen
+import com.leoarmelin.meumercado.ui.screens.CameraScreen
+import com.leoarmelin.meumercado.ui.screens.HomeScreen
 import com.leoarmelin.meumercado.viewmodels.CameraViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 import kotlinx.coroutines.launch

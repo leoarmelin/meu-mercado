@@ -1,4 +1,4 @@
-package com.leoarmelin.meumercado.screens
+package com.leoarmelin.meumercado.ui.screens
 
 import android.util.Log
 import androidx.compose.foundation.layout.Box
