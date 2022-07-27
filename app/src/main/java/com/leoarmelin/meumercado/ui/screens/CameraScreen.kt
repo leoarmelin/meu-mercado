@@ -22,6 +22,7 @@ import com.leoarmelin.meumercado.extensions.gradientBackground
 import com.leoarmelin.meumercado.extensions.noRippleClickable
 import com.leoarmelin.meumercado.models.api.ResultState
 import com.leoarmelin.meumercado.models.navigation.NavDestination
+import com.leoarmelin.meumercado.ui.components.LoadingDialog
 import com.leoarmelin.meumercado.viewmodels.CameraViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 
@@ -45,8 +46,23 @@ fun CameraScreen(
     var isSearching by remember { mutableStateOf(false) }
 
     LaunchedEffect(cameraViewModel.ticketResultState) {
-        if (cameraViewModel.ticketResultState is ResultState.Success) {
-            navigationViewModel.setRoute(NavDestination.Ticket.routeName)
+        when (val result = cameraViewModel.ticketResultState) {
+            is ResultState.Loading -> {
+                Log.d("Aoba", "Loading")
+            }
+
+            is ResultState.Success -> {
+                Log.d("Aoba", "Success")
+                navigationViewModel.setRoute(NavDestination.Ticket.routeName)
+            }
+
+            is ResultState.Error -> {
+                Log.d("Aoba", "Error ${result.exception}")
+            }
+
+            else -> {
+                Log.d("Aoba", "else :)")
+            }
         }
     }
 
@@ -105,5 +121,7 @@ fun CameraScreen(
                     .padding(horizontal = 9.dp, vertical = 5.dp),
             )
         }
+
+        LoadingDialog(cameraViewModel.ticketResultState == ResultState.Loading)
     }
 }

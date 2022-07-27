@@ -8,8 +8,16 @@ import com.leoarmelin.meumercado.models.navigation.NavDestination
 
 class NavigationViewModel : ViewModel() {
     var currentRoute by mutableStateOf(NavDestination.Home.routeName)
+    var lastRoute by mutableStateOf<String?>(null)
 
     fun setRoute(route: String) {
+        lastRoute = currentRoute
         currentRoute = route
+    }
+
+    fun popBack() {
+        val currentLastRoute = lastRoute ?: return
+        currentRoute = currentLastRoute
+        lastRoute = null
     }
 }

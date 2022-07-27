@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.leoarmelin.meumercado.models.api.ResultState
 import com.leoarmelin.meumercado.models.navigation.NavDestination
 import com.leoarmelin.meumercado.ui.screens.CameraScreen
 import com.leoarmelin.meumercado.ui.screens.HomeScreen
@@ -62,6 +63,11 @@ fun AppNavHost(
                 }
             }
             NavDestination.Camera.routeName -> {
+                navigationViewModel.popBack()
+            }
+            NavDestination.Ticket.routeName -> {
+                if (cameraViewModel.ticketResultState == ResultState.Loading) return@BackHandler
+
                 navigationViewModel.setRoute(NavDestination.Home.routeName)
             }
         }
