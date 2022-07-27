@@ -20,6 +20,7 @@ import com.leoarmelin.meumercado.R
 import com.leoarmelin.meumercado.components.CameraView
 import com.leoarmelin.meumercado.extensions.gradientBackground
 import com.leoarmelin.meumercado.extensions.noRippleClickable
+import com.leoarmelin.meumercado.models.api.ResultState
 import com.leoarmelin.meumercado.models.navigation.NavDestination
 import com.leoarmelin.meumercado.viewmodels.CameraViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
@@ -43,9 +44,9 @@ fun CameraScreen(
 
     var isSearching by remember { mutableStateOf(false) }
 
-    SideEffect {
-        if (cameraViewModel.ticket != null) {
-            navigationViewModel.setRoute(NavDestination.Home.routeName)
+    LaunchedEffect(cameraViewModel.ticketResultState) {
+        if (cameraViewModel.ticketResultState is ResultState.Success) {
+            navigationViewModel.setRoute(NavDestination.Ticket.routeName)
         }
     }
 

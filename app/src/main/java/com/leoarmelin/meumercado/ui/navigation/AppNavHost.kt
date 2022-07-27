@@ -13,6 +13,8 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.leoarmelin.meumercado.models.navigation.NavDestination
 import com.leoarmelin.meumercado.ui.screens.CameraScreen
 import com.leoarmelin.meumercado.ui.screens.HomeScreen
+import com.leoarmelin.meumercado.ui.screens.TicketScreen
+import com.leoarmelin.meumercado.ui.theme.Primary800
 import com.leoarmelin.meumercado.ui.theme.Secondary50
 import com.leoarmelin.meumercado.viewmodels.CameraViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
@@ -39,6 +41,10 @@ fun AppNavHost(
         NavDestination.Camera.routeName -> {
             systemUiController.setStatusBarColor(Color.Black)
             systemUiController.setNavigationBarColor(Color.Black)
+        }
+        NavDestination.Ticket.routeName -> {
+            systemUiController.setStatusBarColor(Secondary50)
+            systemUiController.setNavigationBarColor(Primary800)
         }
     }
 
@@ -71,6 +77,10 @@ fun AppNavHost(
                 cameraViewModel = cameraViewModel,
                 navigationViewModel = navigationViewModel
             )
+        }
+        
+        composable(NavDestination.Ticket.routeName) {
+            TicketScreen(cameraViewModel = cameraViewModel)
         }
     }
 
