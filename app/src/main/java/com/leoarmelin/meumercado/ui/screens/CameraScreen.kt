@@ -17,7 +17,7 @@ import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.leoarmelin.meumercado.R
-import com.leoarmelin.meumercado.components.CameraView
+import com.leoarmelin.meumercado.ui.components.CameraView
 import com.leoarmelin.meumercado.extensions.gradientBackground
 import com.leoarmelin.meumercado.extensions.noRippleClickable
 import com.leoarmelin.meumercado.models.api.ResultState

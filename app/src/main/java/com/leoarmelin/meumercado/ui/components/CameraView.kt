@@ -1,4 +1,4 @@
-package com.leoarmelin.meumercado.components
+package com.leoarmelin.meumercado.ui.components
 
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis

@@ -13,7 +13,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import com.leoarmelin.meumercado.components.ProductList
+import com.leoarmelin.meumercado.ui.components.ProductList
 import com.leoarmelin.meumercado.extensions.toMoney
 import com.leoarmelin.meumercado.ui.theme.Primary800
 import com.leoarmelin.meumercado.ui.theme.Secondary50

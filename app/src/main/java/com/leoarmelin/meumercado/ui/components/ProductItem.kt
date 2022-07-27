@@ -1,4 +1,4 @@
-package com.leoarmelin.meumercado.components
+package com.leoarmelin.meumercado.ui.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon

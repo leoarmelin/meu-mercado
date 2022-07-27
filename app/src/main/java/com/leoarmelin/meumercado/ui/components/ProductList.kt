@@ -1,4 +1,4 @@
-package com.leoarmelin.meumercado.components
+package com.leoarmelin.meumercado.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
