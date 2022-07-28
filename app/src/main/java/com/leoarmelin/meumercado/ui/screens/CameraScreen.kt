@@ -105,7 +105,7 @@ fun CameraScreen(
                     .size(30.dp)
                     .noRippleClickable {
                         if (cameraViewModel.ticketResultState == ResultState.Loading) return@noRippleClickable
-                        navigationViewModel.setRoute(NavDestination.Home.routeName)
+                        navigationViewModel.setRoute(NavDestination.Start.routeName)
                     }
                     .padding(6.dp),
                 tint = Color.White

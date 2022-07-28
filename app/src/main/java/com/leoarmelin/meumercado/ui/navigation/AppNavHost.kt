@@ -13,7 +13,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.leoarmelin.meumercado.models.api.ResultState
 import com.leoarmelin.meumercado.models.navigation.NavDestination
 import com.leoarmelin.meumercado.ui.screens.CameraScreen
-import com.leoarmelin.meumercado.ui.screens.HomeScreen
+import com.leoarmelin.meumercado.ui.screens.StartScreen
 import com.leoarmelin.meumercado.ui.screens.TicketScreen
 import com.leoarmelin.meumercado.ui.theme.Primary800
 import com.leoarmelin.meumercado.ui.theme.Secondary50
@@ -35,7 +35,7 @@ fun AppNavHost(
     var closeCount by remember { mutableStateOf(0) }
 
     when (navigationViewModel.currentRoute) {
-        NavDestination.Home.routeName -> {
+        NavDestination.Start.routeName -> {
             systemUiController.setStatusBarColor(Secondary50)
             systemUiController.setNavigationBarColor(Secondary50)
         }
@@ -51,7 +51,7 @@ fun AppNavHost(
 
     BackHandler {
         when (navigationViewModel.currentRoute) {
-            NavDestination.Home.routeName -> {
+            NavDestination.Start.routeName -> {
                 closeCount++
                 if (closeCount == 2) {
                     activity?.finish()
@@ -68,14 +68,14 @@ fun AppNavHost(
             NavDestination.Ticket.routeName -> {
                 if (cameraViewModel.ticketResultState == ResultState.Loading) return@BackHandler
 
-                navigationViewModel.setRoute(NavDestination.Home.routeName)
+                navigationViewModel.setRoute(NavDestination.Start.routeName)
             }
         }
     }
 
-    NavHost(navController = navController, startDestination = NavDestination.Home.routeName) {
-        composable(NavDestination.Home.routeName) {
-            HomeScreen(navigationViewModel, cameraViewModel.isPermissionGranted)
+    NavHost(navController = navController, startDestination = NavDestination.Start.routeName) {
+        composable(NavDestination.Start.routeName) {
+            StartScreen(navigationViewModel, cameraViewModel.isPermissionGranted)
         }
 
         composable(NavDestination.Camera.routeName) {

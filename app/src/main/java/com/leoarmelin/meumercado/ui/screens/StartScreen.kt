@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 
 @androidx.camera.core.ExperimentalGetImage
 @Composable
-fun HomeScreen(
+fun StartScreen(
     navigationViewModel: NavigationViewModel,
     isCameraPermissionGranted: Boolean,
 ) {
