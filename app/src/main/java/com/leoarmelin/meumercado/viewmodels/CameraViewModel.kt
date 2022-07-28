@@ -1,5 +1,6 @@
 package com.leoarmelin.meumercado.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -30,6 +31,7 @@ class CameraViewModel(
                 is Result.Loading -> {}
                 is Result.Success -> {
                     ticket = result.data
+                    Log.d("Aoba", "${result.data}")
                     ticketResultState = ResultState.Success
                 }
                 is Result.Error -> {

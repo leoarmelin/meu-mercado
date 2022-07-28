@@ -13,7 +13,6 @@ import com.leoarmelin.meumercado.R
 import com.leoarmelin.meumercado.extensions.toMoney
 import com.leoarmelin.meumercado.extensions.unityAmount
 import com.leoarmelin.meumercado.models.Product
-import com.leoarmelin.meumercado.ui.theme.Gray300
 import com.leoarmelin.meumercado.ui.theme.Gray900
 import com.leoarmelin.meumercado.ui.theme.Secondary800
 
@@ -52,15 +51,6 @@ fun ProductItem(product: Product) {
             text = product.price.toMoney(),
             style = MaterialTheme.typography.h5,
             color = Secondary800
-        )
-
-        Icon(
-            painter = painterResource(id = R.drawable.ic_drag),
-            contentDescription = "Pressione e arraste este ícone para trocar os itens de ordem.",
-            tint = Gray300,
-            modifier = Modifier
-                .padding(start = 30.dp)
-                .size(16.dp)
         )
     }
 }

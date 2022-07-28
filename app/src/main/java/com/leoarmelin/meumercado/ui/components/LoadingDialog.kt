@@ -18,7 +18,7 @@ import com.leoarmelin.meumercado.R
 
 @Composable
 fun LoadingDialog(isVisible: Boolean) {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.test))
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading))
     val progress by animateLottieCompositionAsState(
         composition = composition,
         iterations = LottieConstants.IterateForever

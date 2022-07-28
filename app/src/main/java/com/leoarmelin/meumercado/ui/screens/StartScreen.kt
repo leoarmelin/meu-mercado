@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.leoarmelin.meumercado.R
 import com.leoarmelin.meumercado.extensions.getActivity
 import com.leoarmelin.meumercado.models.navigation.NavDestination
@@ -21,6 +22,7 @@ import com.leoarmelin.meumercado.ui.theme.Secondary800
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 import kotlinx.coroutines.launch
 
+@ExperimentalPagerApi
 @androidx.camera.core.ExperimentalGetImage
 @Composable
 fun StartScreen(

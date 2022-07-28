@@ -9,18 +9,22 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.leoarmelin.meumercado.ui.navigation.AppNavHost
 import com.leoarmelin.meumercado.handlers.PermissionsHandler
 import com.leoarmelin.meumercado.models.navigation.NavDestination
 import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 import com.leoarmelin.meumercado.viewmodels.CameraViewModel
+import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 
+@ExperimentalPagerApi
 @androidx.camera.core.ExperimentalGetImage
 class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
     val permissionsHandler = PermissionsHandler(this, this)
 
     private val cameraViewModel: CameraViewModel by viewModels()
+    private val mainViewModel: MainViewModel by viewModels()
     private val navigationViewModel: NavigationViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,12 +36,14 @@ class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
 
                 Scaffold(
                     scaffoldState = scaffoldState,
-                    modifier = Modifier.fillMaxSize()
-                ) {
+                    modifier = Modifier.fillMaxSize(),
+                ) { padding ->
                     AppNavHost(
                         cameraViewModel = cameraViewModel,
+                        mainViewModel = mainViewModel,
                         navigationViewModel = navigationViewModel,
-                        scaffoldState = scaffoldState
+                        scaffoldState = scaffoldState,
+                        padding = padding
                     )
                 }
             }
