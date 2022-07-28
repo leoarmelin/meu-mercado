@@ -104,6 +104,7 @@ fun CameraScreen(
                     .align(Alignment.TopStart)
                     .size(30.dp)
                     .noRippleClickable {
+                        if (cameraViewModel.ticketResultState == ResultState.Loading) return@noRippleClickable
                         navigationViewModel.setRoute(NavDestination.Home.routeName)
                     }
                     .padding(6.dp),
