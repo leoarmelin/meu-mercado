@@ -5,12 +5,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -20,7 +18,7 @@ import com.leoarmelin.meumercado.models.navigation.NavDestination
 import com.leoarmelin.meumercado.ui.components.BottomCamera
 import com.leoarmelin.meumercado.ui.components.HomeTabs
 import com.leoarmelin.meumercado.ui.theme.Secondary50
-import com.leoarmelin.meumercado.viewmodels.MainViewModel
+import com.leoarmelin.meumercado.viewmodels.CameraViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 import kotlinx.coroutines.launch
 
@@ -28,7 +26,7 @@ import kotlinx.coroutines.launch
 @ExperimentalGetImage
 @Composable
 fun HomeScreen(
-    mainViewModel: MainViewModel,
+    cameraViewModel: CameraViewModel,
     navigationViewModel: NavigationViewModel,
     isCameraPermissionGranted: Boolean,
 ) {
@@ -58,7 +56,10 @@ fun HomeScreen(
             ) { page ->
                 when (page) {
                     0 -> ComingSoonTab()
-                    1 -> MyTicketsTab(mainViewModel.userSavedTickets)
+                    1 -> MyTicketsTab(cameraViewModel.userSavedTickets) { ticket ->
+                            cameraViewModel.ticket = ticket
+                            navigationViewModel.setRoute(NavDestination.Ticket.routeName)
+                    }
                 }
             }
         }

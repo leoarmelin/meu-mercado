@@ -20,10 +20,9 @@ import com.leoarmelin.meumercado.ui.screens.CameraScreen
 import com.leoarmelin.meumercado.ui.screens.StartScreen
 import com.leoarmelin.meumercado.ui.screens.TicketScreen
 import com.leoarmelin.meumercado.ui.screens.home_screen.HomeScreen
-import com.leoarmelin.meumercado.ui.theme.Primary800
+import com.leoarmelin.meumercado.ui.theme.Primary500
 import com.leoarmelin.meumercado.ui.theme.Secondary50
 import com.leoarmelin.meumercado.viewmodels.CameraViewModel
-import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 import kotlinx.coroutines.launch
 
@@ -33,7 +32,6 @@ import kotlinx.coroutines.launch
 fun AppNavHost(
     scaffoldState: ScaffoldState,
     cameraViewModel: CameraViewModel,
-    mainViewModel: MainViewModel,
     navigationViewModel: NavigationViewModel,
     padding: PaddingValues
 ) {
@@ -54,11 +52,11 @@ fun AppNavHost(
         }
         NavDestination.Ticket.routeName -> {
             systemUiController.setStatusBarColor(Secondary50)
-            systemUiController.setNavigationBarColor(Primary800)
+            systemUiController.setNavigationBarColor(Primary500)
         }
         NavDestination.Home.routeName -> {
             systemUiController.setStatusBarColor(Secondary50)
-            systemUiController.setNavigationBarColor(Primary800)
+            systemUiController.setNavigationBarColor(Primary500)
         }
     }
 
@@ -81,7 +79,7 @@ fun AppNavHost(
             NavDestination.Ticket.routeName -> {
                 if (cameraViewModel.ticketResultState == ResultState.Loading) return@BackHandler
 
-                navigationViewModel.setRoute(NavDestination.Start.routeName)
+                navigationViewModel.setRoute(NavDestination.Home.routeName)
             }
             NavDestination.Home.routeName -> {
                 closeCount++
@@ -114,14 +112,18 @@ fun AppNavHost(
         }
 
         composable(NavDestination.Ticket.routeName) {
-            TicketScreen(cameraViewModel = cameraViewModel)
+            TicketScreen(
+                cameraViewModel = cameraViewModel,
+                navigationViewModel = navigationViewModel,
+                isCameraPermissionGranted = cameraViewModel.isPermissionGranted
+            )
         }
 
         composable(NavDestination.Home.routeName) {
             HomeScreen(
-                mainViewModel = mainViewModel,
+                cameraViewModel = cameraViewModel,
                 navigationViewModel = navigationViewModel,
-                cameraViewModel.isPermissionGranted
+                isCameraPermissionGranted = cameraViewModel.isPermissionGranted
             )
         }
     }

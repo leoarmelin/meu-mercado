@@ -15,7 +15,6 @@ import com.leoarmelin.meumercado.handlers.PermissionsHandler
 import com.leoarmelin.meumercado.models.navigation.NavDestination
 import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 import com.leoarmelin.meumercado.viewmodels.CameraViewModel
-import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 
 @ExperimentalPagerApi
@@ -24,7 +23,6 @@ class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
     val permissionsHandler = PermissionsHandler(this, this)
 
     private val cameraViewModel: CameraViewModel by viewModels()
-    private val mainViewModel: MainViewModel by viewModels()
     private val navigationViewModel: NavigationViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +38,6 @@ class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
                 ) { padding ->
                     AppNavHost(
                         cameraViewModel = cameraViewModel,
-                        mainViewModel = mainViewModel,
                         navigationViewModel = navigationViewModel,
                         scaffoldState = scaffoldState,
                         padding = padding
