@@ -16,7 +16,7 @@ import com.leoarmelin.meumercado.models.navigation.NavDestination
 import com.leoarmelin.meumercado.ui.components.BottomCamera
 import com.leoarmelin.meumercado.ui.components.ProductList
 import com.leoarmelin.meumercado.ui.theme.Secondary50
-import com.leoarmelin.meumercado.viewmodels.CameraViewModel
+import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 import kotlinx.coroutines.launch
 
@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 @ExperimentalGetImage
 @Composable
 fun TicketScreen(
-    cameraViewModel: CameraViewModel,
+    mainViewModel: MainViewModel,
     navigationViewModel: NavigationViewModel,
     isCameraPermissionGranted: Boolean,
 ) {
@@ -37,10 +37,10 @@ fun TicketScreen(
             .fillMaxSize()
             .background(Secondary50)
     ) {
-        cameraViewModel.ticket?.let { ProductList(it) }
+        mainViewModel.ticket?.let { ProductList(it) }
 
         BottomCamera(
-            totalPrice = (cameraViewModel.ticket?.price_total ?: 0.0).toMoney(),
+            totalPrice = (mainViewModel.ticket?.price_total ?: 0.0).toMoney(),
             modifier = Modifier.align(Alignment.BottomStart)
         ) {
             scope.launch {

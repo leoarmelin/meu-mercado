@@ -23,13 +23,13 @@ import com.leoarmelin.meumercado.extensions.noRippleClickable
 import com.leoarmelin.meumercado.models.api.ResultState
 import com.leoarmelin.meumercado.models.navigation.NavDestination
 import com.leoarmelin.meumercado.ui.components.LoadingDialog
-import com.leoarmelin.meumercado.viewmodels.CameraViewModel
+import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 
 @androidx.camera.core.ExperimentalGetImage
 @Composable
 fun CameraScreen(
-    cameraViewModel: CameraViewModel,
+    mainViewModel: MainViewModel,
     navigationViewModel: NavigationViewModel
 ) {
     val barcodeScannerOptions = remember {
@@ -45,8 +45,8 @@ fun CameraScreen(
 
     var isSearching by remember { mutableStateOf(false) }
 
-    LaunchedEffect(cameraViewModel.ticketResultState) {
-        when (val result = cameraViewModel.ticketResultState) {
+    LaunchedEffect(mainViewModel.ticketResultState) {
+        when (val result = mainViewModel.ticketResultState) {
             is ResultState.Loading -> {
                 Log.d("Aoba", "Loading")
             }
@@ -60,21 +60,19 @@ fun CameraScreen(
                 Log.d("Aoba", "Error ${result.exception}")
             }
 
-            else -> {
-                Log.d("Aoba", "else :)")
-            }
+            else -> {}
         }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        if (cameraViewModel.isPermissionGranted) {
+        if (mainViewModel.isPermissionGranted) {
             CameraView(
                 modifier = Modifier.fillMaxSize(),
                 barcodeScanner = barcodeScanner,
                 barcodeSuccessCallback = { url ->
                     if (!isSearching) {
                         isSearching = true
-                        cameraViewModel.getNfce(url)
+                        mainViewModel.getNfce(url)
                     }
                 },
                 barcodeTypeCallback = { Log.d("Aoba", "Unexpected code type") },
@@ -92,7 +90,7 @@ fun CameraScreen(
                 painter = painterResource(id = R.drawable.ic_camera_frame),
                 contentDescription = "Aponte este quadrado deixando o QR Code dentro dele para adicionar os produtos.",
                 modifier = Modifier
-                    .size(200.dp)
+                    .size(240.dp)
                     .align(Alignment.Center), tint = Color(0x99BABABA)
             )
 
@@ -104,7 +102,7 @@ fun CameraScreen(
                     .align(Alignment.TopStart)
                     .size(30.dp)
                     .noRippleClickable {
-                        if (cameraViewModel.ticketResultState == ResultState.Loading) return@noRippleClickable
+                        if (mainViewModel.ticketResultState == ResultState.Loading) return@noRippleClickable
                         navigationViewModel.setRoute(NavDestination.Start.routeName)
                     }
                     .padding(6.dp),
@@ -123,6 +121,6 @@ fun CameraScreen(
             )
         }
 
-        LoadingDialog(cameraViewModel.ticketResultState == ResultState.Loading)
+        LoadingDialog(mainViewModel.ticketResultState == ResultState.Loading)
     }
 }

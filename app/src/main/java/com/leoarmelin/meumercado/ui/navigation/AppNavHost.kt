@@ -22,7 +22,7 @@ import com.leoarmelin.meumercado.ui.screens.TicketScreen
 import com.leoarmelin.meumercado.ui.screens.home_screen.HomeScreen
 import com.leoarmelin.meumercado.ui.theme.Primary500
 import com.leoarmelin.meumercado.ui.theme.Secondary50
-import com.leoarmelin.meumercado.viewmodels.CameraViewModel
+import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 import kotlinx.coroutines.launch
 
@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun AppNavHost(
     scaffoldState: ScaffoldState,
-    cameraViewModel: CameraViewModel,
+    mainViewModel: MainViewModel,
     navigationViewModel: NavigationViewModel,
     padding: PaddingValues
 ) {
@@ -77,7 +77,7 @@ fun AppNavHost(
                 navigationViewModel.popBack()
             }
             NavDestination.Ticket.routeName -> {
-                if (cameraViewModel.ticketResultState == ResultState.Loading) return@BackHandler
+                if (mainViewModel.ticketResultState == ResultState.Loading) return@BackHandler
 
                 navigationViewModel.setRoute(NavDestination.Home.routeName)
             }
@@ -101,29 +101,29 @@ fun AppNavHost(
         modifier = Modifier.padding(padding)
     ) {
         composable(NavDestination.Start.routeName) {
-            StartScreen(navigationViewModel, cameraViewModel.isPermissionGranted)
+            StartScreen(navigationViewModel, mainViewModel.isPermissionGranted)
         }
 
         composable(NavDestination.Camera.routeName) {
             CameraScreen(
-                cameraViewModel = cameraViewModel,
+                mainViewModel = mainViewModel,
                 navigationViewModel = navigationViewModel
             )
         }
 
         composable(NavDestination.Ticket.routeName) {
             TicketScreen(
-                cameraViewModel = cameraViewModel,
+                mainViewModel = mainViewModel,
                 navigationViewModel = navigationViewModel,
-                isCameraPermissionGranted = cameraViewModel.isPermissionGranted
+                isCameraPermissionGranted = mainViewModel.isPermissionGranted
             )
         }
 
         composable(NavDestination.Home.routeName) {
             HomeScreen(
-                cameraViewModel = cameraViewModel,
+                mainViewModel = mainViewModel,
                 navigationViewModel = navigationViewModel,
-                isCameraPermissionGranted = cameraViewModel.isPermissionGranted
+                isCameraPermissionGranted = mainViewModel.isPermissionGranted
             )
         }
     }

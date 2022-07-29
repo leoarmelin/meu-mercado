@@ -47,17 +47,5 @@ fun ProductList(ticket: Ticket) {
         items(ticket.items) { product ->
             ProductItem(product)
         }
-        items(ticket.items) { product ->
-            ProductItem(product)
-        }
-        items(ticket.items) { product ->
-            ProductItem(product)
-        }
-        items(ticket.items) { product ->
-            ProductItem(product)
-        }
-        items(ticket.items) { product ->
-            ProductItem(product)
-        }
     }
 }

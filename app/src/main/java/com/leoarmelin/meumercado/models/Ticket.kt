@@ -1,15 +1,32 @@
 package com.leoarmelin.meumercado.models
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
+
+@Entity(tableName = "ticket")
 data class Ticket(
-    val store: String,
-    val cnpj: String,
-    val address: String,
-    val quantity: Int,
-    val price_total: Double,
-    val payment_method: String,
-    val date: String,
+    @PrimaryKey
     val key: String,
-    val customer_document: String,
-    val customer_name: String,
-    val items: List<Product>
+    @SerializedName("store")
+    val store: String,
+    @SerializedName("cnpj")
+    val cnpj: String,
+    @SerializedName("address")
+    val address: String,
+    @SerializedName("quantity")
+    val quantity: Int,
+    @SerializedName("price_total")
+    val price_total: Double,
+    @SerializedName("payment_method")
+    val payment_method: String,
+    @SerializedName("date")
+    val date: String,
+    @SerializedName("customer_document")
+    val customer_document: String? = null,
+    @SerializedName("customer_name")
+    val customer_name: String? = null,
+    @SerializedName("items")
+    val items: List<Product> = listOf()
 )
+

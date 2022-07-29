@@ -9,12 +9,13 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.ViewModelProvider
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.leoarmelin.meumercado.ui.navigation.AppNavHost
 import com.leoarmelin.meumercado.handlers.PermissionsHandler
 import com.leoarmelin.meumercado.models.navigation.NavDestination
 import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
-import com.leoarmelin.meumercado.viewmodels.CameraViewModel
+import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 
 @ExperimentalPagerApi
@@ -22,11 +23,13 @@ import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
     val permissionsHandler = PermissionsHandler(this, this)
 
-    private val cameraViewModel: CameraViewModel by viewModels()
+    private lateinit var mainViewModel: MainViewModel
     private val navigationViewModel: NavigationViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        mainViewModel = MainViewModel(application)
 
         setContent {
             MeuMercadoTheme {
@@ -37,7 +40,7 @@ class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
                     modifier = Modifier.fillMaxSize(),
                 ) { padding ->
                     AppNavHost(
-                        cameraViewModel = cameraViewModel,
+                        mainViewModel = mainViewModel,
                         navigationViewModel = navigationViewModel,
                         scaffoldState = scaffoldState,
                         padding = padding
@@ -48,12 +51,12 @@ class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
     }
 
     override fun onGrantedCameraAccess() {
-        cameraViewModel.setCameraPermissionState(true)
+        mainViewModel.setCameraPermissionState(true)
         navigationViewModel.setRoute(NavDestination.Camera.routeName)
     }
 
     override fun onNotGrantedCameraAccess() {
-        cameraViewModel.setCameraPermissionState(false)
+        mainViewModel.setCameraPermissionState(false)
     }
 
     override fun onShowCameraUIAccess() {
