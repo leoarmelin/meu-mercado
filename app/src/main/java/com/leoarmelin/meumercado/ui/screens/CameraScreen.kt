@@ -23,8 +23,13 @@ import com.leoarmelin.meumercado.extensions.noRippleClickable
 import com.leoarmelin.meumercado.models.api.ResultState
 import com.leoarmelin.meumercado.models.navigation.NavDestination
 import com.leoarmelin.meumercado.ui.components.LoadingDialog
+import com.leoarmelin.meumercado.ui.theme.Secondary800
 import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @androidx.camera.core.ExperimentalGetImage
 @Composable
@@ -43,25 +48,40 @@ fun CameraScreen(
         BarcodeScanning.getClient(barcodeScannerOptions)
     }
 
+    val searchCoroutineScope = rememberCoroutineScope()
+
     var isSearching by remember { mutableStateOf(false) }
+    var isErrorVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(mainViewModel.ticketResultState) {
         when (val result = mainViewModel.ticketResultState) {
             is ResultState.Loading -> {
                 Log.d("Aoba", "Loading")
+                isErrorVisible = false
             }
 
             is ResultState.Success -> {
                 Log.d("Aoba", "Success")
                 navigationViewModel.setRoute(NavDestination.Ticket.routeName)
                 mainViewModel.ticketResultState = null
+                isErrorVisible = false
             }
 
             is ResultState.Error -> {
                 Log.d("Aoba", "Error ${result.exception}")
+                isErrorVisible = true
+                searchCoroutineScope.launch {
+                    delay(1000)
+                    isSearching = false
+                }
+                searchCoroutineScope.launch {
+
+                }
             }
 
-            else -> {}
+            else -> {
+                isErrorVisible = false
+            }
         }
     }
 
@@ -118,8 +138,21 @@ fun CameraScreen(
                     .padding(bottom = 49.dp)
                     .align(Alignment.BottomCenter)
                     .background(Color(0x4D000000), RoundedCornerShape(2.dp))
-                    .padding(horizontal = 9.dp, vertical = 5.dp),
+                    .padding(horizontal = 10.dp, vertical = 5.dp),
             )
+
+            if (isErrorVisible) {
+                Text(
+                    text = "Erro ao ler o QR Code",
+                    style = MaterialTheme.typography.body2,
+                    color = Color.White,
+                    modifier = Modifier
+                        .padding(top = 60.dp)
+                        .align(Alignment.TopCenter)
+                        .background(Secondary800, RoundedCornerShape(20.dp))
+                        .padding(horizontal = 10.dp, vertical = 5.dp),
+                )
+            }
         }
 
         LoadingDialog(mainViewModel.ticketResultState == ResultState.Loading)
