@@ -17,19 +17,17 @@ import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.leoarmelin.meumercado.R
-import com.leoarmelin.meumercado.ui.components.CameraView
 import com.leoarmelin.meumercado.extensions.gradientBackground
 import com.leoarmelin.meumercado.extensions.noRippleClickable
 import com.leoarmelin.meumercado.models.api.ResultState
 import com.leoarmelin.meumercado.models.navigation.NavDestination
+import com.leoarmelin.meumercado.ui.components.CameraView
 import com.leoarmelin.meumercado.ui.components.LoadingDialog
 import com.leoarmelin.meumercado.ui.theme.Secondary800
 import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @androidx.camera.core.ExperimentalGetImage
 @Composable
