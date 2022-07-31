@@ -17,6 +17,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.leoarmelin.meumercado.models.api.ResultState
 import com.leoarmelin.meumercado.models.navigation.NavDestination
 import com.leoarmelin.meumercado.ui.screens.CameraScreen
+import com.leoarmelin.meumercado.ui.screens.SplashScreen
 import com.leoarmelin.meumercado.ui.screens.StartScreen
 import com.leoarmelin.meumercado.ui.screens.TicketScreen
 import com.leoarmelin.meumercado.ui.screens.home_screen.HomeScreen
@@ -41,28 +42,9 @@ fun AppNavHost(
     val activity = LocalContext.current as? Activity
     var closeCount by remember { mutableStateOf(0) }
 
-    when (navigationViewModel.currentRoute) {
-        NavDestination.Start.routeName -> {
-            systemUiController.setStatusBarColor(Secondary50)
-            systemUiController.setNavigationBarColor(Secondary50)
-        }
-        NavDestination.Camera.routeName -> {
-            systemUiController.setStatusBarColor(Color.Black)
-            systemUiController.setNavigationBarColor(Color.Black)
-        }
-        NavDestination.Ticket.routeName -> {
-            systemUiController.setStatusBarColor(Secondary50)
-            systemUiController.setNavigationBarColor(Primary500)
-        }
-        NavDestination.Home.routeName -> {
-            systemUiController.setStatusBarColor(Secondary50)
-            systemUiController.setNavigationBarColor(Primary500)
-        }
-    }
-
     BackHandler {
         when (navigationViewModel.currentRoute) {
-            NavDestination.Start.routeName -> {
+            NavDestination.Start.routeName, NavDestination.Home.routeName, NavDestination.Splash.routeName -> {
                 closeCount++
                 if (closeCount == 2) {
                     activity?.finish()
@@ -74,32 +56,24 @@ fun AppNavHost(
                 }
             }
             NavDestination.Camera.routeName -> {
+                if (mainViewModel.ticketResultState == ResultState.Loading) return@BackHandler
                 navigationViewModel.popBack()
             }
             NavDestination.Ticket.routeName -> {
-                if (mainViewModel.ticketResultState == ResultState.Loading) return@BackHandler
-
                 navigationViewModel.setRoute(NavDestination.Home.routeName)
-            }
-            NavDestination.Home.routeName -> {
-                closeCount++
-                if (closeCount == 2) {
-                    activity?.finish()
-                    return@BackHandler
-                }
-                coroutineScope.launch {
-                    scaffoldState.snackbarHostState.showSnackbar("Pressione novamente para fechar.")
-                    closeCount = 0
-                }
             }
         }
     }
 
     NavHost(
         navController = navController,
-        startDestination = NavDestination.Home.routeName,
+        startDestination = NavDestination.Splash.routeName,
         modifier = Modifier.padding(padding)
     ) {
+        composable(NavDestination.Splash.routeName) {
+            SplashScreen(navigationViewModel, mainViewModel)
+        }
+
         composable(NavDestination.Start.routeName) {
             StartScreen(navigationViewModel, mainViewModel.isPermissionGranted)
         }
@@ -123,8 +97,28 @@ fun AppNavHost(
             HomeScreen(
                 mainViewModel = mainViewModel,
                 navigationViewModel = navigationViewModel,
-                isCameraPermissionGranted = mainViewModel.isPermissionGranted
+                isCameraPermissionGranted = mainViewModel.isPermissionGranted,
+                ticketsList = mainViewModel.ticketsList
             )
+        }
+    }
+
+    when (navigationViewModel.currentRoute) {
+        NavDestination.Start.routeName, NavDestination.Splash.routeName -> {
+            systemUiController.setStatusBarColor(Secondary50)
+            systemUiController.setNavigationBarColor(Secondary50)
+        }
+        NavDestination.Camera.routeName -> {
+            systemUiController.setStatusBarColor(Color.Black)
+            systemUiController.setNavigationBarColor(Color.Black)
+        }
+        NavDestination.Ticket.routeName -> {
+            systemUiController.setStatusBarColor(Secondary50)
+            systemUiController.setNavigationBarColor(Primary500)
+        }
+        NavDestination.Home.routeName -> {
+            systemUiController.setStatusBarColor(Secondary50)
+            systemUiController.setNavigationBarColor(Primary500)
         }
     }
 

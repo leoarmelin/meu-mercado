@@ -54,6 +54,7 @@ fun CameraScreen(
             is ResultState.Success -> {
                 Log.d("Aoba", "Success")
                 navigationViewModel.setRoute(NavDestination.Ticket.routeName)
+                mainViewModel.ticketResultState = null
             }
 
             is ResultState.Error -> {
@@ -103,7 +104,7 @@ fun CameraScreen(
                     .size(30.dp)
                     .noRippleClickable {
                         if (mainViewModel.ticketResultState == ResultState.Loading) return@noRippleClickable
-                        navigationViewModel.setRoute(NavDestination.Start.routeName)
+                        navigationViewModel.popBack()
                     }
                     .padding(6.dp),
                 tint = Color.White

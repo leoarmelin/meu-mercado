@@ -6,8 +6,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -15,6 +15,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.leoarmelin.meumercado.extensions.getActivity
+import com.leoarmelin.meumercado.models.Ticket
 import com.leoarmelin.meumercado.models.navigation.NavDestination
 import com.leoarmelin.meumercado.ui.components.BottomCamera
 import com.leoarmelin.meumercado.ui.components.HomeTabs
@@ -30,15 +31,13 @@ fun HomeScreen(
     mainViewModel: MainViewModel,
     navigationViewModel: NavigationViewModel,
     isCameraPermissionGranted: Boolean,
+    ticketsList: List<Ticket>
 ) {
     val context = LocalContext.current
     val activity = context.getActivity()
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(1)
     val tabsList = listOf("Em Breve", "Meus Tickets")
-
-    val ticketsList = mainViewModel.fetchAllTickets().observeAsState(listOf())
-    Log.d("Aoba", "ticketsList:${ticketsList.value}")
 
     Box(
         modifier = Modifier
@@ -60,7 +59,7 @@ fun HomeScreen(
             ) { page ->
                 when (page) {
                     0 -> ComingSoonTab()
-                    1 -> MyTicketsTab(ticketsList.value) { ticket ->
+                    1 -> MyTicketsTab(ticketsList) { ticket ->
                             mainViewModel.ticket = ticket
                             navigationViewModel.setRoute(NavDestination.Ticket.routeName)
                     }

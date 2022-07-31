@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.leoarmelin.meumercado.models.navigation.NavDestination
 
 class NavigationViewModel : ViewModel() {
-    var currentRoute by mutableStateOf(NavDestination.Home.routeName)
+    var currentRoute by mutableStateOf(NavDestination.Splash.routeName)
     var lastRoute by mutableStateOf<String?>(null)
 
     fun setRoute(route: String) {

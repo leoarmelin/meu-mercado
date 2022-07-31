@@ -16,7 +16,7 @@ class RoomRepository(application: Application) {
 
     val readAllTickets: LiveData<List<Ticket>> = ticketDao.fetchAllTickets()
 
-    suspend fun insertUser(ticket: Ticket) {
+    suspend fun insertTicket(ticket: Ticket) {
         ticketDao.insertTicket(ticket)
     }
 
