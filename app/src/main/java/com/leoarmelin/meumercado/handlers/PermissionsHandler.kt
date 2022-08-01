@@ -30,24 +30,20 @@ open class PermissionsHandler(
     }
 
     fun requestCameraPermission() {
-        when {
+        when (PackageManager.PERMISSION_GRANTED) {
             // Permission previously granted
             ContextCompat.checkSelfPermission(
                 activity,
                 Manifest.permission.CAMERA
-            ) == PackageManager.PERMISSION_GRANTED -> {
+            ) -> {
                 listener.onGrantedCameraAccess()
             }
 
-            // Show UI dialog before asking permission to the user
-            ActivityCompat.shouldShowRequestPermissionRationale(
-                activity,
-                Manifest.permission.CAMERA
-            ) -> {
-                listener.onShowCameraUIAccess()
-            }
-
-            else -> requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+            else -> listener.onShowCameraUIAccess()
         }
+    }
+
+    fun launchPermissionRequest() {
+        requestPermissionLauncher.launch(Manifest.permission.CAMERA)
     }
 }

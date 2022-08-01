@@ -22,6 +22,7 @@ class MainViewModel(
 ) : AndroidViewModel(appObj) {
     private val roomRepository: RoomRepository = RoomRepository(appObj)
 
+    var isPermissionDialogOpen by mutableStateOf(false)
     var isPermissionGranted by mutableStateOf(false)
     var ticketResultState by mutableStateOf<ResultState?>(null)
     var ticket by mutableStateOf<Ticket?>(null)
