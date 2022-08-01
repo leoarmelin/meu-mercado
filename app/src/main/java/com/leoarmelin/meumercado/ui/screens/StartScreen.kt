@@ -1,5 +1,6 @@
 package com.leoarmelin.meumercado.ui.screens
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -23,6 +24,7 @@ import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 import kotlinx.coroutines.launch
 
 @ExperimentalPagerApi
+@ExperimentalAnimationApi
 @androidx.camera.core.ExperimentalGetImage
 @Composable
 fun StartScreen(

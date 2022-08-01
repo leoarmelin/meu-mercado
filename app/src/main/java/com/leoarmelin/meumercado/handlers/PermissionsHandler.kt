@@ -3,11 +3,12 @@ package com.leoarmelin.meumercado.handlers
 import android.Manifest
 import android.content.pm.PackageManager
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.core.content.ContextCompat
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.leoarmelin.meumercado.MainActivity
 
+@ExperimentalAnimationApi
 @ExperimentalPagerApi
 open class PermissionsHandler(
     private val activity: MainActivity,

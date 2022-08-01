@@ -1,7 +1,7 @@
 package com.leoarmelin.meumercado.ui.screens.home_screen
 
-import android.util.Log
 import androidx.camera.core.ExperimentalGetImage
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,6 +24,7 @@ import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 import kotlinx.coroutines.launch
 
+@ExperimentalAnimationApi
 @ExperimentalPagerApi
 @ExperimentalGetImage
 @Composable

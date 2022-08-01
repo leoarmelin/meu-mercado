@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
@@ -18,6 +19,7 @@ import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 
 @ExperimentalPagerApi
+@ExperimentalAnimationApi
 @androidx.camera.core.ExperimentalGetImage
 class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
     val permissionsHandler = PermissionsHandler(this, this)
