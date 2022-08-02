@@ -160,7 +160,10 @@ fun AppNavHost(
             NavDestination.Ticket.routeName,
             enterTransition = {
                 slideIntoContainer(
-                    AnimatedContentScope.SlideDirection.Left,
+                    when (initialState.destination.route) {
+                        NavDestination.Camera.routeName -> AnimatedContentScope.SlideDirection.Right
+                        else -> AnimatedContentScope.SlideDirection.Left
+                    },
                     animationSpec = tween(navAnimationDuration)
                 )
             },
@@ -172,7 +175,10 @@ fun AppNavHost(
             },
             popEnterTransition = {
                 slideIntoContainer(
-                    AnimatedContentScope.SlideDirection.Left,
+                    when (initialState.destination.route) {
+                        NavDestination.Camera.routeName -> AnimatedContentScope.SlideDirection.Right
+                        else -> AnimatedContentScope.SlideDirection.Left
+                    },
                     animationSpec = tween(navAnimationDuration)
                 )
             },

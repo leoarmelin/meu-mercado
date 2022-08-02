@@ -16,6 +16,7 @@ import com.leoarmelin.meumercado.extensions.toMoney
 import com.leoarmelin.meumercado.models.navigation.NavDestination
 import com.leoarmelin.meumercado.ui.components.BottomCamera
 import com.leoarmelin.meumercado.ui.components.ProductList
+import com.leoarmelin.meumercado.ui.components.TicketFilters
 import com.leoarmelin.meumercado.ui.theme.Secondary50
 import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
