@@ -169,7 +169,10 @@ fun AppNavHost(
             },
             exitTransition = {
                 slideOutOfContainer(
-                    AnimatedContentScope.SlideDirection.Right,
+                    when (targetState.destination.route) {
+                        NavDestination.Camera.routeName -> AnimatedContentScope.SlideDirection.Left
+                        else -> AnimatedContentScope.SlideDirection.Right
+                    },
                     animationSpec = tween(navAnimationDuration)
                 )
             },
@@ -184,7 +187,10 @@ fun AppNavHost(
             },
             popExitTransition = {
                 slideOutOfContainer(
-                    AnimatedContentScope.SlideDirection.Right,
+                    when (targetState.destination.route) {
+                        NavDestination.Camera.routeName -> AnimatedContentScope.SlideDirection.Left
+                        else -> AnimatedContentScope.SlideDirection.Right
+                    },
                     animationSpec = tween(navAnimationDuration)
                 )
             }
