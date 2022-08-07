@@ -250,8 +250,8 @@ fun AppNavHost(
             systemUiController.setNavigationBarColor(Secondary50)
         }
         NavDestination.Camera.routeName -> {
-            systemUiController.setStatusBarColor(Color.Black)
-            systemUiController.setNavigationBarColor(Color.Black)
+            systemUiController.setStatusBarColor(if (mainViewModel.isPermissionGranted) Color.Black else Secondary50)
+            systemUiController.setNavigationBarColor(if (mainViewModel.isPermissionGranted) Color.Black else Secondary50)
         }
         NavDestination.Ticket.routeName -> {
             systemUiController.setStatusBarColor(Secondary50)

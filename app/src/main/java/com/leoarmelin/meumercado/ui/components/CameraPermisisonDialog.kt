@@ -34,7 +34,7 @@ fun CameraPermissionDialog(isVisible: Boolean, onAccept: () -> Unit) {
             },
             text = {
                 Text(
-                    text = "Aqui vai conter a explicação de como funciona o aplicativo. Primeiro colocar como que mira a camera no QR Code. Que precisa ser QR code do mercado e que com isso você pode comparar preços e organizar financeiramente",
+                    text = "Nosso aplicativo usa sua câmera para coletar os dados presentes no website que o QRCode leva. Dessa forma, é necessário permitir que o app acesse sua câmera durante o uso do aplicativo para que você desfrute de nossas funcionalidades!",
                     style = MaterialTheme.typography.body1,
                     color = Gray900
                 )

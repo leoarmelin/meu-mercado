@@ -3,6 +3,7 @@ package com.leoarmelin.meumercado.ui.screens
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -63,6 +64,7 @@ fun StartScreen(
                 backgroundColor = Secondary800,
                 contentColor = Color.White
             ),
+            shape = RoundedCornerShape(20.dp),
             onClick = {
                 scope.launch {
                     if (!isCameraPermissionGranted) {
