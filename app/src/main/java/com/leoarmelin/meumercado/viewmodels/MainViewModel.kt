@@ -11,14 +11,14 @@ import androidx.lifecycle.viewModelScope
 import com.leoarmelin.meumercado.models.Ticket
 import com.leoarmelin.meumercado.models.api.Result
 import com.leoarmelin.meumercado.models.api.ResultState
-import com.leoarmelin.meumercado.repository.NfceRepository
+import com.leoarmelin.meumercado.repository.NfceScrapperRepository
 import com.leoarmelin.meumercado.repository.RoomRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainViewModel(
     appObj: Application,
-    private val nfceRepository: NfceRepository = NfceRepository(),
+    private val nfceScrapperRepository: NfceScrapperRepository = NfceScrapperRepository(),
 ) : AndroidViewModel(appObj) {
     private val roomRepository: RoomRepository = RoomRepository(appObj)
 
@@ -36,7 +36,7 @@ class MainViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             ticketResultState = ResultState.Loading
 
-            when (val result = nfceRepository.getNfce(url)) {
+            when (val result = nfceScrapperRepository.getNfce(url)) {
                 is Result.Loading -> {}
                 is Result.Success -> {
                     ticket = result.data
