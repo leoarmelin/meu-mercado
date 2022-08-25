@@ -20,8 +20,8 @@ class RoomRepository(application: Application) {
         ticketDao.insertTicket(ticket)
     }
 
-    suspend fun deleteTicketByKey(key: Int) {
-        ticketDao.deleteTicketByKey(key)
+    suspend fun deleteTicketById(id: String) {
+        ticketDao.deleteTicketById(id)
     }
 
     suspend fun deleteAllTickets() {

@@ -13,7 +13,7 @@ import com.leoarmelin.meumercado.R
 
 @Composable
 fun ComingSoonTab() {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading))
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.money_loading))
     val progress by animateLottieCompositionAsState(
         composition = composition,
         iterations = LottieConstants.IterateForever

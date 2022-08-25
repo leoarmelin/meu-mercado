@@ -6,10 +6,16 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.leoarmelin.meumercado.models.Ticket
+import com.leoarmelin.meumercado.utils.ConsumerDataConverter
 import com.leoarmelin.meumercado.utils.ProductDataConverter
+import com.leoarmelin.meumercado.utils.StoreDataConverter
 
-@Database(entities = [Ticket::class], version = 1, exportSchema = false)
-@TypeConverters(ProductDataConverter::class)
+@Database(entities = [Ticket::class], version = 3, exportSchema = false)
+@TypeConverters(
+    ProductDataConverter::class,
+    StoreDataConverter::class,
+    ConsumerDataConverter::class
+)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun ticketDao(): TicketDao
 
@@ -26,7 +32,8 @@ abstract class AppDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java, "jetpack"
-                ).build()
+                ).fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE = instance
                 return instance
             }

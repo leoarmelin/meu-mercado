@@ -15,8 +15,8 @@ interface TicketDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTicket(ticket: Ticket)
 
-    @Query("DELETE FROM ticket where `key` = :key")
-    suspend fun deleteTicketByKey(key: Int)
+    @Query("DELETE FROM ticket where `id` = :id")
+    suspend fun deleteTicketById(id: String)
 
     @Query("DELETE FROM ticket")
     suspend fun deleteAllTickets()

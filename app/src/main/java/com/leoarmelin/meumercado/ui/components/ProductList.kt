@@ -16,7 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.leoarmelin.meumercado.extensions.getLocalDateTime
+import com.leoarmelin.meumercado.extensions.toZonedDateTime
 import com.leoarmelin.meumercado.models.Ticket
 import com.leoarmelin.meumercado.ui.theme.Gray400
 import com.leoarmelin.meumercado.ui.theme.Metropolis
@@ -35,14 +35,14 @@ fun ProductList(ticket: Ticket) {
     ) {
         item {
             Text(
-                text = ticket.store,
+                text = ticket.store.name,
                 style = MaterialTheme.typography.h3,
                 color = Gray400,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
 
             Text(
-                text = ticket.address,
+                text = ticket.store.address,
                 style = MaterialTheme.typography.body2,
                 color = Gray400,
                 textAlign = TextAlign.Center,
@@ -50,7 +50,7 @@ fun ProductList(ticket: Ticket) {
             )
         }
 
-        items(ticket.items) { product ->
+        items(ticket.products) { product ->
             ProductItem(product)
         }
 
@@ -70,24 +70,24 @@ fun ProductList(ticket: Ticket) {
                     .fillMaxWidth()
             )
 
-            Text(
-                text = buildAnnotatedString {
-                    withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                        append("Método: ")
-                    }
-                    append(ticket.payment_method)
-                },
-                fontFamily = Metropolis,
-                fontSize = 16.sp,
-                color = Gray400,
-                modifier = Modifier
-                    .padding(top = 8.dp, start = 24.dp, end = 24.dp)
-                    .fillMaxWidth()
-            )
+//            Text(
+//                text = buildAnnotatedString {
+//                    withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+//                        append("Método: ")
+//                    }
+//                    append(ticket.payment_method)
+//                },
+//                fontFamily = Metropolis,
+//                fontSize = 16.sp,
+//                color = Gray400,
+//                modifier = Modifier
+//                    .padding(top = 8.dp, start = 24.dp, end = 24.dp)
+//                    .fillMaxWidth()
+//            )
 
             Text(
                 style = MaterialTheme.typography.h5,
-                text = ticket.date.getLocalDateTime()
+                text = ticket.issueAt.toZonedDateTime()
                     .format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
                 color = Gray400,
                 modifier = Modifier

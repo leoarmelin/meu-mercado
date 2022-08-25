@@ -28,8 +28,8 @@ fun TicketsList(ticketsList: List<Ticket>, onItemClick: (ticket: Ticket) -> Unit
 
         items(when (ticketFilterType) {
             TicketFilterType.None -> ticketsList
-            TicketFilterType.Value -> ticketsList.sortedByDescending { ticket -> ticket.price_total }
-            TicketFilterType.Alphabet -> ticketsList.sortedBy { ticket -> ticket.store }
+            TicketFilterType.Value -> ticketsList.sortedByDescending { ticket -> ticket.priceTotal }
+            TicketFilterType.Alphabet -> ticketsList.sortedBy { ticket -> ticket.store.name }
         }) { ticket ->
             TicketItem(ticket = ticket, onItemClick)
         }

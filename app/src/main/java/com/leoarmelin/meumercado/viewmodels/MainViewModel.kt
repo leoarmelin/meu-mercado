@@ -9,6 +9,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.leoarmelin.meumercado.models.Ticket
+import com.leoarmelin.meumercado.models.api.CreateNfceRequest
 import com.leoarmelin.meumercado.models.api.Result
 import com.leoarmelin.meumercado.models.api.ResultState
 import com.leoarmelin.meumercado.repository.NfceScrapperRepository
@@ -36,7 +37,7 @@ class MainViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             ticketResultState = ResultState.Loading
 
-            when (val result = nfceScrapperRepository.getNfce(url)) {
+            when (val result = nfceScrapperRepository.getNfce(CreateNfceRequest(url))) {
                 is Result.Loading -> {}
                 is Result.Success -> {
                     ticket = result.data
@@ -62,9 +63,9 @@ class MainViewModel(
         }
     }
 
-    fun deleteTicketByKey(key: Int) {
+    fun deleteTicketById(id: String) {
         viewModelScope.launch {
-            roomRepository.deleteTicketByKey(key)
+            roomRepository.deleteTicketById(id)
         }
     }
 }

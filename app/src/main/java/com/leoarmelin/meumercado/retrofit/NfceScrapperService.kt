@@ -2,20 +2,23 @@ package com.leoarmelin.meumercado.retrofit
 
 import com.leoarmelin.meumercado.BuildConfig
 import com.leoarmelin.meumercado.models.Ticket
+import com.leoarmelin.meumercado.models.api.CreateNfceRequest
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface NfceScrapperService {
-    @GET("/nfce")
-    suspend fun getNfce(@Query("nfce_url") nfceUrl: String): Response<Ticket>
+    @POST("/nfe/CreateNfe")
+    suspend fun getNfce(@Body nfceUrl: CreateNfceRequest): Response<Ticket>
 
     companion object {
-        var nfceScrapperService: NfceScrapperService? = null
+        private var nfceScrapperService: NfceScrapperService? = null
         fun getInstance(): NfceScrapperService {
             if (nfceScrapperService == null) {
                 val interceptor = HttpLoggingInterceptor()

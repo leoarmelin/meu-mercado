@@ -16,7 +16,6 @@ import com.leoarmelin.meumercado.extensions.toMoney
 import com.leoarmelin.meumercado.models.navigation.NavDestination
 import com.leoarmelin.meumercado.ui.components.BottomCamera
 import com.leoarmelin.meumercado.ui.components.ProductList
-import com.leoarmelin.meumercado.ui.components.TicketFilters
 import com.leoarmelin.meumercado.ui.theme.Secondary50
 import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
@@ -43,7 +42,7 @@ fun TicketScreen(
         mainViewModel.ticket?.let { ProductList(it) }
 
         BottomCamera(
-            totalPrice = (mainViewModel.ticket?.price_total ?: 0.0).toMoney(),
+            totalPrice = (mainViewModel.ticket?.priceTotal ?: 0.0).toMoney(),
             modifier = Modifier.align(Alignment.BottomStart)
         ) {
             scope.launch {

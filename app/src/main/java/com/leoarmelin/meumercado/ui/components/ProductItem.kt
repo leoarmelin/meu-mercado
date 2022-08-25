@@ -34,21 +34,21 @@ fun ProductItem(product: Product) {
         )
 
         Column(Modifier.padding(end = 12.dp).weight(1f)) {
-            Text(text = product.item, style = MaterialTheme.typography.h5, color = Secondary800)
+            Text(text = product.name ?: "", style = MaterialTheme.typography.h5, color = Secondary800)
             Text(
                 text = product.unityAmount(),
                 style = MaterialTheme.typography.body1,
                 color = Gray900
             )
             Text(
-                text = "Preço unitário: ${product.unity_price.toMoney()}",
+                text = "Preço unitário: ${product.price.toMoney()}",
                 style = MaterialTheme.typography.body2,
                 color = Gray900
             )
         }
 
         Text(
-            text = product.price.toMoney(),
+            text = (product.price * product.amount).toMoney(),
             style = MaterialTheme.typography.h5,
             color = Secondary800
         )
