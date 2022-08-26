@@ -117,7 +117,7 @@ fun CameraScreen(
                 painter = painterResource(id = R.drawable.ic_camera_frame),
                 contentDescription = "Aponte este quadrado deixando o QR Code dentro dele para adicionar os produtos.",
                 modifier = Modifier
-                    .size(240.dp)
+                    .size(270.dp)
                     .align(Alignment.Center), tint = Color(0x99BABABA)
             )
 
