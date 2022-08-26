@@ -37,12 +37,12 @@ fun ProductItem(product: Product) {
             Text(text = product.name ?: product.code, style = MaterialTheme.typography.h5, color = Secondary800)
             Text(
                 text = product.unityAmount(),
-                style = MaterialTheme.typography.body1,
+                style = MaterialTheme.typography.caption,
                 color = Gray900
             )
             Text(
                 text = "Preço unitário: ${product.price.toMoney()}",
-                style = MaterialTheme.typography.body2,
+                style = MaterialTheme.typography.caption,
                 color = Gray900
             )
         }
@@ -50,7 +50,8 @@ fun ProductItem(product: Product) {
         Text(
             text = (product.price * product.amount).toMoney(),
             style = MaterialTheme.typography.h5,
-            color = Secondary800
+            color = Secondary800,
+            modifier = Modifier.align(Alignment.Top)
         )
     }
 }
