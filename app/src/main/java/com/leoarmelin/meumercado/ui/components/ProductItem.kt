@@ -34,7 +34,7 @@ fun ProductItem(product: Product) {
         )
 
         Column(Modifier.padding(end = 12.dp).weight(1f)) {
-            Text(text = product.name ?: "", style = MaterialTheme.typography.h5, color = Secondary800)
+            Text(text = product.name ?: product.code, style = MaterialTheme.typography.h5, color = Secondary800)
             Text(
                 text = product.unityAmount(),
                 style = MaterialTheme.typography.body1,
