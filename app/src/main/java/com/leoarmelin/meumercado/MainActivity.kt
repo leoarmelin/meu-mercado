@@ -8,6 +8,8 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.leoarmelin.meumercado.handlers.PermissionsHandler
@@ -35,6 +37,7 @@ class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
         setContent {
             MeuMercadoTheme {
                 val scaffoldState = rememberScaffoldState()
+                val isPermissionDialogOpen by mainViewModel.isPermissionDialogOpen.collectAsState()
 
                 Scaffold(
                     scaffoldState = scaffoldState,
@@ -48,8 +51,8 @@ class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
                     )
                 }
 
-                CameraPermissionDialog(mainViewModel.isPermissionDialogOpen) {
-                    mainViewModel.isPermissionDialogOpen = false
+                CameraPermissionDialog(isPermissionDialogOpen) {
+                    mainViewModel.togglePermissionDialog(false)
                     permissionsHandler.launchPermissionRequest()
                 }
             }
@@ -67,6 +70,6 @@ class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
     }
 
     override fun onShowCameraUIAccess() {
-        mainViewModel.isPermissionDialogOpen = true
+        mainViewModel.togglePermissionDialog(true)
     }
 }

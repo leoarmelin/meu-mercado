@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,7 +19,6 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.leoarmelin.meumercado.R
 import com.leoarmelin.meumercado.extensions.getActivity
-import com.leoarmelin.meumercado.models.Ticket
 import com.leoarmelin.meumercado.models.navigation.NavDestination
 import com.leoarmelin.meumercado.ui.components.BottomCamera
 import com.leoarmelin.meumercado.ui.components.HomeTabs
@@ -33,14 +34,14 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     mainViewModel: MainViewModel,
     navigationViewModel: NavigationViewModel,
-    isCameraPermissionGranted: Boolean,
-    ticketsList: List<Ticket>
 ) {
     val context = LocalContext.current
     val activity = context.getActivity()
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(1)
     val tabsList = listOf(stringResource(R.string.em_breve), stringResource(R.string.meus_tickets))
+    val isCameraPermissionGranted by mainViewModel.isPermissionGranted.collectAsState()
+    val ticketsList by mainViewModel.ticketsList.collectAsState()
 
     Box(
         modifier = Modifier
@@ -63,7 +64,7 @@ fun HomeScreen(
                 when (page) {
                     0 -> ComingSoonTab()
                     1 -> MyTicketsTab(ticketsList) { ticket ->
-                        mainViewModel.ticket = ticket
+                        mainViewModel.setTicket(ticket)
                         navigationViewModel.setRoute(NavDestination.Ticket.routeName)
                     }
                 }

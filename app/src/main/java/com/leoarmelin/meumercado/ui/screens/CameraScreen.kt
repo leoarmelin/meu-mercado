@@ -40,6 +40,8 @@ fun CameraScreen(
     mainViewModel: MainViewModel,
     navigationViewModel: NavigationViewModel
 ) {
+    val ticketResultState by mainViewModel.ticketResultState.collectAsState()
+    val isPermissionGranted by mainViewModel.isPermissionGranted.collectAsState()
     val barcodeScannerOptions = remember {
         BarcodeScannerOptions.Builder()
             .setBarcodeFormats(
@@ -56,8 +58,8 @@ fun CameraScreen(
     var isSearching by remember { mutableStateOf(false) }
     var isErrorVisible by remember { mutableStateOf(false) }
 
-    LaunchedEffect(mainViewModel.ticketResultState) {
-        when (val result = mainViewModel.ticketResultState) {
+    LaunchedEffect(ticketResultState) {
+        when (val result = ticketResultState) {
             is ResultState.Loading -> {
                 Log.d("Aoba", "Loading")
                 isErrorVisible = false
@@ -66,7 +68,7 @@ fun CameraScreen(
             is ResultState.Success -> {
                 Log.d("Aoba", "Success")
                 navigationViewModel.setRoute(NavDestination.Ticket.routeName)
-                mainViewModel.ticketResultState = null
+                mainViewModel.clearTicketResultState()
                 isErrorVisible = false
             }
 
@@ -93,7 +95,7 @@ fun CameraScreen(
             .fillMaxSize()
             .background(Secondary50)
     ) {
-        if (mainViewModel.isPermissionGranted) {
+        if (isPermissionGranted) {
             CameraView(
                 modifier = Modifier.fillMaxSize(),
                 barcodeScanner = barcodeScanner,
@@ -130,7 +132,7 @@ fun CameraScreen(
                     .align(Alignment.TopStart)
                     .size(30.dp)
                     .noRippleClickable {
-                        if (mainViewModel.ticketResultState == ResultState.Loading) return@noRippleClickable
+                        if (ticketResultState == ResultState.Loading) return@noRippleClickable
                         navigationViewModel.popBack()
                     }
                     .padding(6.dp),
@@ -195,6 +197,6 @@ fun CameraScreen(
             }
         }
 
-        LoadingDialog(mainViewModel.ticketResultState == ResultState.Loading)
+        LoadingDialog(ticketResultState == ResultState.Loading)
     }
 }

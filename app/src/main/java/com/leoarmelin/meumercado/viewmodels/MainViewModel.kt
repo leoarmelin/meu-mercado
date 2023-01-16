@@ -1,9 +1,5 @@
 package com.leoarmelin.meumercado.viewmodels
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,6 +11,8 @@ import com.leoarmelin.meumercado.repository.NfceScrapperRepository
 import com.leoarmelin.meumercado.repository.RoomRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,29 +22,38 @@ class MainViewModel @Inject constructor(
     private val roomRepository: RoomRepository
 ) : ViewModel() {
 
-    var isPermissionDialogOpen by mutableStateOf(false)
-    var isPermissionGranted by mutableStateOf(false)
-    var ticketResultState by mutableStateOf<ResultState?>(null)
-    var ticket by mutableStateOf<Ticket?>(null)
-    var ticketsList = mutableStateListOf<Ticket>()
+    private val _isPermissionDialogOpen = MutableStateFlow(false)
+    val isPermissionDialogOpen get() = _isPermissionDialogOpen.asStateFlow()
+
+    private val _isPermissionGranted = MutableStateFlow(false)
+    val isPermissionGranted get() = _isPermissionGranted.asStateFlow()
+
+    private val _ticketResultState = MutableStateFlow<ResultState?>(null)
+    val ticketResultState get() = _ticketResultState.asStateFlow()
+
+    private val _ticket = MutableStateFlow<Ticket?>(null)
+    val ticket get() = _ticket.asStateFlow()
+
+    private val _ticketsList = MutableStateFlow(emptyList<Ticket>())
+    val ticketsList get() = _ticketsList.asStateFlow()
 
     fun setCameraPermissionState(state: Boolean) {
-        isPermissionGranted = state
+        _isPermissionGranted.value = state
     }
 
     fun getNfce(url: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            ticketResultState = ResultState.Loading
+            _ticketResultState.value = ResultState.Loading
 
             when (val result = nfceScrapperRepository.getNfce(CreateNfceRequest(url))) {
                 is Result.Loading -> {}
                 is Result.Success -> {
-                    ticket = result.data
+                    _ticket.value = result.data
                     insertTicket(result.data)
-                    ticketResultState = ResultState.Success
+                    _ticketResultState.value = ResultState.Success
                 }
                 is Result.Error -> {
-                    ticketResultState = ResultState.Error(result.exception)
+                    _ticketResultState.value = ResultState.Error(result.exception)
                 }
             }
         }
@@ -59,8 +66,11 @@ class MainViewModel @Inject constructor(
     private suspend fun insertTicket(ticket: Ticket) {
         roomRepository.insertTicket(ticket = ticket)
 
-        if (!ticketsList.contains(ticket)) {
-            ticketsList.add(ticket)
+        if (!ticketsList.value.contains(ticket)) {
+            val newList = ticketsList.value.toMutableList().also {
+                it.add(ticket)
+            }
+            _ticketsList.value = newList
         }
     }
 
@@ -68,5 +78,17 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             roomRepository.deleteTicketById(id)
         }
+    }
+
+    fun togglePermissionDialog(state: Boolean) {
+        _isPermissionDialogOpen.value = state
+    }
+
+    fun setTicket(ticket: Ticket) {
+        _ticket.value = ticket
+    }
+
+    fun clearTicketResultState() {
+        _ticketResultState.value = null
     }
 }

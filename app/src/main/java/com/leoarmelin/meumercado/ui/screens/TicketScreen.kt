@@ -6,6 +6,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,21 +30,22 @@ import kotlinx.coroutines.launch
 fun TicketScreen(
     mainViewModel: MainViewModel,
     navigationViewModel: NavigationViewModel,
-    isCameraPermissionGranted: Boolean,
 ) {
     val context = LocalContext.current
     val activity = context.getActivity()
     val scope = rememberCoroutineScope()
+    val isCameraPermissionGranted by mainViewModel.isPermissionGranted.collectAsState()
+    val ticket by mainViewModel.ticket.collectAsState()
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Secondary50)
     ) {
-        mainViewModel.ticket?.let { ProductList(it) }
+        ticket?.let { ProductList(it) }
 
         BottomCamera(
-            totalPrice = (mainViewModel.ticket?.priceTotal ?: 0.0).toMoney(),
+            totalPrice = (ticket?.priceTotal ?: 0.0).toMoney(),
             modifier = Modifier.align(Alignment.BottomStart)
         ) {
             scope.launch {

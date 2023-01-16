@@ -46,6 +46,8 @@ fun AppNavHost(
     val activity = LocalContext.current as? Activity
     var closeCount by remember { mutableStateOf(0) }
     val navAnimationDuration = remember { 500 }
+    val ticketResultState by mainViewModel.ticketResultState.collectAsState()
+    val isPermissionGranted by mainViewModel.isPermissionGranted.collectAsState()
 
     BackHandler {
         when (navigationViewModel.currentRoute) {
@@ -61,7 +63,7 @@ fun AppNavHost(
                 }
             }
             NavDestination.Camera.routeName -> {
-                if (mainViewModel.ticketResultState == ResultState.Loading) return@BackHandler
+                if (ticketResultState == ResultState.Loading) return@BackHandler
                 navigationViewModel.popBack()
             }
             NavDestination.Ticket.routeName -> {
@@ -120,7 +122,7 @@ fun AppNavHost(
                 )
             }
         ) {
-            StartScreen(navigationViewModel, mainViewModel.isPermissionGranted)
+            StartScreen(navigationViewModel, isPermissionGranted)
         }
 
         composable(
@@ -198,7 +200,6 @@ fun AppNavHost(
             TicketScreen(
                 mainViewModel = mainViewModel,
                 navigationViewModel = navigationViewModel,
-                isCameraPermissionGranted = mainViewModel.isPermissionGranted
             )
         }
 
@@ -238,8 +239,6 @@ fun AppNavHost(
             HomeScreen(
                 mainViewModel = mainViewModel,
                 navigationViewModel = navigationViewModel,
-                isCameraPermissionGranted = mainViewModel.isPermissionGranted,
-                ticketsList = mainViewModel.ticketsList
             )
         }
     }
@@ -250,8 +249,8 @@ fun AppNavHost(
             systemUiController.setNavigationBarColor(Secondary50)
         }
         NavDestination.Camera.routeName -> {
-            systemUiController.setStatusBarColor(if (mainViewModel.isPermissionGranted) Color.Black else Secondary50)
-            systemUiController.setNavigationBarColor(if (mainViewModel.isPermissionGranted) Color.Black else Secondary50)
+            systemUiController.setStatusBarColor(if (isPermissionGranted) Color.Black else Secondary50)
+            systemUiController.setNavigationBarColor(if (isPermissionGranted) Color.Black else Secondary50)
         }
         NavDestination.Ticket.routeName -> {
             systemUiController.setStatusBarColor(Secondary50)
