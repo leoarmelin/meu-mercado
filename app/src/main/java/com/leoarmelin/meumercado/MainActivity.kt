@@ -17,20 +17,20 @@ import com.leoarmelin.meumercado.ui.navigation.AppNavHost
 import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 @ExperimentalPagerApi
 @ExperimentalAnimationApi
 @androidx.camera.core.ExperimentalGetImage
+@AndroidEntryPoint
 class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
     val permissionsHandler = PermissionsHandler(this, this)
 
-    private lateinit var mainViewModel: MainViewModel
+    private val mainViewModel: MainViewModel by viewModels()
     private val navigationViewModel: NavigationViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        mainViewModel = MainViewModel(application)
 
         setContent {
             MeuMercadoTheme {

@@ -1,12 +1,11 @@
 package com.leoarmelin.meumercado.viewmodels
 
-import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.leoarmelin.meumercado.models.Ticket
 import com.leoarmelin.meumercado.models.api.CreateNfceRequest
@@ -14,14 +13,16 @@ import com.leoarmelin.meumercado.models.api.Result
 import com.leoarmelin.meumercado.models.api.ResultState
 import com.leoarmelin.meumercado.repository.NfceScrapperRepository
 import com.leoarmelin.meumercado.repository.RoomRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel(
-    appObj: Application,
-    private val nfceScrapperRepository: NfceScrapperRepository = NfceScrapperRepository(),
-) : AndroidViewModel(appObj) {
-    private val roomRepository: RoomRepository = RoomRepository(appObj)
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val nfceScrapperRepository: NfceScrapperRepository,
+    private val roomRepository: RoomRepository
+) : ViewModel() {
 
     var isPermissionDialogOpen by mutableStateOf(false)
     var isPermissionGranted by mutableStateOf(false)

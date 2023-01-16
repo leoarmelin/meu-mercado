@@ -1,19 +1,13 @@
 package com.leoarmelin.meumercado.repository
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import com.leoarmelin.meumercado.models.Ticket
-import com.leoarmelin.meumercado.room.AppDatabase
 import com.leoarmelin.meumercado.room.TicketDao
+import javax.inject.Inject
 
-class RoomRepository(application: Application) {
-    private var ticketDao: TicketDao
-
-    init {
-        val database = AppDatabase.getDatabase(application)
-        ticketDao = database.ticketDao()
-    }
-
+class RoomRepository @Inject constructor(
+    private val ticketDao: TicketDao
+) {
     val readAllTickets: LiveData<List<Ticket>> = ticketDao.fetchAllTickets()
 
     suspend fun insertTicket(ticket: Ticket) {

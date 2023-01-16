@@ -29,7 +29,7 @@ fun CameraPermissionDialog(isVisible: Boolean, onAccept: () -> Unit) {
             title = {
                 Box(modifier = Modifier.fillMaxWidth()) {
                     Text(
-                        text = stringResource(R.string.bem_vindo_ao_nfc_e_scanner),
+                        text = stringResource(R.string.bem_vindo_ao_precinho),
                         style = MaterialTheme.typography.h5,
                         color = Primary500,
                         modifier = Modifier.align(Alignment.Center)

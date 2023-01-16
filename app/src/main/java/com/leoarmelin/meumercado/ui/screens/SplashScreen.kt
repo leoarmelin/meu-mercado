@@ -40,7 +40,7 @@ fun SplashScreen(navigationViewModel: NavigationViewModel, mainViewModel: MainVi
             .background(Secondary50)
     ) {
         Text(
-            text = stringResource(com.leoarmelin.meumercado.R.string.nfc_e_scanner),
+            text = stringResource(com.leoarmelin.meumercado.R.string.precinho),
             style = MaterialTheme.typography.h1,
             fontSize = 40.sp,
             textAlign = TextAlign.Center,
