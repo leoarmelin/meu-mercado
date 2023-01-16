@@ -2,16 +2,18 @@ package com.leoarmelin.meumercado.ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.pagerTabIndicatorOffset
+import com.google.accompanist.pager.rememberPagerState
 import com.leoarmelin.meumercado.ui.theme.Gray400
+import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 import com.leoarmelin.meumercado.ui.theme.Secondary50
 import com.leoarmelin.meumercado.ui.theme.Secondary800
 
@@ -47,5 +49,14 @@ fun HomeTabs(state: PagerState, tabsList: List<String>, onSelectTab: (tabIndex: 
                 modifier = Modifier
             )
         }
+    }
+}
+
+@OptIn(ExperimentalPagerApi::class)
+@Preview
+@Composable
+private fun Preview() {
+    MeuMercadoTheme {
+        HomeTabs(state = rememberPagerState(), tabsList = listOf("Tab1", "Tab2"), onSelectTab = {})
     }
 }

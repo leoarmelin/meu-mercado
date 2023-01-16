@@ -9,12 +9,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.leoarmelin.meumercado.R
+import com.leoarmelin.meumercado.contants.MockData
 import com.leoarmelin.meumercado.extensions.toMoney
 import com.leoarmelin.meumercado.extensions.unityAmount
 import com.leoarmelin.meumercado.models.Product
 import com.leoarmelin.meumercado.ui.theme.Gray900
+import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 import com.leoarmelin.meumercado.ui.theme.Secondary800
 
 @Composable
@@ -65,5 +68,13 @@ fun ProductItem(product: Product) {
             color = Secondary800,
             modifier = Modifier.align(Alignment.Top)
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun Preview() {
+    MeuMercadoTheme {
+        ProductItem(product = MockData.productOne)
     }
 }

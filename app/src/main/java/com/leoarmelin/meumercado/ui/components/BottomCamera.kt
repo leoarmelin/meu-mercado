@@ -16,8 +16,12 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.leoarmelin.meumercado.R
+import com.leoarmelin.meumercado.contants.MockData
+import com.leoarmelin.meumercado.extensions.toMoney
+import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 import com.leoarmelin.meumercado.ui.theme.Primary500
 import com.leoarmelin.meumercado.ui.theme.Secondary800
 
@@ -63,6 +67,19 @@ fun BottomCamera(totalPrice: String?, modifier: Modifier, onCameraClick: () -> U
                 tint = Color.White,
                 modifier = Modifier.size(30.dp)
             )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun Preview() {
+    MeuMercadoTheme {
+        BottomCamera(
+            totalPrice = MockData.ticketWithoutConsumer.priceTotal.toMoney(),
+            modifier = Modifier
+        ) {
+
         }
     }
 }

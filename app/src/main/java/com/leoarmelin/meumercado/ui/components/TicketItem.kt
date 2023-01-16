@@ -9,13 +9,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.leoarmelin.meumercado.R
+import com.leoarmelin.meumercado.contants.MockData
 import com.leoarmelin.meumercado.extensions.noRippleClickable
 import com.leoarmelin.meumercado.extensions.toMoney
 import com.leoarmelin.meumercado.extensions.toZonedDateTime
 import com.leoarmelin.meumercado.models.Ticket
 import com.leoarmelin.meumercado.ui.theme.Gray900
+import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 import com.leoarmelin.meumercado.ui.theme.Primary500
 import com.leoarmelin.meumercado.ui.theme.Secondary800
 import java.time.format.DateTimeFormatter
@@ -43,7 +46,8 @@ fun TicketItem(ticket: Ticket, onItemClick: (ticket: Ticket) -> Unit) {
         Column(
             Modifier
                 .padding(end = 12.dp)
-                .weight(1f)) {
+                .weight(1f)
+        ) {
             Text(text = ticket.store.name, style = MaterialTheme.typography.h5, color = Primary500)
             Text(
                 text = ticket.priceTotal.toMoney(),
@@ -57,5 +61,13 @@ fun TicketItem(ticket: Ticket, onItemClick: (ticket: Ticket) -> Unit) {
                 color = Gray900
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun Preview() {
+    MeuMercadoTheme {
+        TicketItem(ticket = MockData.ticketWithoutConsumer, onItemClick = {})
     }
 }

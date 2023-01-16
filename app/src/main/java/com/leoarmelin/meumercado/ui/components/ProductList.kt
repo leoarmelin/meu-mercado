@@ -15,12 +15,15 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.leoarmelin.meumercado.contants.MockData
 import com.leoarmelin.meumercado.extensions.toZonedDateTime
 import com.leoarmelin.meumercado.models.Ticket
 import com.leoarmelin.meumercado.ui.theme.Gray400
 import com.leoarmelin.meumercado.ui.theme.Metropolis
+import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 import com.leoarmelin.meumercado.ui.theme.Secondary50
 import java.time.format.DateTimeFormatter
 
@@ -96,5 +99,13 @@ fun ProductList(ticket: Ticket) {
                     .fillMaxWidth()
             )
         }
+    }
+}
+
+@Preview
+@Composable
+private fun Preview() {
+    MeuMercadoTheme {
+        ProductList(ticket = MockData.ticketWithoutConsumer)
     }
 }

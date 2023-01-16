@@ -11,8 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.leoarmelin.meumercado.R
+import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 
 @Composable
 fun TicketFilters(ticketFilterType: TicketFilterType, onClick: (TicketFilterType) -> Unit) {
@@ -69,4 +71,28 @@ enum class TicketFilterType {
     Alphabet,
     Value,
     None,
+}
+
+@Preview
+@Composable
+private fun Alphabet() {
+    MeuMercadoTheme {
+        TicketFilters(ticketFilterType = TicketFilterType.Alphabet, onClick = {})
+    }
+}
+
+@Preview
+@Composable
+private fun Value() {
+    MeuMercadoTheme {
+        TicketFilters(ticketFilterType = TicketFilterType.Value, onClick = {})
+    }
+}
+
+@Preview
+@Composable
+private fun None() {
+    MeuMercadoTheme {
+        TicketFilters(ticketFilterType = TicketFilterType.None, onClick = {})
+    }
 }
