@@ -1,6 +1,5 @@
 package com.leoarmelin.meumercado.viewmodels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.leoarmelin.meumercado.models.Ticket
@@ -59,8 +58,12 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun fetchAllTickets(): LiveData<List<Ticket>> {
-        return roomRepository.readAllTickets
+    fun fetchAllTickets() {
+        viewModelScope.launch(Dispatchers.IO) {
+            roomRepository.readAllTickets.collect {
+                _ticketsList.value = it
+            }
+        }
     }
 
     private suspend fun insertTicket(ticket: Ticket) {
