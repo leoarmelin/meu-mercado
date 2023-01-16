@@ -6,18 +6,19 @@ import androidx.camera.core.Preview
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import com.google.mlkit.vision.barcode.BarcodeScanner
+import com.google.mlkit.vision.barcode.BarcodeScannerOptions
+import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import com.leoarmelin.meumercado.extensions.getCameraProvider
+import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 
 @androidx.camera.core.ExperimentalGetImage
 @Composable
@@ -88,6 +89,37 @@ fun CameraView(
     Box(modifier = modifier.fillMaxSize()) {
         AndroidView({ previewView }, modifier = Modifier.fillMaxSize()) {
 
+        }
+    }
+}
+
+// Only visible running in a real device
+@androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
+@androidx.compose.ui.tooling.preview.Preview
+@Composable
+private fun Preview() {
+    MeuMercadoTheme {
+        var isInitialized by remember { mutableStateOf(false) }
+
+        LaunchedEffect(Unit) {
+            isInitialized = true
+        }
+
+        if (isInitialized) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                CameraView(
+                    barcodeScanner = BarcodeScanning.getClient(
+                        BarcodeScannerOptions.Builder()
+                            .setBarcodeFormats(
+                                Barcode.FORMAT_QR_CODE,
+                                Barcode.FORMAT_AZTEC
+                            ).build()
+                    ),
+                    barcodeTypeCallback = {},
+                    barcodeSuccessCallback = {},
+                    barcodeFailureCallback = {}
+                )
+            }
         }
     }
 }
