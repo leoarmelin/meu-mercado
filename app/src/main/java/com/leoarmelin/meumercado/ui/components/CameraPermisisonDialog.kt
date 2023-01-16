@@ -10,8 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import com.leoarmelin.meumercado.ui.theme.Gray900
 import com.leoarmelin.meumercado.ui.theme.Primary500
+import com.leoarmelin.meumercado.R
 
 @Composable
 fun CameraPermissionDialog(isVisible: Boolean, onAccept: () -> Unit) {
@@ -25,7 +27,7 @@ fun CameraPermissionDialog(isVisible: Boolean, onAccept: () -> Unit) {
             title = {
                 Box(modifier = Modifier.fillMaxWidth()) {
                     Text(
-                        text = "Bem-vindo ao NFC-e Scanner",
+                        text = stringResource(R.string.bem_vindo_ao_nfc_e_scanner),
                         style = MaterialTheme.typography.h5,
                         color = Primary500,
                         modifier = Modifier.align(Alignment.Center)
@@ -34,7 +36,7 @@ fun CameraPermissionDialog(isVisible: Boolean, onAccept: () -> Unit) {
             },
             text = {
                 Text(
-                    text = "Nosso aplicativo usa sua câmera para acessar o website do QRCode e coletar os dados dos itens compraods. Dessa forma, é necessário permitir que o app acesse sua câmera durante o uso do aplicativo para que você desfrute de nossas funcionalidades!",
+                    text = stringResource(R.string.nosso_aplicativo_usa_sua_camera),
                     style = MaterialTheme.typography.body1,
                     color = Gray900
                 )
@@ -48,7 +50,7 @@ fun CameraPermissionDialog(isVisible: Boolean, onAccept: () -> Unit) {
                     elevation = null
                 ) {
                     Text(
-                        text = "Entendi",
+                        text = stringResource(R.string.entendi),
                         style = MaterialTheme.typography.h5,
                         color = Primary500
                     )

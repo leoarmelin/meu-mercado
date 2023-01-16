@@ -32,7 +32,7 @@ fun TicketFilters(ticketFilterType: TicketFilterType, onClick: (TicketFilterType
             Text(text = "$", style = MaterialTheme.typography.body2, color = Color.White)
             Icon(
                 painter = painterResource(id = R.drawable.ic_arrow_up),
-                contentDescription = "Arrow pointing vertically",
+                contentDescription = "Seta apontando veticalmente",
                 tint = Color.White,
                 modifier = Modifier
                     .padding(start = 1.dp)
@@ -50,7 +50,7 @@ fun TicketFilters(ticketFilterType: TicketFilterType, onClick: (TicketFilterType
             Text(text = "A", style = MaterialTheme.typography.body2, color = Color.White)
             Icon(
                 painter = painterResource(id = R.drawable.ic_arrow_up),
-                contentDescription = "Arrow pointing horizontally",
+                contentDescription = "Seta apontando horizontalmente",
                 tint = Color.White,
                 modifier = Modifier
                     .padding(horizontal = 2.dp)

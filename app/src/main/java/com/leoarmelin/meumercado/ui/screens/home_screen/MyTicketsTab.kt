@@ -9,6 +9,5 @@ fun MyTicketsTab(
     ticketsList: List<Ticket>,
     onItemClick: (Ticket) -> Unit
 ) {
-
     TicketsList(ticketsList, onItemClick)
 }

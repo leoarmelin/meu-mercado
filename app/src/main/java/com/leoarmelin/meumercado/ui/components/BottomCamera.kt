@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -34,9 +35,9 @@ fun BottomCamera(totalPrice: String?, modifier: Modifier, onCameraClick: () -> U
                 style = MaterialTheme.typography.h4,
                 text = buildAnnotatedString {
                     withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                        append("Valor total: ")
+                        append(stringResource(R.string.valor_total_dois_pontos))
                     }
-                    append(totalPrice)
+                    append(" $totalPrice")
                 },
                 color = Color.White,
                 modifier = Modifier
@@ -58,7 +59,7 @@ fun BottomCamera(totalPrice: String?, modifier: Modifier, onCameraClick: () -> U
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_camera),
-                contentDescription = "Ícone de câmera fotográfica",
+                contentDescription = stringResource(R.string.icone_de_camera_fotografica),
                 tint = Color.White,
                 modifier = Modifier.size(30.dp)
             )

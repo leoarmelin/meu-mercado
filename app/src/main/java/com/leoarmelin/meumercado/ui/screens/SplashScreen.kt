@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.leoarmelin.meumercado.models.navigation.NavDestination
@@ -39,7 +40,7 @@ fun SplashScreen(navigationViewModel: NavigationViewModel, mainViewModel: MainVi
             .background(Secondary50)
     ) {
         Text(
-            text = "NFC-e\nScanner",
+            text = stringResource(com.leoarmelin.meumercado.R.string.nfc_e_scanner),
             style = MaterialTheme.typography.h1,
             fontSize = 40.sp,
             textAlign = TextAlign.Center,

@@ -1,3 +1,27 @@
 <resources>
     <string name="app_name">MeuMercado</string>
+
+    <string name="comece_organizando_sua_vida_financeira">Comece organizando\nsua vida financeira</string>
+    <string name="icone_de_uma_nota_fiscal">Ícone de uma nota fiscal</string>
+    <string name="abrir_camera">Abrir câmera</string>
+    <string name="icone_de_camera_fotografica">"Ícone de câmera fotográfica"</string>
+    <string name="nfc_e_scanner">"NFC-e\nScanner"</string>
+    <string name="aponte_este_quadrado_deixando_o">Aponte este quadrado deixando o QR Code dentro dele para adicionar os produtos.</string>
+    <string name="botao_para_fechar_a_camera">Botão para fechar a câmera.</string>
+    <string name="mire_sua_camera_para_o_qr_code">Mire sua câmera para o QR Code</string>
+    <string name="erro_ao_ler_o_qr_code">Erro ao ler o QR Code</string>
+    <string name="voce_precisa_autorizar_a_camera">Você precisa autorizar a câmera para começarmos</string>
+    <string name="icone_de_uma_camera_com_um_rosto_triste">Ícone de uma câmera com um rosto triste.</string>
+    <string name="va_para_configuracoes_e_garante">Vá para Configurações e garanta permissão para o uso da câmera. Depois, reinicie o aplicativo.</string>
+    <string name="em_breve">Em Breve</string>
+    <string name="meus_tickets">"Meus Tickets"</string>
+    <string name="valor_total_dois_pontos">Valor total:</string>
+    <string name="bem_vindo_ao_nfc_e_scanner">Bem-vindo ao NFC-e Scanner</string>
+    <string name="nosso_aplicativo_usa_sua_camera">Nosso aplicativo usa sua câmera para acessar o website do QRCode e coletar os dados dos itens compraods. Dessa forma, é necessário permitir que o app acesse sua câmera durante o uso do aplicativo para que você desfrute de nossas funcionalidades!</string>
+    <string name="entendi">Entendi</string>
+    <string name="icone_de_var">Ícone de %s</string>
+    <string name="um_ovo">um ovo</string>
+    <string name="uma_balanca">uma balança</string>
+    <string name="preco_unitario_var">Preço unitário: %s</string>
+    <string name="quantidade_total_dois_pontos">Quantidade total:</string>
 </resources>

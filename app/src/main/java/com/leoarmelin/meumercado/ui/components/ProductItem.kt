@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.leoarmelin.meumercado.R
 import com.leoarmelin.meumercado.extensions.toMoney
@@ -26,22 +27,33 @@ fun ProductItem(product: Product) {
     ) {
         Icon(
             painter = painterResource(id = if (product.unity == "UN") R.drawable.ic_egg else R.drawable.ic_balance),
-            contentDescription = "Ícone de ${if (product.unity == "UN") "um ovo" else "uma balança"}",
+            contentDescription = stringResource(
+                R.string.icone_de_var,
+                if (product.unity == "UN") stringResource(R.string.um_ovo) else stringResource(R.string.uma_balanca)
+            ),
             tint = Secondary800,
             modifier = Modifier
                 .padding(end = 20.dp)
                 .size(40.dp)
         )
 
-        Column(Modifier.padding(end = 12.dp).weight(1f)) {
-            Text(text = product.name ?: product.code, style = MaterialTheme.typography.h5, color = Secondary800)
+        Column(
+            Modifier
+                .padding(end = 12.dp)
+                .weight(1f)
+        ) {
+            Text(
+                text = product.name ?: product.code,
+                style = MaterialTheme.typography.h5,
+                color = Secondary800
+            )
             Text(
                 text = product.unityAmount(),
                 style = MaterialTheme.typography.caption,
                 color = Gray900
             )
             Text(
-                text = "Preço unitário: ${product.price.toMoney()}",
+                text = stringResource(R.string.preco_unitario_var, product.price.toMoney()),
                 style = MaterialTheme.typography.caption,
                 color = Gray900
             )

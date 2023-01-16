@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -44,15 +45,15 @@ fun StartScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Comece organizando\nsua vida financeira",
+            text = stringResource(R.string.comece_organizando_sua_vida_financeira),
             color = Primary800,
             style = MaterialTheme.typography.h1,
             textAlign = TextAlign.Center
         )
 
         Icon(
-            painter = painterResource(id = R.drawable.ic_ticket),
-            contentDescription = "Ícone de uma nota fiscal",
+            painter = painterResource(R.drawable.ic_ticket),
+            contentDescription = stringResource(R.string.icone_de_uma_nota_fiscal),
             tint = Primary800
         )
 
@@ -77,10 +78,10 @@ fun StartScreen(
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_camera),
-                contentDescription = "Ícone de câmera fotográfica",
+                contentDescription = stringResource(R.string.icone_de_camera_fotografica),
                 modifier = Modifier.padding(end = 8.dp)
             )
-            Text(text = "Abrir câmera", style = MaterialTheme.typography.h5)
+            Text(text = stringResource(R.string.abrir_camera), style = MaterialTheme.typography.h5)
         }
     }
 }

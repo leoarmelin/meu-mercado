@@ -11,9 +11,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.leoarmelin.meumercado.R
 import com.leoarmelin.meumercado.extensions.getActivity
 import com.leoarmelin.meumercado.models.Ticket
 import com.leoarmelin.meumercado.models.navigation.NavDestination
@@ -38,7 +40,7 @@ fun HomeScreen(
     val activity = context.getActivity()
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(1)
-    val tabsList = listOf("Em Breve", "Meus Tickets")
+    val tabsList = listOf(stringResource(R.string.em_breve), stringResource(R.string.meus_tickets))
 
     Box(
         modifier = Modifier
@@ -61,8 +63,8 @@ fun HomeScreen(
                 when (page) {
                     0 -> ComingSoonTab()
                     1 -> MyTicketsTab(ticketsList) { ticket ->
-                            mainViewModel.ticket = ticket
-                            navigationViewModel.setRoute(NavDestination.Ticket.routeName)
+                        mainViewModel.ticket = ticket
+                        navigationViewModel.setRoute(NavDestination.Ticket.routeName)
                     }
                 }
             }

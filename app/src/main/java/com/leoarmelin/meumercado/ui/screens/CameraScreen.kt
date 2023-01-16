@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
@@ -114,16 +115,16 @@ fun CameraScreen(
             )
 
             Icon(
-                painter = painterResource(id = R.drawable.ic_camera_frame),
-                contentDescription = "Aponte este quadrado deixando o QR Code dentro dele para adicionar os produtos.",
+                painter = painterResource(R.drawable.ic_camera_frame),
+                contentDescription = stringResource(R.string.aponte_este_quadrado_deixando_o),
                 modifier = Modifier
                     .size(270.dp)
                     .align(Alignment.Center), tint = Color(0x99BABABA)
             )
 
             Icon(
-                painter = painterResource(id = R.drawable.ic_close),
-                contentDescription = "Botão para fechar a câmera.",
+                painter = painterResource(R.drawable.ic_close),
+                contentDescription = stringResource(R.string.botao_para_fechar_a_camera),
                 modifier = Modifier
                     .padding(start = 28.dp, top = 30.dp)
                     .align(Alignment.TopStart)
@@ -137,7 +138,7 @@ fun CameraScreen(
             )
 
             Text(
-                text = "Mire sua câmera para o QR Code",
+                text = stringResource(R.string.mire_sua_camera_para_o_qr_code),
                 style = MaterialTheme.typography.body2,
                 color = Color.White,
                 modifier = Modifier
@@ -149,7 +150,7 @@ fun CameraScreen(
 
             if (isErrorVisible) {
                 Text(
-                    text = "Erro ao ler o QR Code",
+                    text = stringResource(R.string.erro_ao_ler_o_qr_code),
                     style = MaterialTheme.typography.body2,
                     color = Color.White,
                     modifier = Modifier
@@ -169,7 +170,7 @@ fun CameraScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Você precisa autorizar a câmera para começarmos",
+                    text = stringResource(R.string.voce_precisa_autorizar_a_camera),
                     style = MaterialTheme.typography.h1,
                     textAlign = TextAlign.Center,
                     color = Primary800
@@ -177,13 +178,15 @@ fun CameraScreen(
 
                 Icon(
                     painter = painterResource(id = R.drawable.ic_sad_cam),
-                    contentDescription = "Ícone de uma câmera com um rosto triste.",
+                    contentDescription = stringResource(R.string.icone_de_uma_camera_com_um_rosto_triste),
                     tint = Primary800,
-                    modifier = Modifier.width(118.dp).height(106.dp),
+                    modifier = Modifier
+                        .width(118.dp)
+                        .height(106.dp),
                 )
 
                 Text(
-                    text = "Vá para Configurações e garanta permissão para o uso da câmera. Depois, reinicie o aplicativo.",
+                    text = stringResource(R.string.va_para_configuracoes_e_garante),
                     style = MaterialTheme.typography.h5,
                     color = Gray400,
                     textAlign = TextAlign.Center,
