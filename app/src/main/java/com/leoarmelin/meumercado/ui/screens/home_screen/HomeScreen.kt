@@ -40,7 +40,7 @@ fun HomeScreen(
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(1)
     val tabsList = listOf(stringResource(R.string.em_breve), stringResource(R.string.meus_tickets))
-    val isCameraPermissionGranted by mainViewModel.isPermissionGranted.collectAsState()
+    val isCameraPermissionGranted by mainViewModel.isCameraPermissionGranted.collectAsState()
     val ticketsList by mainViewModel.ticketsList.collectAsState()
 
     Box(

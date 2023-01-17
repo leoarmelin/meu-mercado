@@ -46,8 +46,9 @@ fun AppNavHost(
     val activity = LocalContext.current as? Activity
     var closeCount by remember { mutableStateOf(0) }
     val navAnimationDuration = remember { 500 }
-    val ticketResultState by mainViewModel.ticketResultState.collectAsState()
-    val isPermissionGranted by mainViewModel.isPermissionGranted.collectAsState()
+
+    val getNfceState by mainViewModel.getNfceState.collectAsState()
+    val isPermissionGranted by mainViewModel.isCameraPermissionGranted.collectAsState()
 
     BackHandler {
         when (navigationViewModel.currentRoute) {
@@ -63,7 +64,7 @@ fun AppNavHost(
                 }
             }
             NavDestination.Camera.routeName -> {
-                if (ticketResultState == ResultState.Loading) return@BackHandler
+                if (getNfceState == ResultState.Loading) return@BackHandler
                 navigationViewModel.popBack()
             }
             NavDestination.Ticket.routeName -> {

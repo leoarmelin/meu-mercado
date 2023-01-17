@@ -40,8 +40,8 @@ fun CameraScreen(
     mainViewModel: MainViewModel,
     navigationViewModel: NavigationViewModel
 ) {
-    val ticketResultState by mainViewModel.ticketResultState.collectAsState()
-    val isPermissionGranted by mainViewModel.isPermissionGranted.collectAsState()
+    val ticketResultState by mainViewModel.getNfceState.collectAsState()
+    val isPermissionGranted by mainViewModel.isCameraPermissionGranted.collectAsState()
     val barcodeScannerOptions = remember {
         BarcodeScannerOptions.Builder()
             .setBarcodeFormats(

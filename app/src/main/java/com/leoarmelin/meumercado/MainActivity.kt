@@ -11,6 +11,9 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.leoarmelin.meumercado.handlers.PermissionsHandler
 import com.leoarmelin.meumercado.models.navigation.NavDestination
@@ -20,6 +23,7 @@ import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @ExperimentalPagerApi
 @ExperimentalAnimationApi
@@ -34,10 +38,16 @@ class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
+                mainViewModel.fetchAllTickets()
+            }
+        }
+
         setContent {
             MeuMercadoTheme {
                 val scaffoldState = rememberScaffoldState()
-                val isPermissionDialogOpen by mainViewModel.isPermissionDialogOpen.collectAsState()
+                val isPermissionDialogOpen by mainViewModel.isCameraPermissionDialogOpen.collectAsState()
 
                 Scaffold(
                     scaffoldState = scaffoldState,

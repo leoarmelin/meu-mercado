@@ -21,38 +21,38 @@ class MainViewModel @Inject constructor(
     private val roomRepository: RoomRepository
 ) : ViewModel() {
 
-    private val _isPermissionDialogOpen = MutableStateFlow(false)
-    val isPermissionDialogOpen get() = _isPermissionDialogOpen.asStateFlow()
+    private val _isCameraPermissionDialogOpen = MutableStateFlow(false)
+    val isCameraPermissionDialogOpen get() = _isCameraPermissionDialogOpen.asStateFlow()
 
-    private val _isPermissionGranted = MutableStateFlow(false)
-    val isPermissionGranted get() = _isPermissionGranted.asStateFlow()
+    private val _isCameraPermissionGranted = MutableStateFlow(false)
+    val isCameraPermissionGranted get() = _isCameraPermissionGranted.asStateFlow()
 
-    private val _ticketResultState = MutableStateFlow<ResultState?>(null)
-    val ticketResultState get() = _ticketResultState.asStateFlow()
-
-    private val _ticket = MutableStateFlow<Ticket?>(null)
-    val ticket get() = _ticket.asStateFlow()
+    private val _selectedTicket = MutableStateFlow<Ticket?>(null)
+    val selectedTicket get() = _selectedTicket.asStateFlow()
 
     private val _ticketsList = MutableStateFlow(emptyList<Ticket>())
     val ticketsList get() = _ticketsList.asStateFlow()
 
     fun setCameraPermissionState(state: Boolean) {
-        _isPermissionGranted.value = state
+        _isCameraPermissionGranted.value = state
     }
+
+    private val _getNfceState = MutableStateFlow<ResultState?>(null)
+    val getNfceState get() = _getNfceState.asStateFlow()
 
     fun getNfce(url: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _ticketResultState.value = ResultState.Loading
+            _getNfceState.value = ResultState.Loading
 
             when (val result = nfceScrapperRepository.getNfce(CreateNfceRequest(url))) {
                 is Result.Loading -> {}
                 is Result.Success -> {
-                    _ticket.value = result.data
+                    _selectedTicket.value = result.data
                     insertTicket(result.data)
-                    _ticketResultState.value = ResultState.Success
+                    _getNfceState.value = ResultState.Success
                 }
                 is Result.Error -> {
-                    _ticketResultState.value = ResultState.Error(result.exception)
+                    _getNfceState.value = ResultState.Error(result.exception)
                 }
             }
         }
@@ -84,14 +84,14 @@ class MainViewModel @Inject constructor(
     }
 
     fun togglePermissionDialog(state: Boolean) {
-        _isPermissionDialogOpen.value = state
+        _isCameraPermissionDialogOpen.value = state
     }
 
     fun setTicket(ticket: Ticket) {
-        _ticket.value = ticket
+        _selectedTicket.value = ticket
     }
 
     fun clearTicketResultState() {
-        _ticketResultState.value = null
+        _getNfceState.value = null
     }
 }

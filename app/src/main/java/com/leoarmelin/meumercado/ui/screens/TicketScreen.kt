@@ -34,8 +34,8 @@ fun TicketScreen(
     val context = LocalContext.current
     val activity = context.getActivity()
     val scope = rememberCoroutineScope()
-    val isCameraPermissionGranted by mainViewModel.isPermissionGranted.collectAsState()
-    val ticket by mainViewModel.ticket.collectAsState()
+    val isCameraPermissionGranted by mainViewModel.isCameraPermissionGranted.collectAsState()
+    val ticket by mainViewModel.selectedTicket.collectAsState()
 
     Box(
         modifier = Modifier
