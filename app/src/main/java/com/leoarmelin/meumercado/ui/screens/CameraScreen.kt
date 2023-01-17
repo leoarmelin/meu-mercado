@@ -1,6 +1,10 @@
 package com.leoarmelin.meumercado.ui.screens
 
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -78,9 +82,8 @@ fun CameraScreen(
                 searchCoroutineScope.launch {
                     delay(1000)
                     isSearching = false
-                }
-                searchCoroutineScope.launch {
-
+                    delay(3000)
+                    isErrorVisible = false
                 }
             }
 
@@ -150,14 +153,19 @@ fun CameraScreen(
                     .padding(horizontal = 10.dp, vertical = 5.dp),
             )
 
-            if (isErrorVisible) {
+            AnimatedVisibility(
+                visible = isErrorVisible,
+                enter = fadeIn(),
+                exit = fadeOut(animationSpec = tween(3000)),
+                modifier = Modifier
+                    .padding(top = 60.dp)
+                    .align(Alignment.TopCenter)
+            ) {
                 Text(
                     text = stringResource(R.string.erro_ao_ler_o_qr_code),
                     style = MaterialTheme.typography.body2,
                     color = Color.White,
                     modifier = Modifier
-                        .padding(top = 60.dp)
-                        .align(Alignment.TopCenter)
                         .background(Secondary800, RoundedCornerShape(20.dp))
                         .padding(horizontal = 10.dp, vertical = 5.dp),
                 )
