@@ -1,12 +1,14 @@
 package com.leoarmelin.meumercado.models
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 data class Consumer(
-    @SerializedName("id")
+    @Json(name = "id")
     val id: String,
-    @SerializedName("name")
+    @Json(name = "name")
     val name: String,
-    @SerializedName("cpf")
+    @Json(name = "cpf")
     val cpf: String,
 )

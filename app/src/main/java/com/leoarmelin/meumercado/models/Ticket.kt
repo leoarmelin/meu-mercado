@@ -2,27 +2,30 @@ package com.leoarmelin.meumercado.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 @Entity(tableName = "ticket")
 data class Ticket(
+    @Json(name = "quantity")
     @PrimaryKey
     val id: String,
-    @SerializedName("quantity")
+    @Json(name = "quantity")
     val quantity: Int,
-    @SerializedName("priceTotal")
+    @Json(name = "priceTotal")
     val priceTotal: Double,
-    @SerializedName("key")
+    @Json(name = "key")
     val key: String,
-    @SerializedName("url")
+    @Json(name = "url")
     val url: String,
-    @SerializedName("issueAt")
+    @Json(name = "issueAt")
     val issueAt: String,
-    @SerializedName("products")
+    @Json(name = "products")
     val products: List<Product>,
-    @SerializedName("store")
+    @Json(name = "store")
     val store: Store,
-    @SerializedName("consumer")
+    @Json(name = "consumer")
     val consumer: Consumer? = null,
 )
 

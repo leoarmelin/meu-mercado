@@ -6,9 +6,9 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.leoarmelin.meumercado.models.Ticket
-import com.leoarmelin.meumercado.utils.ConsumerDataConverter
-import com.leoarmelin.meumercado.utils.ProductDataConverter
-import com.leoarmelin.meumercado.utils.StoreDataConverter
+import com.leoarmelin.meumercado.room.converters.ConsumerDataConverter
+import com.leoarmelin.meumercado.room.converters.ProductDataConverter
+import com.leoarmelin.meumercado.room.converters.StoreDataConverter
 
 @Database(entities = [Ticket::class], version = 3, exportSchema = false)
 @TypeConverters(
