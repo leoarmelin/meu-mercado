@@ -16,7 +16,7 @@ android {
         def localProperties = new Properties()
         localProperties.load(project.rootProject.file('local.properties').newDataInputStream())
 
-        applicationId "com.leoarmelin.meumercado"
+        applicationId "com.leoarmelin.precinho"
         minSdk 26
         targetSdk 33
         versionCode 4
