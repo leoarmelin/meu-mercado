@@ -53,7 +53,7 @@ fun TicketScreen(
                     if (!isCameraPermissionGranted) {
                         activity?.permissionsHandler?.requestCameraPermission()
                     } else {
-                        navigationViewModel.setRoute(NavDestination.Camera.routeName)
+                        navigationViewModel.setRoute(NavDestination.Camera.route)
                     }
                 }
             }

@@ -26,8 +26,8 @@ fun SplashScreen(navigationViewModel: NavigationViewModel, mainViewModel: MainVi
 
     LaunchedEffect(ticketsList) {
         navigationViewModel.setRoute(
-            if (ticketsList.isEmpty()) NavDestination.Start.routeName
-            else NavDestination.Home.routeName
+            if (ticketsList.isEmpty()) NavDestination.Start.route
+            else NavDestination.Home.route
         )
     }
 

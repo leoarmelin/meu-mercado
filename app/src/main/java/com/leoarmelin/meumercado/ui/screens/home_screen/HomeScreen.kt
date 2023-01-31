@@ -65,7 +65,7 @@ fun HomeScreen(
                     0 -> ComingSoonTab()
                     1 -> MyTicketsTab(ticketsList) { ticket ->
                         mainViewModel.setTicket(ticket)
-                        navigationViewModel.setRoute(NavDestination.Ticket.routeName)
+                        navigationViewModel.setRoute(NavDestination.Ticket.route)
                     }
                 }
             }
@@ -77,7 +77,7 @@ fun HomeScreen(
                     if (!isCameraPermissionGranted) {
                         activity?.permissionsHandler?.requestCameraPermission()
                     } else {
-                        navigationViewModel.setRoute(NavDestination.Camera.routeName)
+                        navigationViewModel.setRoute(NavDestination.Camera.route)
                     }
                 }
             }

@@ -71,12 +71,12 @@ class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
 
     override fun onGrantedCameraAccess() {
         mainViewModel.setCameraPermissionState(true)
-        navigationViewModel.setRoute(NavDestination.Camera.routeName)
+        navigationViewModel.setRoute(NavDestination.Camera.route)
     }
 
     override fun onNotGrantedCameraAccess() {
         mainViewModel.setCameraPermissionState(false)
-        navigationViewModel.setRoute(NavDestination.Camera.routeName)
+        navigationViewModel.setRoute(NavDestination.Camera.route)
     }
 
     override fun onShowCameraUIAccess() {

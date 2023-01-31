@@ -71,7 +71,7 @@ fun CameraScreen(
 
             is ResultState.Success -> {
                 Log.d("Aoba", "Success")
-                navigationViewModel.setRoute(NavDestination.Ticket.routeName)
+                navigationViewModel.setRoute(NavDestination.Ticket.route)
                 mainViewModel.clearTicketResultState()
                 isErrorVisible = false
             }

@@ -52,7 +52,7 @@ fun AppNavHost(
 
     BackHandler {
         when (navigationViewModel.currentRoute) {
-            NavDestination.Start.routeName, NavDestination.Home.routeName, NavDestination.Splash.routeName -> {
+            NavDestination.Start.route, NavDestination.Home.route, NavDestination.Splash.route -> {
                 closeCount++
                 if (closeCount == 2) {
                     activity?.finish()
@@ -63,23 +63,23 @@ fun AppNavHost(
                     closeCount = 0
                 }
             }
-            NavDestination.Camera.routeName -> {
+            NavDestination.Camera.route -> {
                 if (getNfceState == ResultState.Loading) return@BackHandler
                 navigationViewModel.popBack()
             }
-            NavDestination.Ticket.routeName -> {
-                navigationViewModel.setRoute(NavDestination.Home.routeName)
+            NavDestination.Ticket.route -> {
+                navigationViewModel.setRoute(NavDestination.Home.route)
             }
         }
     }
 
     AnimatedNavHost(
         navController = navController,
-        startDestination = NavDestination.Splash.routeName,
+        startDestination = NavDestination.Splash.route,
         modifier = Modifier.padding(padding)
     ) {
         composable(
-            NavDestination.Splash.routeName,
+            NavDestination.Splash.route,
             exitTransition = {
                 slideOutOfContainer(
                     AnimatedContentScope.SlideDirection.Left,
@@ -91,11 +91,11 @@ fun AppNavHost(
         }
 
         composable(
-            NavDestination.Start.routeName,
+            NavDestination.Start.route,
             enterTransition = {
                 slideIntoContainer(
                     when (initialState.destination.route) {
-                        NavDestination.Camera.routeName, NavDestination.Ticket.routeName -> AnimatedContentScope.SlideDirection.Right
+                        NavDestination.Camera.route, NavDestination.Ticket.route -> AnimatedContentScope.SlideDirection.Right
                         else -> AnimatedContentScope.SlideDirection.Left
                     },
                     animationSpec = tween(navAnimationDuration)
@@ -110,7 +110,7 @@ fun AppNavHost(
             popEnterTransition = {
                 slideIntoContainer(
                     when (initialState.destination.route) {
-                        NavDestination.Camera.routeName, NavDestination.Ticket.routeName -> AnimatedContentScope.SlideDirection.Right
+                        NavDestination.Camera.route, NavDestination.Ticket.route -> AnimatedContentScope.SlideDirection.Right
                         else -> AnimatedContentScope.SlideDirection.Left
                     },
                     animationSpec = tween(navAnimationDuration)
@@ -127,7 +127,7 @@ fun AppNavHost(
         }
 
         composable(
-            NavDestination.Camera.routeName,
+            NavDestination.Camera.route,
             enterTransition = {
                 slideIntoContainer(
                     AnimatedContentScope.SlideDirection.Left,
@@ -160,11 +160,11 @@ fun AppNavHost(
         }
 
         composable(
-            NavDestination.Ticket.routeName,
+            NavDestination.Ticket.route,
             enterTransition = {
                 slideIntoContainer(
                     when (initialState.destination.route) {
-                        NavDestination.Camera.routeName -> AnimatedContentScope.SlideDirection.Right
+                        NavDestination.Camera.route -> AnimatedContentScope.SlideDirection.Right
                         else -> AnimatedContentScope.SlideDirection.Left
                     },
                     animationSpec = tween(navAnimationDuration)
@@ -173,7 +173,7 @@ fun AppNavHost(
             exitTransition = {
                 slideOutOfContainer(
                     when (targetState.destination.route) {
-                        NavDestination.Camera.routeName -> AnimatedContentScope.SlideDirection.Left
+                        NavDestination.Camera.route -> AnimatedContentScope.SlideDirection.Left
                         else -> AnimatedContentScope.SlideDirection.Right
                     },
                     animationSpec = tween(navAnimationDuration)
@@ -182,7 +182,7 @@ fun AppNavHost(
             popEnterTransition = {
                 slideIntoContainer(
                     when (initialState.destination.route) {
-                        NavDestination.Camera.routeName -> AnimatedContentScope.SlideDirection.Right
+                        NavDestination.Camera.route -> AnimatedContentScope.SlideDirection.Right
                         else -> AnimatedContentScope.SlideDirection.Left
                     },
                     animationSpec = tween(navAnimationDuration)
@@ -191,7 +191,7 @@ fun AppNavHost(
             popExitTransition = {
                 slideOutOfContainer(
                     when (targetState.destination.route) {
-                        NavDestination.Camera.routeName -> AnimatedContentScope.SlideDirection.Left
+                        NavDestination.Camera.route -> AnimatedContentScope.SlideDirection.Left
                         else -> AnimatedContentScope.SlideDirection.Right
                     },
                     animationSpec = tween(navAnimationDuration)
@@ -205,11 +205,11 @@ fun AppNavHost(
         }
 
         composable(
-            NavDestination.Home.routeName,
+            NavDestination.Home.route,
             enterTransition = {
                 slideIntoContainer(
                     when (initialState.destination.route) {
-                        NavDestination.Camera.routeName, NavDestination.Ticket.routeName -> AnimatedContentScope.SlideDirection.Right
+                        NavDestination.Camera.route, NavDestination.Ticket.route -> AnimatedContentScope.SlideDirection.Right
                         else -> AnimatedContentScope.SlideDirection.Left
                     },
                     animationSpec = tween(navAnimationDuration)
@@ -224,7 +224,7 @@ fun AppNavHost(
             popEnterTransition = {
                 slideIntoContainer(
                     when (initialState.destination.route) {
-                        NavDestination.Camera.routeName, NavDestination.Ticket.routeName -> AnimatedContentScope.SlideDirection.Right
+                        NavDestination.Camera.route, NavDestination.Ticket.route -> AnimatedContentScope.SlideDirection.Right
                         else -> AnimatedContentScope.SlideDirection.Left
                     },
                     animationSpec = tween(navAnimationDuration)
@@ -245,19 +245,19 @@ fun AppNavHost(
     }
 
     when (navigationViewModel.currentRoute) {
-        NavDestination.Start.routeName, NavDestination.Splash.routeName -> {
+        NavDestination.Start.route, NavDestination.Splash.route -> {
             systemUiController.setStatusBarColor(Secondary50)
             systemUiController.setNavigationBarColor(Secondary50)
         }
-        NavDestination.Camera.routeName -> {
+        NavDestination.Camera.route -> {
             systemUiController.setStatusBarColor(if (isPermissionGranted) Color.Black else Secondary50)
             systemUiController.setNavigationBarColor(if (isPermissionGranted) Color.Black else Secondary50)
         }
-        NavDestination.Ticket.routeName -> {
+        NavDestination.Ticket.route -> {
             systemUiController.setStatusBarColor(Secondary50)
             systemUiController.setNavigationBarColor(Primary500)
         }
-        NavDestination.Home.routeName -> {
+        NavDestination.Home.route -> {
             systemUiController.setStatusBarColor(Secondary50)
             systemUiController.setNavigationBarColor(Primary500)
         }
