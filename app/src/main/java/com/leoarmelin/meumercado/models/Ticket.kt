@@ -5,11 +5,11 @@ import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
-@JsonClass(generateAdapter = true)
 @Entity(tableName = "ticket")
+@JsonClass(generateAdapter = true)
 data class Ticket(
-    @Json(name = "quantity")
     @PrimaryKey
+    @Json(name = "id")
     val id: String,
     @Json(name = "quantity")
     val quantity: Int,

@@ -5,6 +5,8 @@ import com.leoarmelin.meumercado.BuildConfig
 import com.leoarmelin.meumercado.retrofit.NfceScrapperService
 import com.leoarmelin.meumercado.room.AppDatabase
 import com.leoarmelin.meumercado.room.TicketDao
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,16 +36,16 @@ object NetworkModule {
             .build()
     }
 
-//    @Singleton
-//    @Provides
-//    fun provideMoshi(): Moshi = Moshi.Builder().build()
+    @Singleton
+    @Provides
+    fun provideMoshi(): Moshi = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
 
     @Singleton
     @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
+    fun provideRetrofit(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit = Retrofit.Builder()
         .baseUrl(BuildConfig.NFCE_SCRAPPER_URL)
         .client(okHttpClient)
-        .addConverterFactory(MoshiConverterFactory.create())
+        .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()
 
     @Singleton
