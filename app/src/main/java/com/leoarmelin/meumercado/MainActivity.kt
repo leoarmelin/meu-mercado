@@ -15,6 +15,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import com.leoarmelin.meumercado.handlers.PermissionsHandler
 import com.leoarmelin.meumercado.models.navigation.NavDestination
 import com.leoarmelin.meumercado.ui.components.CameraPermissionDialog
@@ -32,11 +35,15 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
     val permissionsHandler = PermissionsHandler(this, this)
 
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
     private val mainViewModel: MainViewModel by viewModels()
     private val navigationViewModel: NavigationViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        firebaseAnalytics = Firebase.analytics
 
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {

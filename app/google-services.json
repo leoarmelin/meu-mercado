@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "122337229513",
+    "project_id": "precinho-6a07d",
+    "storage_bucket": "precinho-6a07d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:122337229513:android:835a0c61b2ea988261eb18",
+        "android_client_info": {
+          "package_name": "com.leoarmelin.meumercado"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "122337229513-muvclku504nmt1258iaoq4kdt4or7b5g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUunR9cRxK_8T7NdA4HByhM5stIpnxkck"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "122337229513-muvclku504nmt1258iaoq4kdt4or7b5g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
