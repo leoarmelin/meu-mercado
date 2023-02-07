@@ -79,6 +79,7 @@ fun CameraScreen(
             is ResultState.Error -> {
                 Log.d("Aoba", "Error ${result.exception}")
                 isErrorVisible = true
+                mainViewModel.clearTicketResultState()
                 searchCoroutineScope.launch {
                     delay(1000)
                     isSearching = false
@@ -87,9 +88,7 @@ fun CameraScreen(
                 }
             }
 
-            else -> {
-                isErrorVisible = false
-            }
+            else -> {}
         }
     }
 
