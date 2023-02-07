@@ -1,43 +1,48 @@
 package com.leoarmelin.meumercado.ui.screens
 
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.leoarmelin.meumercado.R
+import com.leoarmelin.meumercado.extensions.getActivity
 import com.leoarmelin.meumercado.extensions.gradientBackground
 import com.leoarmelin.meumercado.extensions.noRippleClickable
 import com.leoarmelin.meumercado.models.api.ResultState
 import com.leoarmelin.meumercado.models.navigation.NavDestination
 import com.leoarmelin.meumercado.ui.components.CameraView
 import com.leoarmelin.meumercado.ui.components.LoadingDialog
-import com.leoarmelin.meumercado.ui.theme.Gray400
-import com.leoarmelin.meumercado.ui.theme.Primary800
-import com.leoarmelin.meumercado.ui.theme.Secondary50
-import com.leoarmelin.meumercado.ui.theme.Secondary800
+import com.leoarmelin.meumercado.ui.theme.*
 import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalAnimationApi::class, ExperimentalPagerApi::class)
 @androidx.camera.core.ExperimentalGetImage
 @Composable
 fun CameraScreen(
@@ -56,8 +61,13 @@ fun CameraScreen(
     val barcodeScanner = remember {
         BarcodeScanning.getClient(barcodeScannerOptions)
     }
+    val openIntentResult = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+        onResult = {}
+    )
 
     val searchCoroutineScope = rememberCoroutineScope()
+    val activity = LocalContext.current.getActivity()
 
     var isSearching by remember { mutableStateOf(false) }
     var isErrorVisible by remember { mutableStateOf(false) }
@@ -194,13 +204,42 @@ fun CameraScreen(
                         .height(106.dp),
                 )
 
-                Text(
-                    text = stringResource(R.string.va_para_configuracoes_e_garante),
-                    style = MaterialTheme.typography.h5,
-                    color = Gray400,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = 12.dp)
-                )
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = stringResource(R.string.va_para_configuracoes_e_garante),
+                        style = MaterialTheme.typography.h5,
+                        color = Gray400,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(horizontal = 12.dp)
+                    )
+
+                    Button(
+                        onClick = {
+                            searchCoroutineScope.launch {
+                                val appConfigIntent =
+                                    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                val uri: Uri = Uri.fromParts("package", activity?.packageName, null)
+                                appConfigIntent.data = uri
+                                openIntentResult.launch(appConfigIntent)
+                            }
+                        },
+                        shape = RoundedCornerShape(50.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Secondary800,
+                        )
+                    ) {
+                        Text(
+                            text = stringResource(R.string.ir_para_configuracoes),
+                            style = MaterialTheme.typography.h5,
+                            color = Color.White
+                        )
+                    }
+                }
+
             }
         }
 

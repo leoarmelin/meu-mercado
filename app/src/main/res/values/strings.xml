@@ -19,6 +19,7 @@
     <string name="bem_vindo_ao_precinho">Bem-vindo ao Precinho</string>
     <string name="nosso_aplicativo_usa_sua_camera">Nosso aplicativo usa sua câmera para acessar o website do QRCode e coletar os dados dos itens compraods. Dessa forma, é necessário permitir que o app acesse sua câmera durante o uso do aplicativo para que você desfrute de nossas funcionalidades!</string>
     <string name="entendi">Entendi</string>
+    <string name="ir_para_configuracoes">Ir para Configurações</string>
     <string name="icone_de_var">Ícone de %s</string>
     <string name="um_ovo">um ovo</string>
     <string name="uma_balanca">uma balança</string>
