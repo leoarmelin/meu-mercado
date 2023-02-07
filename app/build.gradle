@@ -22,7 +22,7 @@ android {
         applicationId "com.leoarmelin.meumercado"
         minSdk 26
         targetSdk 33
-        versionCode 7
+        versionCode 8
         versionName "1.0.3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
