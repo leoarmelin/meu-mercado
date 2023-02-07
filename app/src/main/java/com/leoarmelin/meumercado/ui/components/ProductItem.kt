@@ -29,10 +29,10 @@ fun ProductItem(product: Product) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(id = if (product.unity == "UN") R.drawable.ic_egg else R.drawable.ic_balance),
+            painter = painterResource(id = if (product.unity == "unidade") R.drawable.ic_egg else R.drawable.ic_balance),
             contentDescription = stringResource(
                 R.string.icone_de_var,
-                if (product.unity == "UN") stringResource(R.string.um_ovo) else stringResource(R.string.uma_balanca)
+                if (product.unity == "unidade") stringResource(R.string.um_ovo) else stringResource(R.string.uma_balanca)
             ),
             tint = Secondary800,
             modifier = Modifier
@@ -56,14 +56,14 @@ fun ProductItem(product: Product) {
                 color = Gray900
             )
             Text(
-                text = stringResource(R.string.preco_unitario_var, product.price.toMoney()),
+                text = stringResource(R.string.preco_unitario_var, (product.price / product.amount).toMoney()),
                 style = MaterialTheme.typography.caption,
                 color = Gray900
             )
         }
 
         Text(
-            text = (product.price * product.amount).toMoney(),
+            text = product.price.toMoney(),
             style = MaterialTheme.typography.h5,
             color = Secondary800,
             modifier = Modifier.align(Alignment.Top)

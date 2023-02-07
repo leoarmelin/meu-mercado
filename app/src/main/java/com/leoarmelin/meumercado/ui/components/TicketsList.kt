@@ -16,6 +16,16 @@ import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 @Composable
 fun TicketsList(ticketsList: List<Ticket>, onItemClick: (ticket: Ticket) -> Unit) {
     var ticketFilterType by remember { mutableStateOf(TicketFilterType.None) }
+    val filteredTicketList by remember(ticketsList, ticketFilterType) {
+        derivedStateOf {
+            when (ticketFilterType) {
+                TicketFilterType.None -> ticketsList
+                TicketFilterType.Value -> ticketsList.sortedByDescending { ticket -> ticket.priceTotal }
+                TicketFilterType.Alphabet -> ticketsList.sortedBy { ticket -> ticket.store.name }
+            }
+        }
+    }
+
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -29,11 +39,7 @@ fun TicketsList(ticketsList: List<Ticket>, onItemClick: (ticket: Ticket) -> Unit
             }
         }
 
-        items(when (ticketFilterType) {
-            TicketFilterType.None -> ticketsList
-            TicketFilterType.Value -> ticketsList.sortedByDescending { ticket -> ticket.priceTotal }
-            TicketFilterType.Alphabet -> ticketsList.sortedBy { ticket -> ticket.store.name }
-        }) { ticket ->
+        items(filteredTicketList) { ticket ->
             TicketItem(ticket = ticket, onItemClick)
         }
     }
