@@ -43,6 +43,7 @@ fun ProductList(ticket: Ticket) {
                 style = MaterialTheme.typography.h3,
                 color = Gray400,
                 textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 16.dp)
             )
 
             Text(
@@ -50,7 +51,7 @@ fun ProductList(ticket: Ticket) {
                 style = MaterialTheme.typography.body2,
                 color = Gray400,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 4.dp)
+                modifier = Modifier.padding(top = 4.dp, start = 16.dp, end = 16.dp)
             )
         }
 
