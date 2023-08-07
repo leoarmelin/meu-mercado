@@ -2,7 +2,6 @@ package com.leoarmelin.meumercado.dagger
 
 import android.content.Context
 import com.leoarmelin.meumercado.BuildConfig
-import com.leoarmelin.meumercado.retrofit.NfceScrapperService
 import com.leoarmelin.meumercado.room.AppDatabase
 import com.leoarmelin.meumercado.room.TicketDao
 import com.squareup.moshi.Moshi
@@ -47,11 +46,6 @@ object NetworkModule {
         .client(okHttpClient)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()
-
-    @Singleton
-    @Provides
-    fun provideNfceScrapperService(retrofit: Retrofit): NfceScrapperService =
-        retrofit.create(NfceScrapperService::class.java)
 
     @Singleton
     @Provides

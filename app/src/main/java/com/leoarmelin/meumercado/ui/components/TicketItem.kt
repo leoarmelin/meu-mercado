@@ -15,13 +15,11 @@ import com.leoarmelin.meumercado.R
 import com.leoarmelin.meumercado.contants.MockData
 import com.leoarmelin.meumercado.extensions.noRippleClickable
 import com.leoarmelin.meumercado.extensions.toMoney
-import com.leoarmelin.meumercado.extensions.toZonedDateTime
-import com.leoarmelin.meumercado.models.Ticket
+import com.leoarmelin.sharedmodels.Ticket
 import com.leoarmelin.meumercado.ui.theme.Gray900
 import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 import com.leoarmelin.meumercado.ui.theme.Primary500
 import com.leoarmelin.meumercado.ui.theme.Secondary800
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun TicketItem(ticket: Ticket, onItemClick: (ticket: Ticket) -> Unit) {
@@ -55,8 +53,7 @@ fun TicketItem(ticket: Ticket, onItemClick: (ticket: Ticket) -> Unit) {
                 color = Secondary800
             )
             Text(
-                text = ticket.issueAt.toZonedDateTime()
-                    .format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                text = ticket.issueAt,
                 style = MaterialTheme.typography.body2,
                 color = Gray900
             )
@@ -68,6 +65,6 @@ fun TicketItem(ticket: Ticket, onItemClick: (ticket: Ticket) -> Unit) {
 @Composable
 private fun Preview() {
     MeuMercadoTheme {
-        TicketItem(ticket = MockData.ticketWithoutConsumer, onItemClick = {})
+        TicketItem(ticket = MockData.ticket, onItemClick = {})
     }
 }

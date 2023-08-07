@@ -4,13 +4,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.leoarmelin.meumercado.models.navigation.NavDestination
+import com.leoarmelin.sharedmodels.navigation.NavDestination
 
 class NavigationViewModel : ViewModel() {
-    var currentRoute by mutableStateOf(NavDestination.Splash.route)
-    var lastRoute by mutableStateOf<String?>(null)
+    var currentRoute by mutableStateOf<NavDestination>(NavDestination.Splash)
+    var lastRoute by mutableStateOf<NavDestination?>(null)
 
-    fun setRoute(route: String) {
+    fun setRoute(route: NavDestination) {
         lastRoute = currentRoute
         currentRoute = route
     }

@@ -15,7 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.leoarmelin.meumercado.extensions.getActivity
 import com.leoarmelin.meumercado.extensions.toMoney
-import com.leoarmelin.meumercado.models.navigation.NavDestination
+import com.leoarmelin.sharedmodels.navigation.NavDestination
 import com.leoarmelin.meumercado.ui.components.BottomCamera
 import com.leoarmelin.meumercado.ui.components.ProductList
 import com.leoarmelin.meumercado.ui.theme.Secondary50
@@ -53,7 +53,7 @@ fun TicketScreen(
                     if (!isCameraPermissionGranted) {
                         activity?.permissionsHandler?.requestCameraPermission()
                     } else {
-                        navigationViewModel.setRoute(NavDestination.Camera.route)
+                        navigationViewModel.setRoute(NavDestination.Camera)
                     }
                 }
             }

@@ -76,7 +76,7 @@ fun BottomCamera(totalPrice: String?, modifier: Modifier, onCameraClick: () -> U
 private fun Preview() {
     MeuMercadoTheme {
         BottomCamera(
-            totalPrice = MockData.ticketWithoutConsumer.priceTotal.toMoney(),
+            totalPrice = MockData.ticket.priceTotal.toMoney(),
             modifier = Modifier
         ) {
 

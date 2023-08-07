@@ -17,17 +17,15 @@ import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.leoarmelin.meumercado.models.api.ResultState
-import com.leoarmelin.meumercado.models.navigation.NavDestination
 import com.leoarmelin.meumercado.ui.screens.CameraScreen
 import com.leoarmelin.meumercado.ui.screens.SplashScreen
-import com.leoarmelin.meumercado.ui.screens.StartScreen
 import com.leoarmelin.meumercado.ui.screens.TicketScreen
-import com.leoarmelin.meumercado.ui.screens.home_screen.HomeScreen
 import com.leoarmelin.meumercado.ui.theme.Primary500
 import com.leoarmelin.meumercado.ui.theme.Secondary50
 import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
+import com.leoarmelin.sharedmodels.api.ResultState
+import com.leoarmelin.sharedmodels.navigation.NavDestination
 import kotlinx.coroutines.launch
 
 @ExperimentalAnimationApi
@@ -52,7 +50,7 @@ fun AppNavHost(
 
     BackHandler {
         when (navigationViewModel.currentRoute) {
-            NavDestination.Start.route, NavDestination.Home.route, NavDestination.Splash.route -> {
+            NavDestination.Home -> {
                 closeCount++
                 if (closeCount == 2) {
                     activity?.finish()
@@ -63,13 +61,14 @@ fun AppNavHost(
                     closeCount = 0
                 }
             }
-            NavDestination.Camera.route -> {
+            NavDestination.Camera -> {
                 if (getNfceState == ResultState.Loading) return@BackHandler
                 navigationViewModel.popBack()
             }
-            NavDestination.Ticket.route -> {
-                navigationViewModel.setRoute(NavDestination.Home.route)
+            NavDestination.Ticket -> {
+                navigationViewModel.setRoute(NavDestination.Home)
             }
+            NavDestination.Splash -> {}
         }
     }
 
@@ -88,42 +87,6 @@ fun AppNavHost(
             }
         ) {
             SplashScreen(navigationViewModel, mainViewModel)
-        }
-
-        composable(
-            NavDestination.Start.route,
-            enterTransition = {
-                slideIntoContainer(
-                    when (initialState.destination.route) {
-                        NavDestination.Camera.route, NavDestination.Ticket.route -> AnimatedContentScope.SlideDirection.Right
-                        else -> AnimatedContentScope.SlideDirection.Left
-                    },
-                    animationSpec = tween(navAnimationDuration)
-                )
-            },
-            exitTransition = {
-                slideOutOfContainer(
-                    AnimatedContentScope.SlideDirection.Left,
-                    animationSpec = tween(navAnimationDuration)
-                )
-            },
-            popEnterTransition = {
-                slideIntoContainer(
-                    when (initialState.destination.route) {
-                        NavDestination.Camera.route, NavDestination.Ticket.route -> AnimatedContentScope.SlideDirection.Right
-                        else -> AnimatedContentScope.SlideDirection.Left
-                    },
-                    animationSpec = tween(navAnimationDuration)
-                )
-            },
-            popExitTransition = {
-                slideOutOfContainer(
-                    AnimatedContentScope.SlideDirection.Left,
-                    animationSpec = tween(navAnimationDuration)
-                )
-            }
-        ) {
-            StartScreen(navigationViewModel, isPermissionGranted)
         }
 
         composable(
@@ -203,67 +166,28 @@ fun AppNavHost(
                 navigationViewModel = navigationViewModel,
             )
         }
-
-        composable(
-            NavDestination.Home.route,
-            enterTransition = {
-                slideIntoContainer(
-                    when (initialState.destination.route) {
-                        NavDestination.Camera.route, NavDestination.Ticket.route -> AnimatedContentScope.SlideDirection.Right
-                        else -> AnimatedContentScope.SlideDirection.Left
-                    },
-                    animationSpec = tween(navAnimationDuration)
-                )
-            },
-            exitTransition = {
-                slideOutOfContainer(
-                    AnimatedContentScope.SlideDirection.Left,
-                    animationSpec = tween(navAnimationDuration)
-                )
-            },
-            popEnterTransition = {
-                slideIntoContainer(
-                    when (initialState.destination.route) {
-                        NavDestination.Camera.route, NavDestination.Ticket.route -> AnimatedContentScope.SlideDirection.Right
-                        else -> AnimatedContentScope.SlideDirection.Left
-                    },
-                    animationSpec = tween(navAnimationDuration)
-                )
-            },
-            popExitTransition = {
-                slideOutOfContainer(
-                    AnimatedContentScope.SlideDirection.Left,
-                    animationSpec = tween(navAnimationDuration)
-                )
-            }
-        ) {
-            HomeScreen(
-                mainViewModel = mainViewModel,
-                navigationViewModel = navigationViewModel,
-            )
-        }
     }
 
     when (navigationViewModel.currentRoute) {
-        NavDestination.Start.route, NavDestination.Splash.route -> {
+        NavDestination.Splash -> {
             systemUiController.setStatusBarColor(Secondary50)
             systemUiController.setNavigationBarColor(Secondary50)
         }
-        NavDestination.Camera.route -> {
+        NavDestination.Camera -> {
             systemUiController.setStatusBarColor(if (isPermissionGranted) Color.Black else Secondary50)
             systemUiController.setNavigationBarColor(if (isPermissionGranted) Color.Black else Secondary50)
         }
-        NavDestination.Ticket.route -> {
+        NavDestination.Ticket -> {
             systemUiController.setStatusBarColor(Secondary50)
             systemUiController.setNavigationBarColor(Primary500)
         }
-        NavDestination.Home.route -> {
+        NavDestination.Home -> {
             systemUiController.setStatusBarColor(Secondary50)
             systemUiController.setNavigationBarColor(Primary500)
         }
     }
 
     LaunchedEffect(navigationViewModel.currentRoute) {
-        navController.navigate(navigationViewModel.currentRoute)
+        navController.navigate(navigationViewModel.currentRoute.route)
     }
 }

@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.leoarmelin.meumercado.contants.MockData
-import com.leoarmelin.meumercado.models.Ticket
+import com.leoarmelin.sharedmodels.Ticket
 import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 
 @Composable
@@ -49,7 +49,7 @@ fun TicketsList(ticketsList: List<Ticket>, onItemClick: (ticket: Ticket) -> Unit
 @Composable
 private fun OneItem() {
     MeuMercadoTheme {
-        TicketsList(ticketsList = listOf(MockData.ticketWithoutConsumer), onItemClick = {})
+        TicketsList(ticketsList = listOf(MockData.ticket), onItemClick = {})
     }
 }
 

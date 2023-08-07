@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.leoarmelin.meumercado.models.Ticket
+import com.leoarmelin.sharedmodels.Ticket
 import kotlinx.coroutines.flow.Flow
 
 @Dao

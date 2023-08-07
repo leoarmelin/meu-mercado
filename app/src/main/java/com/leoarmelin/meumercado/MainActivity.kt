@@ -19,7 +19,6 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.leoarmelin.meumercado.handlers.PermissionsHandler
-import com.leoarmelin.meumercado.models.navigation.NavDestination
 import com.leoarmelin.meumercado.ui.components.CameraPermissionDialog
 import com.leoarmelin.meumercado.ui.navigation.AppNavHost
 import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
@@ -78,12 +77,12 @@ class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
 
     override fun onGrantedCameraAccess() {
         mainViewModel.setCameraPermissionState(true)
-        navigationViewModel.setRoute(NavDestination.Camera.route)
+        navigationViewModel.setRoute(com.leoarmelin.sharedmodels.navigation.NavDestination.Camera.route)
     }
 
     override fun onNotGrantedCameraAccess() {
         mainViewModel.setCameraPermissionState(false)
-        navigationViewModel.setRoute(NavDestination.Camera.route)
+        navigationViewModel.setRoute(com.leoarmelin.sharedmodels.navigation.NavDestination.Camera.route)
     }
 
     override fun onShowCameraUIAccess() {

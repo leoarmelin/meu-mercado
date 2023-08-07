@@ -15,13 +15,13 @@ import com.leoarmelin.meumercado.R
 import com.leoarmelin.meumercado.contants.MockData
 import com.leoarmelin.meumercado.extensions.toMoney
 import com.leoarmelin.meumercado.extensions.unityAmount
-import com.leoarmelin.meumercado.models.Product
 import com.leoarmelin.meumercado.ui.theme.Gray900
 import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 import com.leoarmelin.meumercado.ui.theme.Secondary800
+import com.leoarmelin.sharedmodels.Unity
 
 @Composable
-fun ProductItem(product: Product) {
+fun ProductItem(product: com.leoarmelin.sharedmodels.Product) {
     Row(
         modifier = Modifier
             .padding(horizontal = 24.dp)
@@ -29,10 +29,10 @@ fun ProductItem(product: Product) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(id = if (product.unity == "unidade") R.drawable.ic_egg else R.drawable.ic_balance),
+            painter = painterResource(id = if (product.unity == Unity.UN) R.drawable.ic_egg else R.drawable.ic_balance),
             contentDescription = stringResource(
                 R.string.icone_de_var,
-                if (product.unity == "unidade") stringResource(R.string.um_ovo) else stringResource(R.string.uma_balanca)
+                if (product.unity == Unity.UN) stringResource(R.string.um_ovo) else stringResource(R.string.uma_balanca)
             ),
             tint = Secondary800,
             modifier = Modifier
@@ -46,7 +46,7 @@ fun ProductItem(product: Product) {
                 .weight(1f)
         ) {
             Text(
-                text = product.name ?: product.code,
+                text = product.name ?: "Unknown",
                 style = MaterialTheme.typography.h5,
                 color = Secondary800
             )
@@ -56,14 +56,14 @@ fun ProductItem(product: Product) {
                 color = Gray900
             )
             Text(
-                text = stringResource(R.string.preco_unitario_var, (product.price / product.amount).toMoney()),
+                text = stringResource(R.string.preco_unitario_var, (product.unityPrice / product.amount).toMoney()),
                 style = MaterialTheme.typography.caption,
                 color = Gray900
             )
         }
 
         Text(
-            text = product.price.toMoney(),
+            text = product.unityPrice.toMoney(),
             style = MaterialTheme.typography.h5,
             color = Secondary800,
             modifier = Modifier.align(Alignment.Top)

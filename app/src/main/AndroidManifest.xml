@@ -16,6 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:name=".application.MainApplication"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.MeuMercado"
         tools:targetApi="31">
         <activity

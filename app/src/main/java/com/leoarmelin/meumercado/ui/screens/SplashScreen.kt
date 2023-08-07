@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
-import com.leoarmelin.meumercado.models.navigation.NavDestination
+import com.leoarmelin.sharedmodels.navigation.NavDestination
 import com.leoarmelin.meumercado.ui.theme.Secondary50
 import com.leoarmelin.meumercado.ui.theme.Secondary800
 import com.leoarmelin.meumercado.viewmodels.MainViewModel
@@ -25,10 +25,7 @@ fun SplashScreen(navigationViewModel: NavigationViewModel, mainViewModel: MainVi
     val ticketsList by mainViewModel.ticketsList.collectAsState()
 
     LaunchedEffect(ticketsList) {
-        navigationViewModel.setRoute(
-            if (ticketsList.isEmpty()) NavDestination.Start.route
-            else NavDestination.Home.route
-        )
+        navigationViewModel.setRoute(NavDestination.Home)
     }
 
     Box(

@@ -1,6 +1,6 @@
 package com.leoarmelin.meumercado.repository
 
-import com.leoarmelin.meumercado.models.Ticket
+import com.leoarmelin.sharedmodels.Ticket
 import com.leoarmelin.meumercado.room.TicketDao
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

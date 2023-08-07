@@ -5,8 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.leoarmelin.meumercado.models.Ticket
-import com.leoarmelin.meumercado.room.converters.ConsumerDataConverter
+import com.leoarmelin.sharedmodels.Ticket
 import com.leoarmelin.meumercado.room.converters.ProductDataConverter
 import com.leoarmelin.meumercado.room.converters.StoreDataConverter
 
@@ -14,7 +13,6 @@ import com.leoarmelin.meumercado.room.converters.StoreDataConverter
 @TypeConverters(
     ProductDataConverter::class,
     StoreDataConverter::class,
-    ConsumerDataConverter::class
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun ticketDao(): TicketDao

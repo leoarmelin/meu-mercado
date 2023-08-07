@@ -1,7 +1,7 @@
 package com.leoarmelin.meumercado.room.converters
 
 import androidx.room.TypeConverter
-import com.leoarmelin.meumercado.models.Store
+import com.leoarmelin.sharedmodels.Store
 import com.squareup.moshi.Moshi
 
 class StoreDataConverter {

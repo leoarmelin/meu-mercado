@@ -2,22 +2,23 @@ package com.leoarmelin.meumercado.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.leoarmelin.meumercado.models.Ticket
-import com.leoarmelin.meumercado.models.api.CreateNfceRequest
-import com.leoarmelin.meumercado.models.api.Result
-import com.leoarmelin.meumercado.models.api.ResultState
-import com.leoarmelin.meumercado.repository.NfceScrapperRepository
+import com.leoarmelin.sharedmodels.Ticket
+import com.leoarmelin.sharedmodels.api.CreateNfceRequest
+import com.leoarmelin.sharedmodels.api.Result
+import com.leoarmelin.sharedmodels.api.ResultState
+import com.leoarmelin.meumercado.repository.ScrapperRepository
 import com.leoarmelin.meumercado.repository.RoomRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val nfceScrapperRepository: NfceScrapperRepository,
+    private val scrapperRepository: ScrapperRepository,
     private val roomRepository: RoomRepository
 ) : ViewModel() {
 
@@ -44,15 +45,17 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             _getNfceState.value = ResultState.Loading
 
-            when (val result = nfceScrapperRepository.getNfce(CreateNfceRequest(url))) {
-                is Result.Loading -> {}
-                is Result.Success -> {
-                    _selectedTicket.value = result.data
-                    insertTicket(result.data)
-                    _getNfceState.value = ResultState.Success
-                }
-                is Result.Error -> {
-                    _getNfceState.value = ResultState.Error(result.exception)
+            scrapperRepository.getNfce(CreateNfceRequest(url)).collectLatest { result ->
+                when (result) {
+                    is Result.Loading -> {}
+                    is Result.Success -> {
+                        _selectedTicket.value = result.data
+                        insertTicket(result.data)
+                        _getNfceState.value = ResultState.Success
+                    }
+                    is Result.Error -> {
+                        _getNfceState.value = ResultState.Error(result.exception)
+                    }
                 }
             }
         }
