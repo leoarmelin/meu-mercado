@@ -19,7 +19,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.leoarmelin.meumercado.R
-import com.leoarmelin.meumercado.contants.MockData
 import com.leoarmelin.meumercado.extensions.toMoney
 import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 import com.leoarmelin.meumercado.ui.theme.Primary500
@@ -76,7 +75,7 @@ fun BottomCamera(totalPrice: String?, modifier: Modifier, onCameraClick: () -> U
 private fun Preview() {
     MeuMercadoTheme {
         BottomCamera(
-            totalPrice = MockData.ticket.priceTotal.toMoney(),
+            totalPrice = 22.0.toMoney(),
             modifier = Modifier
         ) {
 

@@ -1,24 +1,41 @@
 package com.leoarmelin.meumercado.repository
 
-import com.leoarmelin.sharedmodels.Ticket
-import com.leoarmelin.meumercado.room.TicketDao
+import com.leoarmelin.database.CategoryDao
+import com.leoarmelin.database.ProductDao
+import com.leoarmelin.sharedmodels.Category
+import com.leoarmelin.sharedmodels.Product
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class RoomRepository @Inject constructor(
-    private val ticketDao: TicketDao
+    private val productDao: ProductDao,
+    private val categoryDao: CategoryDao
 ) {
-    val readAllTickets: Flow<List<Ticket>> = ticketDao.fetchAllTickets()
+    val readAllCategories: Flow<List<Category>> = categoryDao.fetchAllCategories()
 
-    suspend fun insertTicket(ticket: Ticket) {
-        ticketDao.insertTicket(ticket)
+    suspend fun insertCategory(category: Category) {
+        categoryDao.insertCategory(category)
     }
 
-    suspend fun deleteTicketById(id: String) {
-        ticketDao.deleteTicketById(id)
+    suspend fun deleteCategoryById(id: String) {
+        categoryDao.deleteCategoryById(id)
     }
 
-    suspend fun deleteAllTickets() {
-        ticketDao.deleteAllTickets()
+    suspend fun updateCategory(category: Category) {
+        categoryDao.updateCategory(category)
     }
+
+    suspend fun fetchProductsFromCategory(categoryId: String) =
+        productDao.fetchProductsFromCategory(categoryId)
+
+    suspend fun deleteProductById(id: String) {
+        productDao.deleteProductById(id)
+    }
+
+    suspend fun updateProduct(product: Product) {
+        productDao.updateProduct(product)
+    }
+
+    suspend fun getTotalAmountFromCategoryId(categoryId: String) =
+        productDao.getTotalAmountFromCategoryId(categoryId)
 }

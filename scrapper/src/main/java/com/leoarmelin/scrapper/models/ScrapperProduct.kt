@@ -7,5 +7,6 @@ internal data class ScrapperProduct(
     var quantity: Double = 0.0,
     var unity: Unity = Unity.UN,
     var unityValue: Double = 0.0,
-    var totalValue: Double = 0.0
+    var totalValue: Double = 0.0,
+    var issueAt: String = ""
 )

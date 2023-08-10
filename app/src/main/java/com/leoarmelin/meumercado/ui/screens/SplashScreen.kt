@@ -22,9 +22,13 @@ import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 
 @Composable
 fun SplashScreen(navigationViewModel: NavigationViewModel, mainViewModel: MainViewModel) {
-    val ticketsList by mainViewModel.ticketsList.collectAsState()
+//    val ticketsList by mainViewModel.ticketsList.collectAsState()
+//
+//    LaunchedEffect(ticketsList) {
+//        navigationViewModel.setRoute(NavDestination.Home)
+//    }
 
-    LaunchedEffect(ticketsList) {
+    LaunchedEffect(Unit) {
         navigationViewModel.setRoute(NavDestination.Home)
     }
 

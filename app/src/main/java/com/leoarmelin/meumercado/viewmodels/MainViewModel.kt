@@ -2,7 +2,6 @@ package com.leoarmelin.meumercado.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.leoarmelin.sharedmodels.Ticket
 import com.leoarmelin.sharedmodels.api.CreateNfceRequest
 import com.leoarmelin.sharedmodels.api.Result
 import com.leoarmelin.sharedmodels.api.ResultState
@@ -28,12 +27,6 @@ class MainViewModel @Inject constructor(
     private val _isCameraPermissionGranted = MutableStateFlow(false)
     val isCameraPermissionGranted get() = _isCameraPermissionGranted.asStateFlow()
 
-    private val _selectedTicket = MutableStateFlow<Ticket?>(null)
-    val selectedTicket get() = _selectedTicket.asStateFlow()
-
-    private val _ticketsList = MutableStateFlow(emptyList<Ticket>())
-    val ticketsList get() = _ticketsList.asStateFlow()
-
     fun setCameraPermissionState(state: Boolean) {
         _isCameraPermissionGranted.value = state
     }
@@ -49,8 +42,6 @@ class MainViewModel @Inject constructor(
                 when (result) {
                     is Result.Loading -> {}
                     is Result.Success -> {
-                        _selectedTicket.value = result.data
-                        insertTicket(result.data)
                         _getNfceState.value = ResultState.Success
                     }
                     is Result.Error -> {
@@ -61,37 +52,15 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun fetchAllTickets() {
+    fun fetchAllCategories() {
         viewModelScope.launch(Dispatchers.IO) {
-            roomRepository.readAllTickets.collect {
-                _ticketsList.value = it
+            roomRepository.readAllCategories.collect {
             }
-        }
-    }
-
-    private suspend fun insertTicket(ticket: Ticket) {
-        roomRepository.insertTicket(ticket = ticket)
-
-        if (!ticketsList.value.contains(ticket)) {
-            val newList = ticketsList.value.toMutableList().also {
-                it.add(ticket)
-            }
-            _ticketsList.value = newList
-        }
-    }
-
-    fun deleteTicketById(id: String) {
-        viewModelScope.launch {
-            roomRepository.deleteTicketById(id)
         }
     }
 
     fun togglePermissionDialog(state: Boolean) {
         _isCameraPermissionDialogOpen.value = state
-    }
-
-    fun setTicket(ticket: Ticket) {
-        _selectedTicket.value = ticket
     }
 
     fun clearTicketResultState() {

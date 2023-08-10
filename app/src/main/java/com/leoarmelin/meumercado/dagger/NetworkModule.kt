@@ -2,8 +2,9 @@ package com.leoarmelin.meumercado.dagger
 
 import android.content.Context
 import com.leoarmelin.meumercado.BuildConfig
-import com.leoarmelin.meumercado.room.AppDatabase
-import com.leoarmelin.meumercado.room.TicketDao
+import com.leoarmelin.database.AppDatabase
+import com.leoarmelin.database.CategoryDao
+import com.leoarmelin.database.ProductDao
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -54,5 +55,9 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideTicketDao(appDatabase: AppDatabase): TicketDao = appDatabase.ticketDao()
+    fun provideCategoryDao(appDatabase: AppDatabase): CategoryDao = appDatabase.categoryDao()
+
+    @Singleton
+    @Provides
+    fun provideProductDao(appDatabase: AppDatabase): ProductDao = appDatabase.productDao()
 }

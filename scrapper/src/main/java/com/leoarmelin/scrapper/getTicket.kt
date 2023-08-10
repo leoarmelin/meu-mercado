@@ -1,6 +1,5 @@
 package com.leoarmelin.scrapper
 
-import android.util.Log
 import com.leoarmelin.scrapper.constants.AppCssSelectors
 import com.leoarmelin.scrapper.extensions.toMoney
 import com.leoarmelin.scrapper.extensions.toTicket
@@ -18,8 +17,11 @@ import it.skrape.selects.html5.table
 import it.skrape.selects.html5.td
 import it.skrape.selects.html5.tr
 import it.skrape.skrape
+import java.lang.IndexOutOfBoundsException
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
-fun getTicket(websiteUrl: String): Ticket  {
+fun getTicket(websiteUrl: String): Ticket {
     val scrapperTicket: ScrapperTicket = skrape(HttpFetcher) {
         request {
             url = websiteUrl
@@ -81,8 +83,6 @@ fun getTicket(websiteUrl: String): Ticket  {
 
                     results.total = totalValueElement.text.toMoney()
 
-                    Log.d("Aoba", "${totalValueElement}")
-
                     div {
                         findSecond {
                             val storeNameElement = div {
@@ -91,10 +91,18 @@ fun getTicket(websiteUrl: String): Ticket  {
                             val storeAddressElement = div {
                                 findLast()
                             }
+                            var address = storeAddressElement.text
+                            try {
+                                address = storeAddressElement.text.split(",")
+                                    .filter { it.isNotEmpty() && it != " " }
+                                    .joinToString(", ") { it.trim()}
+                            } catch (e: Exception) {
+                                println("Address error: $e")
+                            }
 
                             results.store = ScrapperStore(
                                 name = storeNameElement.text,
-                                address = storeAddressElement.text
+                                address = address
                             )
                         }
                     }
@@ -111,8 +119,27 @@ fun getTicket(websiteUrl: String): Ticket  {
                         findLast()
                     }
                 }
+                try {
+                    val dateTimeArray = dateTimeElement.text.split(" ").takeLast(2)
+                    val dateArray =
+                        dateTimeArray[0].split("/").map { it.toInt() }
+                    val timeArray =
+                        dateTimeArray[1].split(":").map { it.toIntOrNull() ?: 0 }
+                    val date = LocalDateTime.of(
+                        dateArray[2],
+                        dateArray[1],
+                        dateArray[0],
+                        timeArray[0],
+                        timeArray[1],
+                        timeArray[2]
+                    )
 
-                results.issueAt = dateTimeElement.text.split(" ").takeLast(2).joinToString(" ")
+                    results.issueAt = date.format(DateTimeFormatter.ISO_DATE_TIME)
+                } catch (e: IndexOutOfBoundsException) {
+                    results.issueAt = ""
+                } catch (e: NumberFormatException) {
+                    results.issueAt = ""
+                }
                 // END Issue at
             }
         }

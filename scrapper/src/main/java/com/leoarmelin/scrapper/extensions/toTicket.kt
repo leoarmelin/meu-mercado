@@ -24,7 +24,8 @@ internal fun List<ScrapperProduct>.toProduct(): List<Product> = this.map {
         unity = it.unity,
         amount = it.quantity,
         unityPrice = it.unityValue,
-        totalPrice = it.totalValue
+        totalPrice = it.totalValue,
+        issueAt = it.issueAt
     )
 }
 

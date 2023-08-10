@@ -24,6 +24,7 @@ import com.leoarmelin.meumercado.ui.navigation.AppNavHost
 import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
+import com.leoarmelin.sharedmodels.navigation.NavDestination
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -46,7 +47,7 @@ class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
 
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                mainViewModel.fetchAllTickets()
+                mainViewModel.fetchAllCategories()
             }
         }
 
@@ -77,12 +78,12 @@ class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
 
     override fun onGrantedCameraAccess() {
         mainViewModel.setCameraPermissionState(true)
-        navigationViewModel.setRoute(com.leoarmelin.sharedmodels.navigation.NavDestination.Camera.route)
+        navigationViewModel.setRoute(NavDestination.Camera)
     }
 
     override fun onNotGrantedCameraAccess() {
         mainViewModel.setCameraPermissionState(false)
-        navigationViewModel.setRoute(com.leoarmelin.sharedmodels.navigation.NavDestination.Camera.route)
+        navigationViewModel.setRoute(NavDestination.Camera)
     }
 
     override fun onShowCameraUIAccess() {

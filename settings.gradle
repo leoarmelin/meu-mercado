@@ -16,3 +16,5 @@ rootProject.name = "MeuMercado"
 include ':app'
 include ':scrapper'
 include ':sharedmodels'
+include ':database'
+include ':cameraview'

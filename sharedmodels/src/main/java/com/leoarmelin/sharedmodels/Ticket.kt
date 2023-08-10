@@ -1,14 +1,10 @@
 package com.leoarmelin.sharedmodels
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
-@Entity(tableName = "ticket")
 @JsonClass(generateAdapter = true)
 data class Ticket(
-    @PrimaryKey
     @Json(name = "id")
     val id: String,
     @Json(name = "priceTotal")

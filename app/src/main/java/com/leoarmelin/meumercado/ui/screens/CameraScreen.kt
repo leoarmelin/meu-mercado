@@ -6,6 +6,7 @@ import android.provider.Settings
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.core.ExperimentalGetImage
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
@@ -44,14 +45,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.mlkit.vision.barcode.BarcodeScannerOptions
-import com.google.mlkit.vision.barcode.BarcodeScanning
-import com.google.mlkit.vision.barcode.common.Barcode
+import com.leoarmelin.cameraview.CameraView
 import com.leoarmelin.meumercado.R
 import com.leoarmelin.meumercado.extensions.getActivity
 import com.leoarmelin.meumercado.extensions.gradientBackground
 import com.leoarmelin.meumercado.extensions.noRippleClickable
-import com.leoarmelin.meumercado.ui.components.CameraView
 import com.leoarmelin.meumercado.ui.components.LoadingDialog
 import com.leoarmelin.meumercado.ui.theme.Gray400
 import com.leoarmelin.meumercado.ui.theme.Primary800
@@ -64,32 +62,22 @@ import com.leoarmelin.sharedmodels.navigation.NavDestination
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@ExperimentalGetImage
 @OptIn(ExperimentalAnimationApi::class, ExperimentalPagerApi::class)
-@androidx.camera.core.ExperimentalGetImage
 @Composable
 fun CameraScreen(
     mainViewModel: MainViewModel,
     navigationViewModel: NavigationViewModel
 ) {
+    val searchCoroutineScope = rememberCoroutineScope()
+    val activity = LocalContext.current.getActivity()
+
     val ticketResultState by mainViewModel.getNfceState.collectAsState()
     val isPermissionGranted by mainViewModel.isCameraPermissionGranted.collectAsState()
-    val barcodeScannerOptions = remember {
-        BarcodeScannerOptions.Builder()
-            .setBarcodeFormats(
-                Barcode.FORMAT_QR_CODE,
-                Barcode.FORMAT_AZTEC
-            ).build()
-    }
-    val barcodeScanner = remember {
-        BarcodeScanning.getClient(barcodeScannerOptions)
-    }
     val openIntentResult = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
         onResult = {}
     )
-
-    val searchCoroutineScope = rememberCoroutineScope()
-    val activity = LocalContext.current.getActivity()
 
     var isSearching by remember { mutableStateOf(false) }
     var isErrorVisible by remember { mutableStateOf(false) }
@@ -103,7 +91,7 @@ fun CameraScreen(
 
             is ResultState.Success -> {
                 Log.d("Aoba", "Success")
-                navigationViewModel.setRoute(NavDestination.Ticket)
+                //navigationViewModel.setRoute(NavDestination.Ticket)
                 mainViewModel.clearTicketResultState()
                 isErrorVisible = false
             }
@@ -132,7 +120,6 @@ fun CameraScreen(
         if (isPermissionGranted) {
             CameraView(
                 modifier = Modifier.fillMaxSize(),
-                barcodeScanner = barcodeScanner,
                 barcodeSuccessCallback = { url ->
                     if (!isSearching) {
                         isSearching = true

@@ -18,8 +18,8 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.leoarmelin.meumercado.ui.screens.CameraScreen
+import com.leoarmelin.meumercado.ui.screens.HomeScreen
 import com.leoarmelin.meumercado.ui.screens.SplashScreen
-import com.leoarmelin.meumercado.ui.screens.TicketScreen
 import com.leoarmelin.meumercado.ui.theme.Primary500
 import com.leoarmelin.meumercado.ui.theme.Secondary50
 import com.leoarmelin.meumercado.viewmodels.MainViewModel
@@ -64,9 +64,6 @@ fun AppNavHost(
             NavDestination.Camera -> {
                 if (getNfceState == ResultState.Loading) return@BackHandler
                 navigationViewModel.popBack()
-            }
-            NavDestination.Ticket -> {
-                navigationViewModel.setRoute(NavDestination.Home)
             }
             NavDestination.Splash -> {}
         }
@@ -122,49 +119,8 @@ fun AppNavHost(
             )
         }
 
-        composable(
-            NavDestination.Ticket.route,
-            enterTransition = {
-                slideIntoContainer(
-                    when (initialState.destination.route) {
-                        NavDestination.Camera.route -> AnimatedContentScope.SlideDirection.Right
-                        else -> AnimatedContentScope.SlideDirection.Left
-                    },
-                    animationSpec = tween(navAnimationDuration)
-                )
-            },
-            exitTransition = {
-                slideOutOfContainer(
-                    when (targetState.destination.route) {
-                        NavDestination.Camera.route -> AnimatedContentScope.SlideDirection.Left
-                        else -> AnimatedContentScope.SlideDirection.Right
-                    },
-                    animationSpec = tween(navAnimationDuration)
-                )
-            },
-            popEnterTransition = {
-                slideIntoContainer(
-                    when (initialState.destination.route) {
-                        NavDestination.Camera.route -> AnimatedContentScope.SlideDirection.Right
-                        else -> AnimatedContentScope.SlideDirection.Left
-                    },
-                    animationSpec = tween(navAnimationDuration)
-                )
-            },
-            popExitTransition = {
-                slideOutOfContainer(
-                    when (targetState.destination.route) {
-                        NavDestination.Camera.route -> AnimatedContentScope.SlideDirection.Left
-                        else -> AnimatedContentScope.SlideDirection.Right
-                    },
-                    animationSpec = tween(navAnimationDuration)
-                )
-            }
-        ) {
-            TicketScreen(
-                mainViewModel = mainViewModel,
-                navigationViewModel = navigationViewModel,
-            )
+        composable(NavDestination.Home.route) {
+            HomeScreen(mainViewModel, navigationViewModel)
         }
     }
 
@@ -176,10 +132,6 @@ fun AppNavHost(
         NavDestination.Camera -> {
             systemUiController.setStatusBarColor(if (isPermissionGranted) Color.Black else Secondary50)
             systemUiController.setNavigationBarColor(if (isPermissionGranted) Color.Black else Secondary50)
-        }
-        NavDestination.Ticket -> {
-            systemUiController.setStatusBarColor(Secondary50)
-            systemUiController.setNavigationBarColor(Primary500)
         }
         NavDestination.Home -> {
             systemUiController.setStatusBarColor(Secondary50)
