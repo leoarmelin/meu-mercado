@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.leoarmelin.sharedmodels.navigation.NavDestination
 
 class NavigationViewModel : ViewModel() {
-    var currentRoute by mutableStateOf<NavDestination>(NavDestination.Splash)
+    var currentRoute by mutableStateOf<NavDestination>(NavDestination.Home)
     var lastRoute by mutableStateOf<NavDestination?>(null)
 
     fun setRoute(route: NavDestination) {

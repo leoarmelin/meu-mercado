@@ -9,7 +9,6 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.leoarmelin.meumercado.MainActivity
 
 @ExperimentalAnimationApi
-@ExperimentalPagerApi
 open class PermissionsHandler(
     private val activity: MainActivity,
     private val listener: AccessListener
