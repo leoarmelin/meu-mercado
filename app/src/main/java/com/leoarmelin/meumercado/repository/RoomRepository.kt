@@ -25,7 +25,7 @@ class RoomRepository @Inject constructor(
         categoryDao.updateCategory(category)
     }
 
-    suspend fun fetchProductsFromCategory(categoryId: String) =
+    fun fetchProductsFromCategory(categoryId: String) =
         productDao.fetchProductsFromCategory(categoryId)
 
     suspend fun deleteProductById(id: String) {
@@ -36,6 +36,10 @@ class RoomRepository @Inject constructor(
         productDao.updateProduct(product)
     }
 
-    suspend fun getTotalAmountFromCategoryId(categoryId: String) =
+    fun getTotalAmountFromCategoryId(categoryId: String) =
         productDao.getTotalAmountFromCategoryId(categoryId)
+
+    suspend fun insertProduct(product: Product) {
+        productDao.insertProduct(product)
+    }
 }

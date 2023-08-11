@@ -51,14 +51,11 @@ import com.leoarmelin.meumercado.extensions.getActivity
 import com.leoarmelin.meumercado.extensions.gradientBackground
 import com.leoarmelin.meumercado.extensions.noRippleClickable
 import com.leoarmelin.meumercado.ui.components.LoadingDialog
-import com.leoarmelin.meumercado.ui.theme.Gray400
-import com.leoarmelin.meumercado.ui.theme.Primary800
-import com.leoarmelin.meumercado.ui.theme.Secondary50
-import com.leoarmelin.meumercado.ui.theme.Secondary800
+import com.leoarmelin.meumercado.ui.theme.Black
+import com.leoarmelin.meumercado.ui.theme.White
 import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
-import com.leoarmelin.sharedmodels.api.ResultState
-import com.leoarmelin.sharedmodels.navigation.NavDestination
+import com.leoarmelin.sharedmodels.api.Result
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -72,7 +69,7 @@ fun CameraScreen(
     val searchCoroutineScope = rememberCoroutineScope()
     val activity = LocalContext.current.getActivity()
 
-    val ticketResultState by mainViewModel.getNfceState.collectAsState()
+    val ticketResult by mainViewModel.nfceState.collectAsState()
     val isPermissionGranted by mainViewModel.isCameraPermissionGranted.collectAsState()
     val openIntentResult = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
@@ -82,24 +79,24 @@ fun CameraScreen(
     var isSearching by remember { mutableStateOf(false) }
     var isErrorVisible by remember { mutableStateOf(false) }
 
-    LaunchedEffect(ticketResultState) {
-        when (val result = ticketResultState) {
-            is ResultState.Loading -> {
+    LaunchedEffect(ticketResult) {
+        when (val result = ticketResult) {
+            is Result.Loading -> {
                 Log.d("Aoba", "Loading")
                 isErrorVisible = false
             }
 
-            is ResultState.Success -> {
+            is Result.Success -> {
                 Log.d("Aoba", "Success")
                 //navigationViewModel.setRoute(NavDestination.Ticket)
-                mainViewModel.clearTicketResultState()
+                mainViewModel.clearTicketResult()
                 isErrorVisible = false
             }
 
-            is ResultState.Error -> {
+            is Result.Error -> {
                 Log.d("Aoba", "Error ${result.exception}")
                 isErrorVisible = true
-                mainViewModel.clearTicketResultState()
+                mainViewModel.clearTicketResult()
                 searchCoroutineScope.launch {
                     delay(1000)
                     isSearching = false
@@ -115,7 +112,7 @@ fun CameraScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Secondary50)
+            .background(White)
     ) {
         if (isPermissionGranted) {
             CameraView(
@@ -153,7 +150,7 @@ fun CameraScreen(
                     .align(Alignment.TopStart)
                     .size(30.dp)
                     .noRippleClickable {
-                        if (ticketResultState == ResultState.Loading) return@noRippleClickable
+                        if (ticketResult is Result.Loading) return@noRippleClickable
                         navigationViewModel.popBack()
                     }
                     .padding(6.dp),
@@ -184,7 +181,7 @@ fun CameraScreen(
                     style = MaterialTheme.typography.body2,
                     color = Color.White,
                     modifier = Modifier
-                        .background(Secondary800, RoundedCornerShape(20.dp))
+                        .background(White, RoundedCornerShape(20.dp))
                         .padding(horizontal = 10.dp, vertical = 5.dp),
                 )
             }
@@ -201,13 +198,13 @@ fun CameraScreen(
                     text = stringResource(R.string.voce_precisa_autorizar_a_camera),
                     style = MaterialTheme.typography.h1,
                     textAlign = TextAlign.Center,
-                    color = Primary800
+                    color = Black
                 )
 
                 Icon(
                     painter = painterResource(id = R.drawable.ic_sad_cam),
                     contentDescription = stringResource(R.string.icone_de_uma_camera_com_um_rosto_triste),
-                    tint = Primary800,
+                    tint = Black,
                     modifier = Modifier
                         .width(118.dp)
                         .height(106.dp),
@@ -221,7 +218,7 @@ fun CameraScreen(
                     Text(
                         text = stringResource(R.string.va_para_configuracoes_e_garante),
                         style = MaterialTheme.typography.h5,
-                        color = Gray400,
+                        color = Black,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(horizontal = 12.dp)
                     )
@@ -238,7 +235,7 @@ fun CameraScreen(
                         },
                         shape = RoundedCornerShape(50.dp),
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Secondary800,
+                            backgroundColor = White,
                         )
                     ) {
                         Text(
@@ -252,6 +249,6 @@ fun CameraScreen(
             }
         }
 
-        LoadingDialog(ticketResultState == ResultState.Loading)
+        LoadingDialog(ticketResult is Result.Loading)
     }
 }

@@ -2,11 +2,15 @@ package com.leoarmelin.meumercado.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Primary100 = Color(0xFFB9E4C9)
-val Primary500 = Color(0xFF37966F)
-val Primary800 = Color(0xFF356859)
-val Secondary50 = Color(0xFFFFFBE6)
-val Secondary800 = Color(0xFFFD5523)
-val Gray300 = Color(0xFFBDBDBD)
-val Gray400 = Color(0xFF4F4F4F)
-val Gray900 = Color(0xFF333333)
+val White = Color(0xFFF5F5F0)
+val CreamOne = Color(0xFFE5E5D4)
+val CreamTwo = Color(0xFFC6BFAE)
+val GrayOne = Color(0xFF77787F)
+val GrayTwo = Color(0xFF9F9F9F)
+val Blue = Color(0xFF126FFF)
+val Wheat = Color(0xFFFFD4A7)
+val LightPurple = Color(0xFFE9D5FF)
+val LightPink = Color(0xFFFFB7D8)
+val Pink = Color(0xFFFF0081)
+val Green = Color(0xFFB9F462)
+val Black = Color(0xFF17120F)

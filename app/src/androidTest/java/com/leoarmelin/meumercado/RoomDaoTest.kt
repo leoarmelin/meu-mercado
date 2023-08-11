@@ -142,7 +142,8 @@ class RoomDaoTest {
     companion object {
         val mockCategory = Category(
             id = "c-1",
-            name = "Category One"
+            name = "Category One",
+            emoji = "🍙"
         )
         val mockProduct = Product(
             id = "p-1",

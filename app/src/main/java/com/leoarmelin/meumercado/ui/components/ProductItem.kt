@@ -14,9 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.leoarmelin.meumercado.R
 import com.leoarmelin.meumercado.extensions.toMoney
 import com.leoarmelin.meumercado.extensions.unityAmount
-import com.leoarmelin.meumercado.ui.theme.Gray900
-import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
-import com.leoarmelin.meumercado.ui.theme.Secondary800
+import com.leoarmelin.meumercado.ui.theme.Black
 import com.leoarmelin.sharedmodels.Unity
 
 @Composable
@@ -27,18 +25,6 @@ fun ProductItem(product: com.leoarmelin.sharedmodels.Product) {
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            painter = painterResource(id = if (product.unity == Unity.UN) R.drawable.ic_egg else R.drawable.ic_balance),
-            contentDescription = stringResource(
-                R.string.icone_de_var,
-                if (product.unity == Unity.UN) stringResource(R.string.um_ovo) else stringResource(R.string.uma_balanca)
-            ),
-            tint = Secondary800,
-            modifier = Modifier
-                .padding(end = 20.dp)
-                .size(40.dp)
-        )
-
         Column(
             Modifier
                 .padding(end = 12.dp)
@@ -47,24 +33,24 @@ fun ProductItem(product: com.leoarmelin.sharedmodels.Product) {
             Text(
                 text = product.name ?: "Unknown",
                 style = MaterialTheme.typography.h5,
-                color = Secondary800
+                color = Black
             )
             Text(
                 text = product.unityAmount(),
                 style = MaterialTheme.typography.caption,
-                color = Gray900
+                color = Black
             )
             Text(
                 text = stringResource(R.string.preco_unitario_var, (product.unityPrice / product.amount).toMoney()),
                 style = MaterialTheme.typography.caption,
-                color = Gray900
+                color = Black
             )
         }
 
         Text(
             text = product.unityPrice.toMoney(),
             style = MaterialTheme.typography.h5,
-            color = Secondary800,
+            color = Black,
             modifier = Modifier.align(Alignment.Top)
         )
     }

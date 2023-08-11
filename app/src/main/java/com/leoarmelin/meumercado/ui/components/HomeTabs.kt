@@ -12,10 +12,9 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
-import com.leoarmelin.meumercado.ui.theme.Gray400
+import com.leoarmelin.meumercado.ui.theme.Black
 import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
-import com.leoarmelin.meumercado.ui.theme.Secondary50
-import com.leoarmelin.meumercado.ui.theme.Secondary800
+import com.leoarmelin.meumercado.ui.theme.White
 
 @ExperimentalPagerApi
 @Composable
@@ -26,11 +25,11 @@ fun HomeTabs(state: PagerState, tabsList: List<String>, onSelectTab: (tabIndex: 
             .fillMaxWidth()
             .height(50.dp)
             .shadow(6.dp),
-        backgroundColor = Secondary50,
+        backgroundColor = White,
         indicator = { tabPositions ->
             TabRowDefaults.Indicator(
                 modifier = Modifier.pagerTabIndicatorOffset(state, tabPositions),
-                color = Secondary800,
+                color = White,
                 height = TabRowDefaults.IndicatorHeight * 1.5F
             )
         }
@@ -42,7 +41,7 @@ fun HomeTabs(state: PagerState, tabsList: List<String>, onSelectTab: (tabIndex: 
                 text = {
                     Text(
                         title,
-                        color = if (state.currentPage == index) Secondary800 else Gray400,
+                        color = if (state.currentPage == index) Black else Black,
                         style = MaterialTheme.typography.h5
                     )
                 },

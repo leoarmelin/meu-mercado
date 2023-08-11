@@ -23,7 +23,7 @@ interface ProductDao {
     suspend fun updateProduct(product: Product)
 
     @Query("SELECT SUM(total_price) FROM products WHERE `category_id` = :categoryId")
-    fun getTotalAmountFromCategoryId(categoryId: String): Flow<Double>
+    fun getTotalAmountFromCategoryId(categoryId: String): Flow<Double?>
 
     @Query("SELECT * FROM products WHERE `id` = :id")
     fun getProductById(id: String): Flow<Product?>

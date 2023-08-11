@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.leoarmelin.meumercado.ui.theme.Secondary50
+import com.leoarmelin.meumercado.ui.theme.White
 import com.leoarmelin.sharedmodels.Product
 
 @Composable
@@ -18,7 +18,7 @@ fun ProductList(products: List<Product>) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(Secondary50),
+            .background(White),
         horizontalAlignment = Alignment.CenterHorizontally,
         contentPadding = PaddingValues(top = 38.dp, bottom = 96.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)

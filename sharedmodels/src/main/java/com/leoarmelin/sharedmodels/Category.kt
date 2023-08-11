@@ -15,5 +15,8 @@ data class Category(
     val id: String,
     @ColumnInfo(name = "name")
     @Json(name = "name")
-    val name: String
+    val name: String,
+    @ColumnInfo(name = "emoji")
+    @Json(name = "emoji")
+    val emoji: String
 )

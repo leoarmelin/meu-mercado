@@ -5,26 +5,30 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.compose.ui.unit.dp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.leoarmelin.meumercado.handlers.PermissionsHandler
 import com.leoarmelin.meumercado.ui.components.CameraPermissionDialog
-import com.leoarmelin.meumercado.ui.navigation.AppMainSheetScreen
+import com.leoarmelin.meumercado.ui.components.DatePicker
+import com.leoarmelin.meumercado.ui.screens.MainScreen
 import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 import com.leoarmelin.sharedmodels.navigation.NavDestination
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 @ExperimentalAnimationApi
 @androidx.camera.core.ExperimentalGetImage
@@ -42,30 +46,40 @@ class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
 
         firebaseAnalytics = Firebase.analytics
 
-        lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                mainViewModel.fetchAllCategories()
-            }
-        }
-
         setContent {
             MeuMercadoTheme {
                 val systemUiController = rememberSystemUiController()
                 val isPermissionDialogOpen by mainViewModel.isCameraPermissionDialogOpen.collectAsState()
+                val isDatePickerOpen by mainViewModel.isDatePickerOpen.collectAsState()
+                val selectedDate by mainViewModel.selectedDate.collectAsState()
 
                 LaunchedEffect(Unit) {
                     systemUiController.setStatusBarColor(Color(0xFFDEDEDE))
                     systemUiController.setNavigationBarColor(Color.White)
                 }
 
-                AppMainSheetScreen(
-                    mainViewModel = mainViewModel,
-                    navigationViewModel = navigationViewModel,
-                )
+                Box(modifier = Modifier.fillMaxSize()) {
+                    MainScreen(
+                        mainViewModel = mainViewModel,
+                        navigationViewModel = navigationViewModel,
+                    )
 
-                CameraPermissionDialog(isPermissionDialogOpen) {
-                    mainViewModel.togglePermissionDialog(false)
-                    permissionsHandler.launchPermissionRequest()
+                    DatePicker(
+                        modifier = Modifier
+                            .padding(top = 24.dp, start = 12.dp)
+                            .align(Alignment.TopStart),
+                        isOpen = isDatePickerOpen,
+                        currentDate = selectedDate,
+                        onApply = mainViewModel::selectDate,
+                        onClose = {
+                            mainViewModel.toggleDatePicker(false)
+                        }
+                    )
+
+                    CameraPermissionDialog(isPermissionDialogOpen) {
+                        mainViewModel.togglePermissionDialog(false)
+                        permissionsHandler.launchPermissionRequest()
+                    }
                 }
             }
         }

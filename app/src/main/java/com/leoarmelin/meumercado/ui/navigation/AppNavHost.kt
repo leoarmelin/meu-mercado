@@ -20,7 +20,7 @@ import com.leoarmelin.meumercado.ui.screens.CameraScreen
 import com.leoarmelin.meumercado.ui.screens.HomeScreen
 import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
-import com.leoarmelin.sharedmodels.api.ResultState
+import com.leoarmelin.sharedmodels.api.Result
 import com.leoarmelin.sharedmodels.navigation.NavDestination
 import kotlinx.coroutines.launch
 
@@ -36,7 +36,7 @@ fun AppNavHost(
 ) {
     val navController = rememberAnimatedNavController()
 
-    val nfceState by mainViewModel.getNfceState.collectAsState()
+    val nfceState by mainViewModel.nfceState.collectAsState()
 
     AppBackHandler(
         currentRoute = navigationViewModel.currentRoute,
@@ -50,7 +50,6 @@ fun AppNavHost(
         startDestination = NavDestination.Home.route,
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFDEDEDE))
             .padding(padding)
     ) {
 
@@ -66,10 +65,7 @@ fun AppNavHost(
         composable(NavDestination.Home.route) {
             HomeScreen(
                 mainViewModel = mainViewModel,
-                navigationViewModel = navigationViewModel,
-                onClick = {
-                    navigationViewModel.setRoute(NavDestination.Camera)
-                }
+                navigationViewModel = navigationViewModel
             )
         }
     }
@@ -82,7 +78,7 @@ fun AppNavHost(
 @Composable
 private fun AppBackHandler(
     currentRoute: NavDestination,
-    nfceState: ResultState?,
+    nfceState: Result<String>?,
     onShowSnackBar: suspend () -> Unit,
     onPopBack: () -> Unit
 ) {
@@ -105,7 +101,7 @@ private fun AppBackHandler(
             }
 
             NavDestination.Camera -> {
-                if (nfceState == ResultState.Loading) return@BackHandler
+                if (nfceState is Result.Loading) return@BackHandler
 
                 onPopBack()
             }

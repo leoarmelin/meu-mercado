@@ -18,9 +18,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
-import com.leoarmelin.meumercado.ui.theme.Gray900
-import com.leoarmelin.meumercado.ui.theme.Primary500
 import com.leoarmelin.meumercado.R
+import com.leoarmelin.meumercado.ui.theme.Black
 import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -41,7 +40,7 @@ fun CameraPermissionDialog(isVisible: Boolean, onAccept: () -> Unit) {
                     Text(
                         text = stringResource(R.string.bem_vindo_ao_precinho),
                         style = MaterialTheme.typography.h5,
-                        color = Primary500,
+                        color = Black,
                         modifier = Modifier.align(Alignment.Center)
                     )
                 }
@@ -50,7 +49,7 @@ fun CameraPermissionDialog(isVisible: Boolean, onAccept: () -> Unit) {
                 Text(
                     text = stringResource(R.string.nosso_aplicativo_usa_sua_camera),
                     style = MaterialTheme.typography.body1,
-                    color = Gray900,
+                    color = Black,
                     lineHeight = 18.sp
                 )
             },
@@ -65,7 +64,7 @@ fun CameraPermissionDialog(isVisible: Boolean, onAccept: () -> Unit) {
                     Text(
                         text = stringResource(R.string.entendi),
                         style = MaterialTheme.typography.h5,
-                        color = Primary500
+                        color = Black
                     )
                 }
             },
