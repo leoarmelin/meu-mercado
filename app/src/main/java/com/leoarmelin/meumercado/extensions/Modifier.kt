@@ -1,13 +1,25 @@
 package com.leoarmelin.meumercado.extensions
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import kotlin.math.PI
+import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.sqrt
+
+inline fun Modifier.noRippleClickable(crossinline onClick: ()->Unit): Modifier = composed {
+    this.clickable(indication = null,
+        interactionSource = remember { MutableInteractionSource() }) {
+        onClick()
+    }
+}
 
 fun Modifier.gradientBackground(colors: List<Color>, angle: Float) = this.then(
     Modifier.drawBehind {
@@ -27,8 +39,8 @@ fun Modifier.gradientBackground(colors: List<Color>, angle: Float) = this.then(
 
         // Setting the exact offset
         val exactOffset = Offset(
-            x = kotlin.math.min(offset.x.coerceAtLeast(0f), size.width),
-            y = size.height - kotlin.math.min(offset.y.coerceAtLeast(0f), size.height)
+            x = min(offset.x.coerceAtLeast(0f), size.width),
+            y = size.height - min(offset.y.coerceAtLeast(0f), size.height)
         )
 
         // Draw a rectangle with the above values

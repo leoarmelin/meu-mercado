@@ -42,4 +42,6 @@ class RoomRepository @Inject constructor(
     suspend fun insertProduct(product: Product) {
         productDao.insertProduct(product)
     }
+
+    fun getCategoryById(id: String) = categoryDao.getCategoryById(id)
 }

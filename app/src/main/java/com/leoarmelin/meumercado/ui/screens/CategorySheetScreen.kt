@@ -2,7 +2,6 @@ package com.leoarmelin.meumercado.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -20,46 +18,45 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.leoarmelin.meumercado.ui.components.CategoryRow
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.leoarmelin.meumercado.ui.components.ProductItem
 import com.leoarmelin.meumercado.ui.theme.Black
 import com.leoarmelin.meumercado.ui.theme.CreamTwo
 import com.leoarmelin.meumercado.ui.theme.Strings
-import com.leoarmelin.meumercado.viewmodels.MainViewModel
+import com.leoarmelin.meumercado.viewmodels.CategoryViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
-import com.leoarmelin.sharedmodels.navigation.NavDestination
 
 @Composable
-fun HomeSheetScreen(mainViewModel: MainViewModel, navigationViewModel: NavigationViewModel) {
-    val categories by mainViewModel.categories.collectAsState()
-    val categoriesValue by mainViewModel.categoriesValues.collectAsState()
+fun CategorySheetScreen(
+    categoryViewModel: CategoryViewModel,
+    navigationViewModel: NavigationViewModel
+) {
+    val products by categoryViewModel.products.collectAsState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 24.dp, start = 24.dp, end = 24.dp),
+            .padding(top = 24.dp),
         verticalArrangement = Arrangement.spacedBy(40.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = Strings.HomeSheet.title,
+            text = Strings.CategorySheet.title,
             color = Black,
             fontSize = 14.sp,
         )
 
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             itemsIndexed(
-                categories,
-                key = { _, category -> category.id }
-            ) { index, category ->
-                CategoryRow(
-                    category = category,
-                    amount = categoriesValue[category.id] ?: 0.0,
-                    onTap = {
-                        navigationViewModel.setRoute(NavDestination.Category(category.id))
-                    }
+                products,
+                key = { _, product -> product.id }
+            ) { index, product ->
+                ProductItem(
+                    product = product
                 )
 
-                if (index < categories.size - 1) {
+                if (index < products.size - 1) {
                     Spacer(
                         modifier = Modifier
                             .padding(vertical = 8.dp)

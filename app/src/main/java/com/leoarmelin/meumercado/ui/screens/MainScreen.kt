@@ -8,6 +8,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,6 +19,7 @@ import com.leoarmelin.meumercado.ui.navigation.AppNavHost
 import com.leoarmelin.meumercado.ui.navigation.SheetNavHost
 import com.leoarmelin.meumercado.ui.theme.CreamOne
 import com.leoarmelin.meumercado.ui.theme.White
+import com.leoarmelin.meumercado.viewmodels.CategoryViewModel
 import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 import com.leoarmelin.sharedmodels.navigation.NavDestination
@@ -28,11 +30,13 @@ import kotlinx.coroutines.delay
 @Composable
 fun MainScreen(
     mainViewModel: MainViewModel,
-    navigationViewModel: NavigationViewModel
+    navigationViewModel: NavigationViewModel,
+    categoryViewModel: CategoryViewModel
 ) {
     val sheetState = rememberBottomSheetScaffoldState()
     val screenHeight = LocalConfiguration.current.screenHeightDp
     val halfScreenHeight = remember { (screenHeight / 2f).dp }
+    val currentRoute by navigationViewModel.currentRoute.collectAsState()
     var isExpanded by remember { mutableStateOf(true) }
 
     val peekHeight by animateDpAsState(
@@ -40,9 +44,9 @@ fun MainScreen(
         label = "peekHeight"
     )
 
-    LaunchedEffect(navigationViewModel.currentRoute) {
+    LaunchedEffect(currentRoute) {
         isExpanded = false
-        if (navigationViewModel.currentRoute == NavDestination.Camera) return@LaunchedEffect
+        if (currentRoute == NavDestination.Camera) return@LaunchedEffect
         delay(1000)
         isExpanded = true
     }
@@ -53,7 +57,8 @@ fun MainScreen(
         sheetContent = {
             SheetNavHost(
                 mainViewModel = mainViewModel,
-                currentRoute = navigationViewModel.currentRoute
+                navigationViewModel = navigationViewModel,
+                categoryViewModel = categoryViewModel
             )
         },
         sheetPeekHeight = peekHeight,
@@ -64,6 +69,7 @@ fun MainScreen(
             sheetState = sheetState,
             mainViewModel = mainViewModel,
             navigationViewModel = navigationViewModel,
+            categoryViewModel = categoryViewModel,
             padding = it
         )
     }

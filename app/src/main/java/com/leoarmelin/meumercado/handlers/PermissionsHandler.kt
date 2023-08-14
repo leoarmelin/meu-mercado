@@ -8,7 +8,6 @@ import androidx.core.content.ContextCompat
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.leoarmelin.meumercado.MainActivity
 
-@ExperimentalAnimationApi
 open class PermissionsHandler(
     private val activity: MainActivity,
     private val listener: AccessListener

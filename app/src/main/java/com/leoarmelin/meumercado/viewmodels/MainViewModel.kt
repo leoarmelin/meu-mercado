@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,7 +38,7 @@ class MainViewModel @Inject constructor(
     val categories get() = _categories.asStateFlow()
 
     private val _categoriesValues = MutableStateFlow<Map<String, Double>>(HashMap())
-    val categoriesValues get() =  _categoriesValues.asStateFlow()
+    val categoriesValues get() = _categoriesValues.asStateFlow()
 
     private val _totalValue = MutableStateFlow(0.0)
     val totalValue get() = _totalValue.asStateFlow()
@@ -78,6 +79,7 @@ class MainViewModel @Inject constructor(
                     is Result.Success -> {
                         _nfceState.value = Result.Success("success")
                     }
+
                     is Result.Error -> {
                         _nfceState.value = Result.Error(result.exception)
                     }
@@ -121,9 +123,18 @@ class MainViewModel @Inject constructor(
         toggleDatePicker(false)
     }
 
-    private fun createCategories() {
+    fun createCategory(
+        emoji: String,
+        name: String
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
-            //roomRepository.insertCategory(Category(UUID.randomUUID().toString(), "Test 2", "🍣"))
+            roomRepository.insertCategory(
+                Category(
+                    id = UUID.randomUUID().toString(),
+                    name = name,
+                    emoji = emoji
+                )
+            )
         }
     }
 

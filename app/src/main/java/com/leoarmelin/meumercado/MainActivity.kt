@@ -20,17 +20,17 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.leoarmelin.meumercado.handlers.PermissionsHandler
+import com.leoarmelin.meumercado.ui.components.AppFAB
 import com.leoarmelin.meumercado.ui.components.CameraPermissionDialog
 import com.leoarmelin.meumercado.ui.components.DatePicker
 import com.leoarmelin.meumercado.ui.screens.MainScreen
 import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
+import com.leoarmelin.meumercado.viewmodels.CategoryViewModel
 import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 import com.leoarmelin.sharedmodels.navigation.NavDestination
 import dagger.hilt.android.AndroidEntryPoint
-import java.time.LocalDateTime
 
-@ExperimentalAnimationApi
 @androidx.camera.core.ExperimentalGetImage
 @AndroidEntryPoint
 class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
@@ -40,6 +40,7 @@ class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
 
     private val mainViewModel: MainViewModel by viewModels()
     private val navigationViewModel: NavigationViewModel by viewModels()
+    private val categoryViewModel: CategoryViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +53,7 @@ class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
                 val isPermissionDialogOpen by mainViewModel.isCameraPermissionDialogOpen.collectAsState()
                 val isDatePickerOpen by mainViewModel.isDatePickerOpen.collectAsState()
                 val selectedDate by mainViewModel.selectedDate.collectAsState()
+                val fabDestinations by navigationViewModel.fabDestinations.collectAsState()
 
                 LaunchedEffect(Unit) {
                     systemUiController.setStatusBarColor(Color(0xFFDEDEDE))
@@ -62,6 +64,7 @@ class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
                     MainScreen(
                         mainViewModel = mainViewModel,
                         navigationViewModel = navigationViewModel,
+                        categoryViewModel = categoryViewModel
                     )
 
                     DatePicker(
@@ -74,6 +77,14 @@ class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
                         onClose = {
                             mainViewModel.toggleDatePicker(false)
                         }
+                    )
+
+                    AppFAB(
+                        modifier = Modifier
+                            .padding(end = 16.dp, bottom = 32.dp)
+                            .align(Alignment.BottomEnd),
+                        destinations = fabDestinations,
+                        onSelect = navigationViewModel::setRoute
                     )
 
                     CameraPermissionDialog(isPermissionDialogOpen) {

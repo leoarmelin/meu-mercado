@@ -34,7 +34,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.leoarmelin.meumercado.ui.theme.Black
 import com.leoarmelin.meumercado.ui.theme.Blue
-import com.leoarmelin.meumercado.ui.theme.Green
 import com.leoarmelin.meumercado.ui.theme.Pink
 import com.leoarmelin.meumercado.ui.theme.White
 import java.time.LocalDateTime

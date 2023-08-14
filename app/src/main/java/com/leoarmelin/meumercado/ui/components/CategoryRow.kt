@@ -1,5 +1,6 @@
 package com.leoarmelin.meumercado.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,9 +16,12 @@ import com.leoarmelin.meumercado.ui.theme.Black
 import com.leoarmelin.sharedmodels.Category
 
 @Composable
-fun CategoryRow(category: Category, amount: Double) {
+fun CategoryRow(category: Category, amount: Double, onTap: (Category) -> Unit) {
     Row(
-        modifier = Modifier.fillMaxWidth().height(32.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(32.dp)
+            .clickable { onTap(category) },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -27,7 +31,12 @@ fun CategoryRow(category: Category, amount: Double) {
         ) {
             Text(text = category.emoji, fontSize = 16.sp)
 
-            Text(text = category.name, fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Black)
+            Text(
+                text = category.name,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = Black
+            )
         }
 
 

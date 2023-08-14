@@ -50,8 +50,7 @@ fun ProductItem(product: com.leoarmelin.sharedmodels.Product) {
         Text(
             text = product.unityPrice.toMoney(),
             style = MaterialTheme.typography.h5,
-            color = Black,
-            modifier = Modifier.align(Alignment.Top)
+            color = Black
         )
     }
 }
