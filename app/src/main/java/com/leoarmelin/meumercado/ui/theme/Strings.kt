@@ -1,10 +1,6 @@
 package com.leoarmelin.meumercado.ui.theme
 
 object Strings {
-    object Home {
-
-    }
-
     object HomeSheet {
         const val title = "Categorias"
     }
@@ -28,5 +24,11 @@ object Strings {
         const val title = "Adicionar categoria"
         const val namePlaceholder = "Nome da categoria"
         const val save = "Salvar"
+    }
+
+    object AddProduct {
+        const val namePlaceholder = "Nome do produto"
+        const val amountPlaceholder = "0"
+        const val pricePlaceholder = "R$ 0,00"
     }
 }

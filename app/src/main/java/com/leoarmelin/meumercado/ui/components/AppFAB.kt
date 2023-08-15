@@ -141,7 +141,7 @@ private fun PreviewOne() {
             modifier = Modifier
                 .padding(bottom = 32.dp, end = 16.dp)
                 .align(Alignment.BottomEnd),
-            destinations = listOf(NavDestination.NewCategory, NavDestination.Camera),
+            destinations = listOf(NavDestination.NewCategory(), NavDestination.Camera),
             onSelect = {}
         )
     }

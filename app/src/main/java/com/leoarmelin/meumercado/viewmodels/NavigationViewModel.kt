@@ -11,7 +11,7 @@ class NavigationViewModel : ViewModel() {
     private val _currentRoute = MutableStateFlow<NavDestination>(NavDestination.Home)
     val currentRoute get() = _currentRoute.asStateFlow()
 
-    private val _lastRoute = MutableStateFlow<NavDestination?>(null)
+    private val _routeHistory = MutableStateFlow<List<NavDestination>>(listOf(NavDestination.Home))
 
     private val _fabDestinations = MutableStateFlow<List<NavDestination>>(emptyList())
     val fabDestinations get() = _fabDestinations.asStateFlow()
@@ -20,8 +20,16 @@ class NavigationViewModel : ViewModel() {
         viewModelScope.launch {
             _currentRoute.collect {
                 _fabDestinations.value = when (it) {
-                    is NavDestination.Home -> listOf(NavDestination.NewCategory, NavDestination.Camera)
-                    is NavDestination.Category -> listOf(NavDestination.NewProduct, NavDestination.Camera)
+                    is NavDestination.Home -> listOf(
+                        NavDestination.NewCategory(),
+                        NavDestination.Camera
+                    )
+
+                    is NavDestination.Category -> listOf(
+                        NavDestination.NewProduct(),
+                        NavDestination.Camera
+                    )
+
                     else -> emptyList()
                 }
             }
@@ -29,13 +37,25 @@ class NavigationViewModel : ViewModel() {
     }
 
     fun setRoute(route: NavDestination) {
-        _lastRoute.value = _currentRoute.value
+        val routeHistory = _routeHistory.value.toMutableList()
+
+        when {
+            route is NavDestination.NewProduct && routeHistory.lastOrNull() is NavDestination.NewProduct -> {
+                routeHistory.removeLast()
+            }
+        }
+
+        routeHistory.add(route)
+        _routeHistory.value = routeHistory
+
         _currentRoute.value = route
     }
 
     fun popBack() {
-        val currentLastRoute = _lastRoute.value ?: return
-        _currentRoute.value = currentLastRoute
-        _lastRoute.value = null
+        val routeHistory = _routeHistory.value.toMutableList()
+        _routeHistory.value = routeHistory.dropLast(1)
+        _routeHistory.value.lastOrNull()?.let {
+            _currentRoute.value = it
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.leoarmelin.meumercado.viewmodels
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.leoarmelin.meumercado.repository.RoomRepository
@@ -15,6 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CategoryViewModel @Inject constructor(
+    stateHandle: SavedStateHandle,
     private val roomRepository: RoomRepository
 ) : ViewModel() {
     private val _category = MutableStateFlow<Category?>(null)
@@ -24,17 +26,17 @@ class CategoryViewModel @Inject constructor(
     val products get() = _products.asStateFlow()
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
-            _category.collect {
-                if (it == null) return@collect
-                _products.value = roomRepository.fetchProductsFromCategory(it.id).first()
+        stateHandle.get<String>("id")?.let { id ->
+            viewModelScope.launch(Dispatchers.IO) {
+                roomRepository.getCategoryById(id).collect {
+                    _category.value = it
+                }
             }
         }
-    }
-
-    fun setCategoryId(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _category.value = roomRepository.getCategoryById(id).first()
+            _category.collect {
+                _products.value = roomRepository.fetchProductsFromCategory(it?.id).first()
+            }
         }
     }
 }

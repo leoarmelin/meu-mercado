@@ -4,6 +4,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -14,6 +15,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.leoarmelin.meumercado.extensions.stringValue
@@ -29,7 +32,9 @@ fun AppInput(
     value: String,
     onValueChange: (String) -> Unit,
     rightIcon: (@Composable () -> Unit)? = null,
-    placeholder: String
+    placeholder: String,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
     TextField(
         modifier = modifier.border(1.dp, GrayThree, RoundedCornerShape(16.dp)),
@@ -46,7 +51,10 @@ fun AppInput(
             backgroundColor = Color.Transparent,
             cursorColor = Blue
         ),
-        trailingIcon = rightIcon
+        trailingIcon = rightIcon,
+        keyboardOptions = keyboardOptions,
+        visualTransformation = visualTransformation,
+        singleLine = true
     )
 }
 
@@ -54,10 +62,11 @@ fun AppInput(
 fun AppInputWithQuantity(
     modifier: Modifier = Modifier,
     value: String,
+    unity: Unity,
     onValueChange: (String) -> Unit,
-    placeholder: String
+    onUnityChange: (Unity) -> Unit,
+    placeholder: String,
 ) {
-    var unityType by remember { mutableStateOf(Unity.UN) }
     AppInput(
         modifier = modifier,
         value = value,
@@ -65,12 +74,15 @@ fun AppInputWithQuantity(
         placeholder = placeholder,
         rightIcon = {
             Text(
-                text = unityType.stringValue,
+                text = unity.stringValue,
                 modifier = Modifier.clickable {
-                    unityType = unityType.toggled
+                    onUnityChange(unity.toggled)
                 }
             )
-        }
+        },
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Number
+        ),
     )
 }
 
@@ -97,11 +109,14 @@ private fun PreviewOne() {
 @Composable
 private fun PreviewTwo() {
     var text by remember { mutableStateOf("") }
+    var unity by remember { mutableStateOf(Unity.UN) }
 
     AppInputWithQuantity(
         modifier = Modifier.padding(16.dp),
         value = text,
+        unity = unity,
         onValueChange = { text = it },
-        placeholder = "Nome da categoria"
+        placeholder = "Nome da categoria",
+        onUnityChange = { unity = it }
     )
 }

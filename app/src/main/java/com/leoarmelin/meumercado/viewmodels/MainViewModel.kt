@@ -7,15 +7,17 @@ import com.leoarmelin.sharedmodels.api.Result
 import com.leoarmelin.meumercado.repository.ScrapperRepository
 import com.leoarmelin.meumercado.repository.RoomRepository
 import com.leoarmelin.sharedmodels.Category
+import com.leoarmelin.sharedmodels.Product
+import com.leoarmelin.sharedmodels.Unity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.UUID
 import javax.inject.Inject
 
@@ -52,13 +54,13 @@ class MainViewModel @Inject constructor(
     init {
         fetchAllCategories()
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _categories.collect {
                 fetchAllCategoriesValues(it)
             }
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _categoriesValues.collect {
                 _totalValue.value = it.values.sum()
             }
@@ -123,34 +125,58 @@ class MainViewModel @Inject constructor(
         toggleDatePicker(false)
     }
 
-    fun createCategory(
+    fun createOrUpdateCategory(
+        id: String?,
         emoji: String,
-        name: String
+        name: String,
+        onSuccess: (Category) -> Unit
     ) {
+        val category = Category(
+            id = id ?: UUID.randomUUID().toString(),
+            name = name,
+            emoji = emoji
+        )
+
         viewModelScope.launch(Dispatchers.IO) {
-            roomRepository.insertCategory(
-                Category(
-                    id = UUID.randomUUID().toString(),
-                    name = name,
-                    emoji = emoji
-                )
-            )
+            if (id == null) {
+                roomRepository.insertCategory(category)
+            } else {
+                roomRepository.updateCategory(category)
+            }
+
+            onSuccess(category)
         }
     }
 
-    private fun createProduct() {
+    fun createOrUpdateProduct(
+        id: String?,
+        emoji: String,
+        name: String,
+        unity: Unity,
+        amount: Double,
+        unityPrice: Double,
+        onSuccess: () -> Unit
+    ) {
+        val category = _categories.value.find { it.emoji == emoji }
+        val product = Product(
+            id = id ?: UUID.randomUUID().toString(),
+            name = name,
+            unity = unity,
+            amount = amount,
+            unityPrice = unityPrice,
+            totalPrice = amount * unityPrice,
+            issueAt = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME),
+            categoryId = category?.id
+        )
+
         viewModelScope.launch(Dispatchers.IO) {
-            delay(5000)
-//            roomRepository.insertProduct(Product(
-//                id = UUID.randomUUID().toString(),
-//                name = "Product One",
-//                unity = Unity.UN,
-//                amount = 2.0,
-//                unityPrice = 5.0,
-//                totalPrice = 10.0,
-//                issueAt = "2023-08-10T13:16:30.0000Z",
-//                categoryId = _categories.value.first().id
-//            ))
+            if (id == null) {
+                roomRepository.insertProduct(product)
+            } else {
+                roomRepository.updateProduct(product)
+            }
+
+            onSuccess()
         }
     }
 }

@@ -11,7 +11,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ProductDao {
     @Query("SELECT * FROM products WHERE `category_id` = :categoryId")
-    fun fetchProductsFromCategory(categoryId: String): Flow<List<Product>>
+    fun fetchProductsFromCategory(categoryId: String?): Flow<List<Product>>
+
+    @Query("SELECT * FROM products WHERE `category_id` = null")
+    fun fetchProductsWithoutCategory(): Flow<List<Product>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertProduct(product: Product)
@@ -24,6 +27,9 @@ interface ProductDao {
 
     @Query("SELECT SUM(total_price) FROM products WHERE `category_id` = :categoryId")
     fun getTotalAmountFromCategoryId(categoryId: String): Flow<Double?>
+
+    @Query("SELECT SUM(total_price) FROM products WHERE `category_id` = null")
+    fun getTotalAmountFromNoCategory(): Flow<Double?>
 
     @Query("SELECT * FROM products WHERE `id` = :id")
     fun getProductById(id: String): Flow<Product?>

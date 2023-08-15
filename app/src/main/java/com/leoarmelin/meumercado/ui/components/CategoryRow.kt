@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.leoarmelin.meumercado.extensions.toMoney
 import com.leoarmelin.meumercado.ui.theme.Black
 import com.leoarmelin.sharedmodels.Category
 
@@ -39,7 +40,11 @@ fun CategoryRow(category: Category, amount: Double, onTap: (Category) -> Unit) {
             )
         }
 
-
-        Text(text = "R$${amount}", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Black)
+        Text(
+            text = amount.toMoney(),
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = Black
+        )
     }
 }
