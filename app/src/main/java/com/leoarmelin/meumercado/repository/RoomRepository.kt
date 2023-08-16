@@ -5,13 +5,15 @@ import com.leoarmelin.database.ProductDao
 import com.leoarmelin.sharedmodels.Category
 import com.leoarmelin.sharedmodels.Product
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 class RoomRepository @Inject constructor(
     private val productDao: ProductDao,
     private val categoryDao: CategoryDao
 ) {
-    val readAllCategories: Flow<List<Category>> = categoryDao.fetchAllCategories()
+    val observeAllCategories: Flow<List<Category>> = categoryDao.fetchAllCategories()
+    val observeAllProducts: Flow<List<Product>> = productDao.fetchAllProducts()
 
     suspend fun insertCategory(category: Category) {
         categoryDao.insertCategory(category)
@@ -25,10 +27,16 @@ class RoomRepository @Inject constructor(
         categoryDao.updateCategory(category)
     }
 
-    fun fetchProductsFromCategory(categoryId: String?) =
-        productDao.fetchProductsFromCategory(categoryId)
+    fun fetchProductsFromCategory(
+        categoryId: String?,
+        startDate: LocalDateTime,
+        endDate: LocalDateTime
+    ) = productDao.fetchProductsFromCategory(categoryId, startDate, endDate)
 
-    fun fetchProductsWithoutCategory() = productDao.fetchProductsWithoutCategory()
+    fun fetchProductsWithoutCategory(
+        startDate: LocalDateTime,
+        endDate: LocalDateTime
+    ) = productDao.fetchProductsWithoutCategory(startDate, endDate)
 
     suspend fun deleteProductById(id: String) {
         productDao.deleteProductById(id)
@@ -38,10 +46,16 @@ class RoomRepository @Inject constructor(
         productDao.updateProduct(product)
     }
 
-    fun getTotalAmountFromCategoryId(categoryId: String) =
-        productDao.getTotalAmountFromCategoryId(categoryId)
+    fun getTotalAmountFromCategoryId(
+        categoryId: String,
+        startDate: LocalDateTime,
+        endDate: LocalDateTime
+    ) = productDao.getTotalAmountFromCategoryId(categoryId, startDate, endDate)
 
-    fun getTotalAmountFromNoCategory() = productDao.getTotalAmountFromNoCategory()
+    fun getTotalAmountFromNoCategory(
+        startDate: LocalDateTime,
+        endDate: LocalDateTime
+    ) = productDao.getTotalAmountFromNoCategory(startDate, endDate)
 
     suspend fun insertProduct(product: Product) {
         productDao.insertProduct(product)

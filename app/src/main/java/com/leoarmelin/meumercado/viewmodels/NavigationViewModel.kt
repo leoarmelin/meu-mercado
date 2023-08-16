@@ -46,6 +46,9 @@ class NavigationViewModel : ViewModel() {
             route is NavDestination.Ticket && routeHistory.lastOrNull() is NavDestination.Camera -> {
                 routeHistory.removeLast()
             }
+            route is NavDestination.Category && routeHistory.lastOrNull() is NavDestination.NewCategory -> {
+                routeHistory.removeLast()
+            }
         }
 
         routeHistory.add(route)

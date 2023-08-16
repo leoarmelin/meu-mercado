@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
@@ -12,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import com.leoarmelin.meumercado.ui.theme.Blue
 import com.leoarmelin.meumercado.ui.theme.GrayOne
@@ -41,7 +43,10 @@ fun CategoryForm(
             modifier = Modifier.weight(1f),
             value = name,
             onValueChange = onNameChange,
-            placeholder = Strings.AddCategory.namePlaceholder
+            placeholder = Strings.AddCategory.namePlaceholder,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                capitalization = KeyboardCapitalization.Sentences
+            )
         )
 
         Icon(

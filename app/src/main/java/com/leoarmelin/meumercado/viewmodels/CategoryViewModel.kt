@@ -11,8 +11,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,6 +22,9 @@ class CategoryViewModel @Inject constructor(
     stateHandle: SavedStateHandle,
     private val roomRepository: RoomRepository
 ) : ViewModel() {
+
+    private val _selectedDate = MutableStateFlow<LocalDateTime?>(null)
+
     private val _category = MutableStateFlow<Category?>(null)
     val category get() = _category.asStateFlow()
 
@@ -44,8 +49,13 @@ class CategoryViewModel @Inject constructor(
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            _category.collect {
-                _products.value = roomRepository.fetchProductsFromCategory(it?.id).first()
+            _selectedDate.combine(_category) { startDate, category ->
+                Pair(startDate, category)
+            }.collect { (startDate, category) ->
+                if (startDate == null) return@collect
+                val endDate = startDate.plusMonths(1).minusSeconds(2)
+
+                _products.value = roomRepository.fetchProductsFromCategory(category?.id, startDate, endDate).first()
             }
         }
     }
@@ -58,9 +68,18 @@ class CategoryViewModel @Inject constructor(
         )
 
         viewModelScope.launch(Dispatchers.IO) {
-            roomRepository.fetchProductsWithoutCategory().collect {
-                _products.value = it
+            _selectedDate.collect { startDate ->
+                if (startDate == null) return@collect
+                val endDate = startDate.plusMonths(1).minusSeconds(2)
+
+                _products.value = roomRepository.fetchProductsWithoutCategory(startDate, endDate).first()
             }
         }
+
+
+    }
+
+    fun setSelectedDate(value: LocalDateTime) {
+        _selectedDate.value = value
     }
 }

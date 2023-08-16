@@ -19,6 +19,7 @@ import org.junit.runner.RunWith
 import org.junit.Assert.*
 import org.junit.Before
 import java.io.IOException
+import java.time.LocalDateTime
 
 @RunWith(AndroidJUnit4::class)
 class RoomDaoTest {
@@ -152,7 +153,7 @@ class RoomDaoTest {
             amount = 1.0,
             unityPrice = 5.0,
             totalPrice = 5.0,
-            issueAt = "2023-08-10T13:16:30.0000Z",
+            issueAt = LocalDateTime.now(),
             categoryId = "c-1",
         )
         val mockProducts = listOf(

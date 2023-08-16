@@ -16,10 +16,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.UUID
 import javax.inject.Inject
 
@@ -50,15 +50,26 @@ class MainViewModel @Inject constructor(
     private val _isDatePickerOpen = MutableStateFlow(false)
     val isDatePickerOpen get() = _isDatePickerOpen.asStateFlow()
 
-    private val _selectedDate = MutableStateFlow(LocalDateTime.now())
+    private val _selectedDate = MutableStateFlow(getInitialDate())
     val selectedDate get() = _selectedDate.asStateFlow()
 
     init {
-        fetchAllCategories()
+        viewModelScope.launch(Dispatchers.IO) {
+            roomRepository.observeAllCategories.collect {
+                val othersCategory = Category(
+                    id = Strings.OthersCategory.id,
+                    name = Strings.OthersCategory.name,
+                    emoji = Strings.OthersCategory.emoji
+                )
+                _categories.value = it + othersCategory
+            }
+        }
 
         viewModelScope.launch(Dispatchers.IO) {
-            _categories.collect {
-                fetchAllCategoriesValues(it)
+            combine(roomRepository.observeAllProducts, _categories, _selectedDate) { _, categories, startDate ->
+                Pair(startDate, categories)
+            }.collect { (startDate, categories) ->
+                fetchAllCategoriesValues(startDate, categories)
             }
         }
 
@@ -92,28 +103,16 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun fetchAllCategories() {
-        viewModelScope.launch(Dispatchers.IO) {
-            roomRepository.readAllCategories.collect {
-                val othersCategory = Category(
-                    id = Strings.OthersCategory.id,
-                    name = Strings.OthersCategory.name,
-                    emoji = Strings.OthersCategory.emoji
-                )
-                _categories.value = it + othersCategory
-            }
-        }
-    }
-
-    private suspend fun fetchAllCategoriesValues(categories: List<Category>) {
+    private suspend fun fetchAllCategoriesValues(startDate: LocalDateTime, categories: List<Category>) {
+        val endDate = startDate.plusMonths(1).minusSeconds(2)
         val values = _categoriesValues.value.toMutableMap()
         categories.forEach { category ->
-            val amount = roomRepository.getTotalAmountFromCategoryId(category.id).first() ?: 0.0
+            val amount = roomRepository.getTotalAmountFromCategoryId(category.id, startDate, endDate).first() ?: 0.0
 
             values[category.id] = amount
         }
 
-        val othersAmount = roomRepository.getTotalAmountFromNoCategory().first() ?: 0.0
+        val othersAmount = roomRepository.getTotalAmountFromNoCategory(startDate, endDate).first() ?: 0.0
         values[Strings.OthersCategory.id] = othersAmount
 
         _categoriesValues.value = values
@@ -131,8 +130,13 @@ class MainViewModel @Inject constructor(
         _ticketResult.value = null
     }
 
+    private fun getInitialDate(): LocalDateTime {
+        val now = LocalDateTime.now()
+        return LocalDateTime.of(now.year, now.monthValue, 1, 0, 0, 1)
+    }
+
     fun selectDate(month: Int, year: Int) {
-        _selectedDate.value = LocalDateTime.of(year, month, 1, 12, 0, 0)
+        _selectedDate.value = LocalDateTime.of(year, month, 1, 0, 0, 1)
         toggleDatePicker(false)
     }
 
@@ -176,7 +180,7 @@ class MainViewModel @Inject constructor(
             amount = amount,
             unityPrice = unityPrice,
             totalPrice = amount * unityPrice,
-            issueAt = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME),
+            issueAt = LocalDateTime.now(),
             categoryId = if (emoji == Strings.OthersCategory.emoji) null else category?.id
         )
 

@@ -1,6 +1,7 @@
 package com.leoarmelin.scrapper.models
 
 import com.leoarmelin.sharedmodels.Unity
+import java.time.LocalDateTime
 
 internal data class ScrapperProduct(
     var name: String = "",
@@ -8,5 +9,5 @@ internal data class ScrapperProduct(
     var unity: Unity = Unity.UN,
     var unityValue: Double = 0.0,
     var totalValue: Double = 0.0,
-    var issueAt: String = ""
+    var issueAt: LocalDateTime = LocalDateTime.now()
 )

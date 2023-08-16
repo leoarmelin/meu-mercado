@@ -6,6 +6,7 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import java.time.LocalDateTime
 
 @Entity(
     tableName = "products",
@@ -40,7 +41,7 @@ data class Product(
     val totalPrice: Double,
     @ColumnInfo(name = "issue_at")
     @Json(name = "issueAt")
-    val issueAt: String,
+    val issueAt: LocalDateTime,
     @ColumnInfo(name = "category_id", index = true)
     @Json(name = "categoryId")
     val categoryId: String? = null,

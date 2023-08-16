@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.leoarmelin.meumercado.ui.theme.Blue
@@ -62,7 +63,10 @@ fun ProductForm(
                 modifier = Modifier.weight(1f),
                 value = name,
                 onValueChange = onNameChange,
-                placeholder = Strings.AddProduct.namePlaceholder
+                placeholder = Strings.AddProduct.namePlaceholder,
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    capitalization = KeyboardCapitalization.Sentences
+                )
             )
 
             Icon(
