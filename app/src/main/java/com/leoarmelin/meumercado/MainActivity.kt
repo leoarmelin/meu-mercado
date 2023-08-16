@@ -17,7 +17,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -28,7 +27,9 @@ import com.leoarmelin.meumercado.ui.components.AppFAB
 import com.leoarmelin.meumercado.ui.components.CameraPermissionDialog
 import com.leoarmelin.meumercado.ui.components.DatePicker
 import com.leoarmelin.meumercado.ui.navigation.AppNavHost
+import com.leoarmelin.meumercado.ui.theme.CreamOne
 import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
+import com.leoarmelin.meumercado.ui.theme.White
 import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 import com.leoarmelin.sharedmodels.navigation.NavDestination
@@ -61,8 +62,8 @@ class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
                 val isCameraPermissionGRanted by mainViewModel.isCameraPermissionGranted.collectAsState()
 
                 LaunchedEffect(Unit) {
-                    systemUiController.setStatusBarColor(Color(0xFFDEDEDE))
-                    systemUiController.setNavigationBarColor(Color.White)
+                    systemUiController.setStatusBarColor(White)
+                    systemUiController.setNavigationBarColor(CreamOne)
                 }
 
                 Scaffold(
