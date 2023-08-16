@@ -9,6 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import com.leoarmelin.sharedmodels.Ticket
 import com.leoarmelin.sharedmodels.api.Result
 import com.leoarmelin.sharedmodels.navigation.NavDestination
 import kotlinx.coroutines.launch
@@ -16,7 +17,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun AppBackHandler(
     currentRoute: NavDestination,
-    nfceState: Result<String>?,
+    nfceState: Result<Ticket>?,
     onShowSnackBar: suspend () -> Unit,
     onPopBack: () -> Unit
 ) {
@@ -44,7 +45,10 @@ fun AppBackHandler(
                 onPopBack()
             }
 
-            is NavDestination.NewCategory, is NavDestination.NewProduct, is NavDestination.Category -> {
+            is NavDestination.NewCategory,
+            is NavDestination.NewProduct,
+            is NavDestination.Category,
+            is NavDestination.Ticket -> {
                 onPopBack()
             }
         }

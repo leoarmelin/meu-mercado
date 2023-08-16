@@ -86,7 +86,7 @@ fun CategoryScreen(
                             unity,
                             amount,
                             unityPrice,
-                            onSuccess = navigationViewModel::popBack
+                            onSuccess = { navigationViewModel.popBack() }
                         )
                     },
                     onSaveCategory = { id, emoji, name ->
@@ -272,7 +272,7 @@ private fun SheetContent(
 }
 
 @Composable
-fun MoreOptionsMenu(
+private fun MoreOptionsMenu(
     modifier: Modifier,
     isOpen: Boolean,
     onEditTap: () -> Unit,

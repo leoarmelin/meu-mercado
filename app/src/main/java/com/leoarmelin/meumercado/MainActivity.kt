@@ -37,7 +37,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @androidx.camera.core.ExperimentalGetImage
 @AndroidEntryPoint
 class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
-    val permissionsHandler = PermissionsHandler(this, this)
+    private val permissionsHandler = PermissionsHandler(this, this)
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
@@ -58,6 +58,7 @@ class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
                 val isDatePickerOpen by mainViewModel.isDatePickerOpen.collectAsState()
                 val selectedDate by mainViewModel.selectedDate.collectAsState()
                 val fabDestinations by navigationViewModel.fabDestinations.collectAsState()
+                val isCameraPermissionGRanted by mainViewModel.isCameraPermissionGranted.collectAsState()
 
                 LaunchedEffect(Unit) {
                     systemUiController.setStatusBarColor(Color(0xFFDEDEDE))
@@ -95,7 +96,21 @@ class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
                                 .padding(end = 16.dp, bottom = 32.dp)
                                 .align(Alignment.BottomEnd),
                             destinations = fabDestinations,
-                            onSelect = navigationViewModel::setRoute
+                            onSelect = { destination ->
+                                when (destination) {
+                                    is NavDestination.Camera -> {
+                                        if (isCameraPermissionGRanted) {
+                                            navigationViewModel.setRoute(NavDestination.Camera)
+                                        } else {
+                                            permissionsHandler.requestCameraPermission()
+                                        }
+                                    }
+
+                                    else -> {
+                                        navigationViewModel.setRoute(destination)
+                                    }
+                                }
+                            }
                         )
 
                         CameraPermissionDialog(isPermissionDialogOpen) {

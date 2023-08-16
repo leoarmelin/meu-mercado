@@ -8,7 +8,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.ExperimentalGetImage
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -44,7 +43,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.pager.ExperimentalPagerApi
 import com.leoarmelin.cameraview.CameraView
 import com.leoarmelin.meumercado.R
 import com.leoarmelin.meumercado.extensions.getActivity
@@ -56,11 +54,11 @@ import com.leoarmelin.meumercado.ui.theme.White
 import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 import com.leoarmelin.sharedmodels.api.Result
+import com.leoarmelin.sharedmodels.navigation.NavDestination
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @ExperimentalGetImage
-@OptIn(ExperimentalAnimationApi::class, ExperimentalPagerApi::class)
 @Composable
 fun CameraScreen(
     mainViewModel: MainViewModel,
@@ -69,7 +67,7 @@ fun CameraScreen(
     val searchCoroutineScope = rememberCoroutineScope()
     val activity = LocalContext.current.getActivity()
 
-    val ticketResult by mainViewModel.nfceState.collectAsState()
+    val ticketResult by mainViewModel.ticketResult.collectAsState()
     val isPermissionGranted by mainViewModel.isCameraPermissionGranted.collectAsState()
     val openIntentResult = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
@@ -88,7 +86,7 @@ fun CameraScreen(
 
             is Result.Success -> {
                 Log.d("Aoba", "Success")
-                //navigationViewModel.setRoute(NavDestination.Ticket)
+                navigationViewModel.setRoute(NavDestination.Ticket(result.data))
                 mainViewModel.clearTicketResult()
                 isErrorVisible = false
             }

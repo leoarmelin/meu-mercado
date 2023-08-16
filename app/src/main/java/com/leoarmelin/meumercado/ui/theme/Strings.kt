@@ -1,7 +1,5 @@
 package com.leoarmelin.meumercado.ui.theme
 
-import com.leoarmelin.sharedmodels.Category
-
 object Strings {
     object Home {
         const val title = "Categorias"
@@ -41,11 +39,5 @@ object Strings {
         const val id = "others"
         const val name = "Outros"
         const val emoji = ""
-
-        val entity = Category(
-            id = id,
-            name = name,
-            emoji = emoji
-        )
     }
 }

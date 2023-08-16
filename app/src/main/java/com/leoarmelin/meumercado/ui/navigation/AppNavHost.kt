@@ -16,6 +16,7 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.leoarmelin.meumercado.ui.screens.CameraScreen
 import com.leoarmelin.meumercado.ui.screens.CategoryScreen
 import com.leoarmelin.meumercado.ui.screens.HomeScreen
+import com.leoarmelin.meumercado.ui.screens.TicketScreen
 import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 import com.leoarmelin.sharedmodels.navigation.NavDestination
@@ -30,7 +31,7 @@ fun AppNavHost(
 ) {
     val navController = rememberAnimatedNavController()
 
-    val nfceState by mainViewModel.nfceState.collectAsState()
+    val nfceState by mainViewModel.ticketResult.collectAsState()
     val currentRoute by navigationViewModel.currentRoute.collectAsState()
 
     AppBackHandler(
@@ -71,13 +72,24 @@ fun AppNavHost(
                 navigationViewModel = navigationViewModel
             )
         }
+
+        composable(NavDestination.Ticket.route) {
+            TicketScreen(
+                mainViewModel = mainViewModel,
+                navigationViewModel = navigationViewModel,
+                ticket = (currentRoute as? NavDestination.Ticket)?.ticket
+            )
+        }
     }
 
     LaunchedEffect(currentRoute) {
         when (val route = currentRoute) {
-            is NavDestination.Camera, is NavDestination.Home -> navController.navigate(route.route)
+            is NavDestination.Camera,
+            is NavDestination.Home,
+            is NavDestination.Ticket -> navController.navigate(route.route)
+
             is NavDestination.Category -> navController.navigate("${route.route}/${route.id}")
-            else -> {}
+            is NavDestination.NewProduct, is NavDestination.NewCategory -> {}
         }
     }
 }

@@ -59,7 +59,6 @@ class CategoryViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             roomRepository.fetchProductsWithoutCategory().collect {
-                println("Aoba - producgts - $it")
                 _products.value = it
             }
         }

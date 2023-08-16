@@ -9,6 +9,7 @@ import com.leoarmelin.meumercado.repository.RoomRepository
 import com.leoarmelin.meumercado.ui.theme.Strings
 import com.leoarmelin.sharedmodels.Category
 import com.leoarmelin.sharedmodels.Product
+import com.leoarmelin.sharedmodels.Ticket
 import com.leoarmelin.sharedmodels.Unity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -34,8 +35,8 @@ class MainViewModel @Inject constructor(
     private val _isCameraPermissionGranted = MutableStateFlow(false)
     val isCameraPermissionGranted get() = _isCameraPermissionGranted.asStateFlow()
 
-    private val _nfceState = MutableStateFlow<Result<String>?>(null)
-    val nfceState get() = _nfceState.asStateFlow()
+    private val _ticketResult = MutableStateFlow<Result<Ticket>?>(null)
+    val ticketResult get() = _ticketResult.asStateFlow()
 
     private val _categories = MutableStateFlow<List<Category>>(emptyList())
     val categories get() = _categories.asStateFlow()
@@ -74,17 +75,17 @@ class MainViewModel @Inject constructor(
 
     fun getNfce(url: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _nfceState.value = Result.Loading
+            _ticketResult.value = Result.Loading
 
             scrapperRepository.getNfce(CreateNfceRequest(url)).collectLatest { result ->
                 when (result) {
                     is Result.Loading -> {}
                     is Result.Success -> {
-                        _nfceState.value = Result.Success("success")
+                        _ticketResult.value = result
                     }
 
                     is Result.Error -> {
-                        _nfceState.value = Result.Error(result.exception)
+                        _ticketResult.value = Result.Error(result.exception)
                     }
                 }
             }
@@ -127,7 +128,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun clearTicketResult() {
-        _nfceState.value = null
+        _ticketResult.value = null
     }
 
     fun selectDate(month: Int, year: Int) {
@@ -165,7 +166,7 @@ class MainViewModel @Inject constructor(
         unity: Unity,
         amount: Double,
         unityPrice: Double,
-        onSuccess: () -> Unit
+        onSuccess: (Product) -> Unit
     ) {
         val category = _categories.value.find { it.emoji == emoji }
         val product = Product(
@@ -176,10 +177,8 @@ class MainViewModel @Inject constructor(
             unityPrice = unityPrice,
             totalPrice = amount * unityPrice,
             issueAt = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME),
-            categoryId = if (category?.id == Strings.OthersCategory.id) null else category?.id
+            categoryId = if (emoji == Strings.OthersCategory.emoji) null else category?.id
         )
-
-        println("Aoba - $product")
 
         viewModelScope.launch(Dispatchers.IO) {
             if (id == null) {
@@ -188,7 +187,7 @@ class MainViewModel @Inject constructor(
                 roomRepository.updateProduct(product)
             }
 
-            onSuccess()
+            onSuccess(product)
         }
     }
 
