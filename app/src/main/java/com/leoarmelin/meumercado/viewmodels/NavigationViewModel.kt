@@ -58,4 +58,9 @@ class NavigationViewModel : ViewModel() {
             _currentRoute.value = it
         }
     }
+
+    fun popAllBack() {
+        _routeHistory.value = listOf(NavDestination.Home)
+        _currentRoute.value = _routeHistory.value.first()
+    }
 }

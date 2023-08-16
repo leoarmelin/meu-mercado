@@ -1,12 +1,17 @@
 package com.leoarmelin.meumercado.ui.theme
 
+import com.leoarmelin.sharedmodels.Category
+
 object Strings {
-    object HomeSheet {
+    object Home {
         const val title = "Categorias"
     }
 
-    object CategorySheet {
+    object Category {
         const val title = "Produtos"
+        const val moreOptions = "Mais opções"
+        const val editCategory = "Editar categoria"
+        const val deleteCategory = "Deletar categoria"
     }
 
     object FAB {
@@ -30,5 +35,17 @@ object Strings {
         const val namePlaceholder = "Nome do produto"
         const val amountPlaceholder = "0"
         const val pricePlaceholder = "R$ 0,00"
+    }
+
+    object OthersCategory {
+        const val id = "others"
+        const val name = "Outros"
+        const val emoji = ""
+
+        val entity = Category(
+            id = id,
+            name = name,
+            emoji = emoji
+        )
     }
 }

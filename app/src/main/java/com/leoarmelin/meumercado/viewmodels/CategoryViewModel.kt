@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.leoarmelin.meumercado.repository.RoomRepository
+import com.leoarmelin.meumercado.ui.theme.Strings
 import com.leoarmelin.sharedmodels.Category
 import com.leoarmelin.sharedmodels.Product
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,15 +28,39 @@ class CategoryViewModel @Inject constructor(
 
     init {
         stateHandle.get<String>("id")?.let { id ->
-            viewModelScope.launch(Dispatchers.IO) {
-                roomRepository.getCategoryById(id).collect {
-                    _category.value = it
-                }
+            if (id == Strings.OthersCategory.id) {
+                initializeWithoutCategory()
+            } else {
+                initializeWithCategory(id)
             }
         }
+    }
+
+    private fun initializeWithCategory(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            roomRepository.getCategoryById(id).collect {
+                _category.value = it
+            }
+        }
+
         viewModelScope.launch(Dispatchers.IO) {
             _category.collect {
                 _products.value = roomRepository.fetchProductsFromCategory(it?.id).first()
+            }
+        }
+    }
+
+    private fun initializeWithoutCategory() {
+        _category.value = Category(
+            Strings.OthersCategory.id,
+            Strings.OthersCategory.name,
+            Strings.OthersCategory.emoji
+        )
+
+        viewModelScope.launch(Dispatchers.IO) {
+            roomRepository.fetchProductsWithoutCategory().collect {
+                println("Aoba - producgts - $it")
+                _products.value = it
             }
         }
     }

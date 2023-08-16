@@ -13,7 +13,7 @@ interface ProductDao {
     @Query("SELECT * FROM products WHERE `category_id` = :categoryId")
     fun fetchProductsFromCategory(categoryId: String?): Flow<List<Product>>
 
-    @Query("SELECT * FROM products WHERE `category_id` = null")
+    @Query("SELECT * FROM products WHERE `category_id` IS NULL")
     fun fetchProductsWithoutCategory(): Flow<List<Product>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -28,7 +28,7 @@ interface ProductDao {
     @Query("SELECT SUM(total_price) FROM products WHERE `category_id` = :categoryId")
     fun getTotalAmountFromCategoryId(categoryId: String): Flow<Double?>
 
-    @Query("SELECT SUM(total_price) FROM products WHERE `category_id` = null")
+    @Query("SELECT SUM(total_price) FROM products WHERE `category_id` IS NULL")
     fun getTotalAmountFromNoCategory(): Flow<Double?>
 
     @Query("SELECT * FROM products WHERE `id` = :id")

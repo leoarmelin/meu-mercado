@@ -127,7 +127,7 @@ private fun SheetContent(
     categoriesValue: Map<String, Double>,
     onCategoryTap: (Category) -> Unit
 ) {
-    SheetColumn(Strings.HomeSheet.title) {
+    SheetColumn(Strings.Home.title) {
         LazyColumn(
             modifier = Modifier
                 .padding(horizontal = 24.dp)

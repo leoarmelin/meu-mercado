@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.rounded.ChevronLeft
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,7 +20,12 @@ import com.leoarmelin.meumercado.ui.theme.Black
 import com.leoarmelin.meumercado.ui.theme.Strings
 
 @Composable
-fun ScreenHeader(modifier: Modifier = Modifier, title: String, onBack: () -> Unit) {
+fun ScreenHeader(
+    modifier: Modifier = Modifier,
+    title: String,
+    onBack: () -> Unit,
+    onMoreOptions: (() -> Unit)? = null
+) {
     Box(modifier = modifier.fillMaxWidth()) {
         Icon(
             modifier = Modifier
@@ -38,6 +44,18 @@ fun ScreenHeader(modifier: Modifier = Modifier, title: String, onBack: () -> Uni
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold
         )
+
+        if (onMoreOptions != null) {
+            Icon(
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .size(24.dp)
+                    .clickable { onMoreOptions() },
+                imageVector = Icons.Filled.MoreVert,
+                contentDescription = Strings.Category.moreOptions,
+                tint = Black
+            )
+        }
     }
 }
 

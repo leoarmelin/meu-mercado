@@ -28,6 +28,8 @@ class RoomRepository @Inject constructor(
     fun fetchProductsFromCategory(categoryId: String?) =
         productDao.fetchProductsFromCategory(categoryId)
 
+    fun fetchProductsWithoutCategory() = productDao.fetchProductsWithoutCategory()
+
     suspend fun deleteProductById(id: String) {
         productDao.deleteProductById(id)
     }

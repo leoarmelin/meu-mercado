@@ -6,6 +6,7 @@ import com.leoarmelin.sharedmodels.api.CreateNfceRequest
 import com.leoarmelin.sharedmodels.api.Result
 import com.leoarmelin.meumercado.repository.ScrapperRepository
 import com.leoarmelin.meumercado.repository.RoomRepository
+import com.leoarmelin.meumercado.ui.theme.Strings
 import com.leoarmelin.sharedmodels.Category
 import com.leoarmelin.sharedmodels.Product
 import com.leoarmelin.sharedmodels.Unity
@@ -93,7 +94,12 @@ class MainViewModel @Inject constructor(
     private fun fetchAllCategories() {
         viewModelScope.launch(Dispatchers.IO) {
             roomRepository.readAllCategories.collect {
-                _categories.value = it
+                val othersCategory = Category(
+                    id = Strings.OthersCategory.id,
+                    name = Strings.OthersCategory.name,
+                    emoji = Strings.OthersCategory.emoji
+                )
+                _categories.value = it + othersCategory
             }
         }
     }
@@ -105,6 +111,10 @@ class MainViewModel @Inject constructor(
 
             values[category.id] = amount
         }
+
+        val othersAmount = roomRepository.getTotalAmountFromNoCategory().first() ?: 0.0
+        values[Strings.OthersCategory.id] = othersAmount
+
         _categoriesValues.value = values
     }
 
@@ -166,8 +176,10 @@ class MainViewModel @Inject constructor(
             unityPrice = unityPrice,
             totalPrice = amount * unityPrice,
             issueAt = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME),
-            categoryId = category?.id
+            categoryId = if (category?.id == Strings.OthersCategory.id) null else category?.id
         )
+
+        println("Aoba - $product")
 
         viewModelScope.launch(Dispatchers.IO) {
             if (id == null) {
@@ -176,6 +188,13 @@ class MainViewModel @Inject constructor(
                 roomRepository.updateProduct(product)
             }
 
+            onSuccess()
+        }
+    }
+
+    fun deleteCategory(category: Category, onSuccess: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            roomRepository.deleteCategoryById(category.id)
             onSuccess()
         }
     }
