@@ -27,6 +27,7 @@ object Strings {
         const val title = "Adicionar categoria"
         const val namePlaceholder = "Nome da categoria"
         const val save = "Salvar"
+        const val delete = "Deletar"
     }
 
     object AddProduct {

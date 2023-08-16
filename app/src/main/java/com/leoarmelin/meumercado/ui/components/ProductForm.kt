@@ -1,6 +1,7 @@
 package com.leoarmelin.meumercado.ui.components
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,23 +9,29 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.leoarmelin.meumercado.ui.theme.Blue
 import com.leoarmelin.meumercado.ui.theme.GrayOne
+import com.leoarmelin.meumercado.ui.theme.Red
 import com.leoarmelin.meumercado.ui.theme.Strings
+import com.leoarmelin.meumercado.ui.theme.White
 import com.leoarmelin.sharedmodels.Unity
 
 @Composable
 fun ProductForm(
+    id: String?,
     emoji: String,
     name: String,
     unity: Unity,
@@ -36,7 +43,8 @@ fun ProductForm(
     onUnityChange: (Unity) -> Unit,
     onAmountChange: (String) -> Unit,
     onUnityPriceChange: (String) -> Unit,
-    onSave: () -> Unit
+    onSave: () -> Unit,
+    onDelete: (String) -> Unit
 ) {
     val checkColor by animateColorAsState(
         targetValue = if (isButtonEnabled) Blue else GrayOne,
@@ -65,6 +73,20 @@ fun ProductForm(
                 contentDescription = Strings.AddCategory.save,
                 tint = checkColor
             )
+
+            if (id != null) {
+                Icon(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clip(CircleShape)
+                        .clickable { onDelete(id) }
+                        .background(Red)
+                        .padding(3.dp),
+                    imageVector = Icons.Filled.Delete,
+                    contentDescription = Strings.AddCategory.delete,
+                    tint = White
+                )
+            }
         }
 
         Row(

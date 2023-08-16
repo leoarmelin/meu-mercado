@@ -46,9 +46,13 @@ class TicketViewModel @Inject constructor(
         val productsMutable = _products.value.toMutableList()
         val index = productsMutable.indexOfFirst { it.id == product.id }
         if (index == -1) return
-        println("Aoba - previous: ${productsMutable[index]}")
         productsMutable[index] = product
-        println("Aoba - next: ${productsMutable[index]}")
+        _products.value = productsMutable
+    }
+
+    fun onDeleteProduct(id: String) {
+        val productsMutable = _products.value.toMutableList()
+        productsMutable.removeIf { it.id == id }
         _products.value = productsMutable
     }
 

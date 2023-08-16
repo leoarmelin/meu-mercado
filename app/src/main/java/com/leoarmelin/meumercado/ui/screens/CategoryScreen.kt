@@ -89,6 +89,11 @@ fun CategoryScreen(
                             onSuccess = { navigationViewModel.popBack() }
                         )
                     },
+                    onDeleteProduct = {
+                        mainViewModel.deleteProduct(it, onSuccess = {
+                            navigationViewModel.popBack()
+                        })
+                    },
                     onSaveCategory = { id, emoji, name ->
                         mainViewModel.createOrUpdateCategory(
                             id = id,
@@ -136,6 +141,7 @@ private fun Content(
     isEditCategory: Boolean,
     onDateTap: () -> Unit,
     onSaveProduct: (String?, String, String, Unity, Double, Double) -> Unit,
+    onDeleteProduct: (String) -> Unit,
     onSaveCategory: (String, String, String) -> Unit,
     onPopBack: () -> Unit,
     onEditTap: () -> Unit,
@@ -171,6 +177,7 @@ private fun Content(
                 }
 
                 ProductForm(
+                    id = product?.id,
                     emoji = emoji,
                     name = name,
                     unity = unity,
@@ -193,7 +200,8 @@ private fun Content(
                             amount.toDoubleOrNull() ?: return@ProductForm,
                             unityPrice.toDoubleOrNull() ?: return@ProductForm,
                         )
-                    }
+                    },
+                    onDelete = onDeleteProduct
                 )
             } else if (isEditCategory) {
                 var emoji by remember(category) {

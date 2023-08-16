@@ -197,4 +197,11 @@ class MainViewModel @Inject constructor(
             onSuccess()
         }
     }
+
+    fun deleteProduct(id: String, onSuccess: (String) -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            roomRepository.deleteProductById(id)
+            onSuccess(id)
+        }
+    }
 }

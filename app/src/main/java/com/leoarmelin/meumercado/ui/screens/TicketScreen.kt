@@ -77,6 +77,12 @@ fun TicketScreen(
                         }
                     )
                 },
+                onDeleteProduct = {
+                    mainViewModel.deleteProduct(it, onSuccess = { id ->
+                        ticketViewModel.onDeleteProduct(id)
+                        editingProduct = null
+                    })
+                },
                 onPopBack = navigationViewModel::popBack,
             )
         },
@@ -98,6 +104,7 @@ private fun Content(
     product: Product?,
     store: Store?,
     onSaveProduct: (String?, String, String, Unity, Double, Double) -> Unit,
+    onDeleteProduct: (String) -> Unit,
     onPopBack: () -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
@@ -120,6 +127,7 @@ private fun Content(
                 }
 
                 ProductForm(
+                    id = product.id,
                     emoji = emoji,
                     name = name,
                     unity = unity,
@@ -142,7 +150,8 @@ private fun Content(
                             amount.toDoubleOrNull() ?: return@ProductForm,
                             unityPrice.toDoubleOrNull() ?: return@ProductForm,
                         )
-                    }
+                    },
+                    onDelete = onDeleteProduct
                 )
             } else {
                 store?.let {
