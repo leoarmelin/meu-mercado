@@ -132,7 +132,7 @@ private fun SheetContent(
             modifier = Modifier
                 .padding(horizontal = 24.dp)
                 .fillMaxSize(),
-            contentPadding = PaddingValues(bottom = 40.dp)
+            contentPadding = PaddingValues(bottom = 80.dp)
         ) {
             itemsIndexed(
                 categories,
