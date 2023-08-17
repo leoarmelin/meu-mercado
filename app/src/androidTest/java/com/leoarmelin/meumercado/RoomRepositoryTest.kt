@@ -21,7 +21,7 @@ import java.io.IOException
 import java.time.LocalDateTime
 
 @RunWith(AndroidJUnit4::class)
-class RoomDaoTest {
+class RoomRepositoryTest {
     private lateinit var db: AppDatabase
     private lateinit var roomRepository: RoomRepository
 
