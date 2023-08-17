@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,6 +51,7 @@ import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 import com.leoarmelin.sharedmodels.Category
 import com.leoarmelin.sharedmodels.Product
 import com.leoarmelin.sharedmodels.Unity
+import com.leoarmelin.sharedmodels.api.Result
 import com.leoarmelin.sharedmodels.navigation.NavDestination
 import java.time.LocalDateTime
 
@@ -63,9 +65,19 @@ fun CategoryScreen(
     val products by categoryViewModel.products.collectAsState()
     val selectedDate by mainViewModel.selectedDate.collectAsState()
     val currentRoute by navigationViewModel.currentRoute.collectAsState()
+    val categoryResult by categoryViewModel.categoryResult.collectAsState()
 
     val totalValue = remember(products) {
         products.sumOf { it.totalPrice }
+    }
+
+    LaunchedEffect(categoryResult) {
+        val result = categoryResult
+        when {
+            result is Result.Success && result.data is String -> navigationViewModel.popAllBack()
+            result is Result.Success -> navigationViewModel.popBack()
+            else -> {}
+        }
     }
 
     ScreenBottomSheet(
@@ -96,22 +108,16 @@ fun CategoryScreen(
                         })
                     },
                     onSaveCategory = { id, emoji, name ->
-                        mainViewModel.createOrUpdateCategory(
+                        categoryViewModel.updateCategory(
                             id = id,
                             emoji = emoji,
-                            name = name,
-                            onSuccess = {
-                                navigationViewModel.popBack()
-                            }
+                            name = name
                         )
                     },
                     onPopBack = navigationViewModel::popBack,
                     onEditTap = { navigationViewModel.setRoute(NavDestination.NewCategory(it)) },
                     onDeleteTap = {
-                        mainViewModel.deleteCategory(
-                            category = it,
-                            onSuccess = navigationViewModel::popAllBack
-                        )
+                        categoryViewModel.deleteCategory(it.id)
                     }
                 )
             }

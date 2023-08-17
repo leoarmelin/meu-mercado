@@ -7,6 +7,7 @@ import com.leoarmelin.meumercado.repository.RoomRepository
 import com.leoarmelin.meumercado.ui.theme.Strings
 import com.leoarmelin.sharedmodels.Category
 import com.leoarmelin.sharedmodels.Product
+import com.leoarmelin.sharedmodels.api.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,6 +29,9 @@ class CategoryViewModel @Inject constructor(
 
     private val _products = MutableStateFlow<List<Product>>(emptyList())
     val products get() = _products.asStateFlow()
+
+    private val _categoryResult = MutableStateFlow<Result<Any>?>(null)
+    val categoryResult get() = _categoryResult.asStateFlow()
 
     init {
         stateHandle.get<String>("id")?.let { id ->
@@ -66,6 +70,22 @@ class CategoryViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             sharedViewModel.dateInterval.collect { dateInterval ->
                 _products.value = roomRepository.fetchProductsWithoutCategory(dateInterval).first()
+            }
+        }
+    }
+
+    fun updateCategory(id: String, emoji: String, name: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            sharedViewModel.updateCategory(Category(id, name, emoji)).collect { result ->
+                _categoryResult.value = result
+            }
+        }
+    }
+
+    fun deleteCategory(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            sharedViewModel.deleteCategory(id).collect { result ->
+                _categoryResult.value = result
             }
         }
     }

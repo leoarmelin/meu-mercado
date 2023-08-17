@@ -1,7 +1,10 @@
 package com.leoarmelin.meumercado.dagger
 
+import com.leoarmelin.meumercado.useCases.CreateCategoryUseCase
+import com.leoarmelin.meumercado.useCases.DeleteCategoryUseCase
 import com.leoarmelin.meumercado.useCases.GetDateIntervalUseCase
 import com.leoarmelin.meumercado.useCases.ObserveAllCategoriesUseCase
+import com.leoarmelin.meumercado.useCases.UpdateCategoryUseCase
 import com.leoarmelin.meumercado.viewmodels.SharedViewModel
 import dagger.Module
 import dagger.Provides
@@ -17,6 +20,15 @@ object ViewModelModule {
     @ActivityRetainedScoped
     fun provideSharedViewModel(
         observeAllCategoriesUseCase: ObserveAllCategoriesUseCase,
-        getDateIntervalUseCase: GetDateIntervalUseCase
-    ): SharedViewModel = SharedViewModel(observeAllCategoriesUseCase, getDateIntervalUseCase)
+        getDateIntervalUseCase: GetDateIntervalUseCase,
+        createCategoryUseCase: CreateCategoryUseCase,
+        updateCategoryUseCase: UpdateCategoryUseCase,
+        deleteCategoryUseCase: DeleteCategoryUseCase
+    ): SharedViewModel = SharedViewModel(
+        observeAllCategoriesUseCase,
+        getDateIntervalUseCase,
+        createCategoryUseCase,
+        updateCategoryUseCase,
+        deleteCategoryUseCase
+    )
 }

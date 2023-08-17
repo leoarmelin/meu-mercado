@@ -2,22 +2,18 @@ package com.leoarmelin.meumercado.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.leoarmelin.sharedmodels.api.CreateNfceRequest
-import com.leoarmelin.sharedmodels.api.Result
-import com.leoarmelin.meumercado.repository.ScrapperRepository
 import com.leoarmelin.meumercado.repository.RoomRepository
 import com.leoarmelin.meumercado.ui.theme.Strings
-import com.leoarmelin.sharedmodels.Category
+import com.leoarmelin.meumercado.useCases.FetchCategoriesValuesUseCase
+import com.leoarmelin.meumercado.useCases.GetNfceUseCase
 import com.leoarmelin.sharedmodels.Product
 import com.leoarmelin.sharedmodels.Ticket
 import com.leoarmelin.sharedmodels.Unity
+import com.leoarmelin.sharedmodels.api.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.util.UUID
@@ -25,9 +21,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val scrapperRepository: ScrapperRepository,
     private val roomRepository: RoomRepository,
-    private val sharedViewModel: SharedViewModel
+    private val sharedViewModel: SharedViewModel,
+    private val getNfceUseCase: GetNfceUseCase,
+    private val fetchCategoriesValuesUseCase: FetchCategoriesValuesUseCase,
 ) : ViewModel() {
 
     private val _isCameraPermissionDialogOpen = MutableStateFlow(false)
@@ -46,25 +43,24 @@ class MainViewModel @Inject constructor(
     val totalValue get() = _totalValue.asStateFlow()
 
     val isDatePickerOpen = sharedViewModel.isDatePickerOpen
-    val selectedDate = sharedViewModel.dateInterval
+    val selectedDate = sharedViewModel.dateInterval.asStateFlow()
     val categories = sharedViewModel.categories
     fun selectDate(month: Int, year: Int) {
         sharedViewModel.selectDate(month, year)
     }
+
     fun toggleDatePicker(state: Boolean) {
         sharedViewModel.toggleDatePicker(state)
     }
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            combine(
-                roomRepository.observeAllProducts,
-                sharedViewModel.categories,
-                sharedViewModel.dateInterval
-            ) { _, categories, startDate ->
-                Pair(startDate, categories)
-            }.collect { (dateInterval, categories) ->
-                fetchAllCategoriesValues(dateInterval, categories)
+            fetchCategoriesValuesUseCase.execute().collect { list ->
+                val map = _categoriesValues.value.toMutableMap()
+                list.forEach {
+                    map[it.first] = it.second
+                }
+                _categoriesValues.value = map
             }
         }
 
@@ -81,41 +77,10 @@ class MainViewModel @Inject constructor(
 
     fun getNfce(url: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _ticketResult.value = Result.Loading
-
-            scrapperRepository.getNfce(CreateNfceRequest(url)).collectLatest { result ->
-                when (result) {
-                    is Result.Loading -> {}
-                    is Result.Success -> {
-                        _ticketResult.value = result
-                    }
-
-                    is Result.Error -> {
-                        _ticketResult.value = Result.Error(result.exception)
-                    }
-                }
+            getNfceUseCase.execute(url).collect {
+                _ticketResult.value = it
             }
         }
-    }
-
-    private suspend fun fetchAllCategoriesValues(
-        dateInterval: Pair<LocalDateTime, LocalDateTime>,
-        categories: List<Category>
-    ) {
-        val values = _categoriesValues.value.toMutableMap()
-        categories.forEach { category ->
-            val amount =
-                roomRepository.getTotalAmountFromCategoryId(category.id, dateInterval).first()
-                    ?: 0.0
-
-            values[category.id] = amount
-        }
-
-        val othersAmount =
-            roomRepository.getTotalAmountWithoutCategory(dateInterval).first() ?: 0.0
-        values[Strings.OthersCategory.id] = othersAmount
-
-        _categoriesValues.value = values
     }
 
     fun togglePermissionDialog(state: Boolean) {
@@ -124,29 +89,6 @@ class MainViewModel @Inject constructor(
 
     fun clearTicketResult() {
         _ticketResult.value = null
-    }
-
-    fun createOrUpdateCategory(
-        id: String?,
-        emoji: String,
-        name: String,
-        onSuccess: (Category) -> Unit
-    ) {
-        val category = Category(
-            id = id ?: UUID.randomUUID().toString(),
-            name = name,
-            emoji = emoji
-        )
-
-        viewModelScope.launch(Dispatchers.IO) {
-            if (id == null) {
-                roomRepository.insertCategory(category)
-            } else {
-                roomRepository.updateCategory(category)
-            }
-
-            onSuccess(category)
-        }
     }
 
     fun createOrUpdateProduct(
@@ -178,13 +120,6 @@ class MainViewModel @Inject constructor(
             }
 
             onSuccess(product)
-        }
-    }
-
-    fun deleteCategory(category: Category, onSuccess: () -> Unit) {
-        viewModelScope.launch(Dispatchers.IO) {
-            roomRepository.deleteCategoryById(category.id)
-            onSuccess()
         }
     }
 

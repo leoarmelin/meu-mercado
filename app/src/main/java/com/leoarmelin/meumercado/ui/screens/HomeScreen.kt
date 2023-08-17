@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.leoarmelin.meumercado.ui.components.CategoryForm
 import com.leoarmelin.meumercado.ui.components.CategoryRow
 import com.leoarmelin.meumercado.ui.components.DateAndBigValue
@@ -26,9 +28,11 @@ import com.leoarmelin.meumercado.ui.components.ScreenHeader
 import com.leoarmelin.meumercado.ui.components.SheetColumn
 import com.leoarmelin.meumercado.ui.theme.CreamTwo
 import com.leoarmelin.meumercado.ui.theme.Strings
+import com.leoarmelin.meumercado.viewmodels.HomeViewModel
 import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 import com.leoarmelin.sharedmodels.Category
+import com.leoarmelin.sharedmodels.api.Result
 import com.leoarmelin.sharedmodels.navigation.NavDestination
 import java.time.LocalDateTime
 
@@ -36,15 +40,22 @@ import java.time.LocalDateTime
 fun HomeScreen(
     mainViewModel: MainViewModel,
     navigationViewModel: NavigationViewModel,
+    homeViewModel: HomeViewModel = hiltViewModel()
 ) {
     val totalValue by mainViewModel.totalValue.collectAsState()
     val selectedDate by mainViewModel.selectedDate.collectAsState()
     val categories by mainViewModel.categories.collectAsState()
     val categoriesValue by mainViewModel.categoriesValues.collectAsState()
     val currentRoute by navigationViewModel.currentRoute.collectAsState()
+    val categoryResult by homeViewModel.categoryResult.collectAsState()
 
-    val category = remember(currentRoute) {
-        (currentRoute as? NavDestination.NewCategory)?.category
+    LaunchedEffect(categoryResult) {
+        when (val result = categoryResult) {
+            is Result.Success -> {
+                navigationViewModel.setRoute(NavDestination.Category(result.data.id))
+            }
+            else -> {}
+        }
     }
 
     ScreenBottomSheet(
@@ -53,17 +64,9 @@ fun HomeScreen(
                 selectedDate = selectedDate,
                 totalValue = totalValue,
                 isAddOrEditCategory = currentRoute is NavDestination.NewCategory,
-                category = category,
                 onDateTap = { mainViewModel.toggleDatePicker(true) },
-                onSaveCategory = { id, emoji, name ->
-                    mainViewModel.createOrUpdateCategory(
-                        id = id,
-                        emoji = emoji,
-                        name = name,
-                        onSuccess = {
-                            navigationViewModel.setRoute(NavDestination.Category(it.id))
-                        }
-                    )
+                onSaveCategory = { emoji, name ->
+                    homeViewModel.createCategory(emoji, name)
                 },
                 onBackTap = navigationViewModel::popBack
             )
@@ -82,18 +85,17 @@ private fun Content(
     selectedDate: Pair<LocalDateTime, LocalDateTime>,
     totalValue: Double,
     isAddOrEditCategory: Boolean,
-    category: Category?,
     onDateTap: () -> Unit,
-    onSaveCategory: (String?, String, String) -> Unit,
+    onSaveCategory: (String, String) -> Unit,
     onBackTap: () -> Unit
 ) {
     ScreenColumn {
         if (isAddOrEditCategory) {
-            var emoji by remember(category) {
-                mutableStateOf(category?.emoji ?: "")
+            var emoji by remember {
+                mutableStateOf("")
             }
-            var name by remember(category) {
-                mutableStateOf(category?.name ?: "")
+            var name by remember {
+                mutableStateOf("")
             }
 
             ScreenHeader(
@@ -108,7 +110,7 @@ private fun Content(
                 onEmojiChange = { emoji = it },
                 onNameChange = { name = it },
                 onSave = {
-                    onSaveCategory(category?.id, emoji, name)
+                    onSaveCategory(emoji, name)
                 }
             )
         } else {

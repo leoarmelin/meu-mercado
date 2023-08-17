@@ -2,7 +2,6 @@ package com.leoarmelin.meumercado
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.leoarmelin.meumercado.repository.ScrapperRepository
-import com.leoarmelin.sharedmodels.api.CreateNfceRequest
 import com.leoarmelin.sharedmodels.api.Result
 import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.test.runTest
@@ -23,7 +22,7 @@ class ScrapperTest {
     @Test
     fun successResult() = runTest {
         val url = "http://www.fazenda.pr.gov.br/nfce/qrcode?p=41230876189406002099651010000588351003610271|2|1|1|E5049B3D3F65118B024A3D1F11DE83AABF19276A"
-        val result = scrapperRepository.getNfce(CreateNfceRequest(url)).last()
+        val result = scrapperRepository.getNfce(url).last()
 
         assertTrue(result is Result.Success)
     }
@@ -31,7 +30,7 @@ class ScrapperTest {
     @Test
     fun wrongUrl() = runTest {
         val url = "wrong_url"
-        val result = scrapperRepository.getNfce(CreateNfceRequest(url)).last()
+        val result = scrapperRepository.getNfce(url).last()
 
         assertTrue(result is Result.Error)
     }
@@ -39,7 +38,7 @@ class ScrapperTest {
     @Test
     fun correctData() = runTest {
         val url = "http://www.fazenda.pr.gov.br/nfce/qrcode?p=TICKET_ID" // Change `TICKET_ID` to test
-        val result = scrapperRepository.getNfce(CreateNfceRequest(url)).last() as Result.Success
+        val result = scrapperRepository.getNfce(url).last() as Result.Success
         val ticket = result.data
 
         assertTrue(ticket.id.isNotEmpty())
