@@ -52,7 +52,7 @@ class RoomRepository @Inject constructor(
         endDate: LocalDateTime
     ) = productDao.getTotalAmountFromCategoryId(categoryId, startDate, endDate)
 
-    fun getTotalAmountFromNoCategory(
+    fun getTotalAmountWithoutCategory(
         startDate: LocalDateTime,
         endDate: LocalDateTime
     ) = productDao.getTotalAmountFromNoCategory(startDate, endDate)
@@ -62,4 +62,6 @@ class RoomRepository @Inject constructor(
     }
 
     fun getCategoryById(id: String) = categoryDao.getCategoryById(id)
+
+    fun getProductById(id: String) = productDao.getProductById(id)
 }

@@ -4,8 +4,7 @@ import androidx.room.Room
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.leoarmelin.database.AppDatabase
-import com.leoarmelin.database.CategoryDao
-import com.leoarmelin.database.ProductDao
+import com.leoarmelin.meumercado.repository.RoomRepository
 import com.leoarmelin.sharedmodels.Category
 import com.leoarmelin.sharedmodels.Product
 import com.leoarmelin.sharedmodels.Unity
@@ -23,9 +22,8 @@ import java.time.LocalDateTime
 
 @RunWith(AndroidJUnit4::class)
 class RoomDaoTest {
-    private lateinit var categoryDao: CategoryDao
-    private lateinit var productDao: ProductDao
     private lateinit var db: AppDatabase
+    private lateinit var roomRepository: RoomRepository
 
     @Before
     fun createDb() {
@@ -33,8 +31,9 @@ class RoomDaoTest {
         db = Room.inMemoryDatabaseBuilder(
             context, AppDatabase::class.java
         ).build()
-        productDao = db.productDao()
-        categoryDao = db.categoryDao()
+        val productDao = db.productDao()
+        val categoryDao = db.categoryDao()
+        roomRepository = RoomRepository(productDao, categoryDao)
     }
 
     @After
@@ -46,8 +45,9 @@ class RoomDaoTest {
     @Test
     @Throws(Exception::class)
     fun insertCategory() = runTest {
-        insertMockCategoryOn(categoryDao)
-        val roomCategory = categoryDao.getCategoryById(mockCategory.id).first()
+        roomRepository.insertCategory(mockCategory)
+        roomRepository.insertCategory(mockCategory)
+        val roomCategory = roomRepository.getCategoryById(mockCategory.id).first()
 
         assertEquals(mockCategory, roomCategory)
     }
@@ -55,13 +55,13 @@ class RoomDaoTest {
     @Test
     @Throws(Exception::class)
     fun removeCategory() = runTest {
-        insertMockCategoryOn(categoryDao)
-        insertMockProductOn(productDao)
+        roomRepository.insertCategory(mockCategory)
+        roomRepository.insertProduct(mockProduct)
 
-        categoryDao.deleteCategoryById(mockCategory.id)
+        roomRepository.deleteCategoryById(mockCategory.id)
 
-        val roomCategory = categoryDao.getCategoryById(mockCategory.id).first()
-        val roomProduct = productDao.getProductById(mockProduct.id).first()
+        val roomCategory = roomRepository.getCategoryById(mockCategory.id).first()
+        val roomProduct = roomRepository.getProductById(mockProduct.id).first()
 
         assertNull(roomCategory)
         assertNotNull(roomProduct)
@@ -71,10 +71,10 @@ class RoomDaoTest {
     @Test
     @Throws(Exception::class)
     fun updateCategory() = runTest {
-        insertMockCategoryOn(categoryDao)
+        roomRepository.insertCategory(mockCategory)
 
-        categoryDao.updateCategory(mockCategory.copy(name = "Category Cool"))
-        val roomCategory = categoryDao.getCategoryById(mockCategory.id).first()
+        roomRepository.updateCategory(mockCategory.copy(name = "Category Cool"))
+        val roomCategory = roomRepository.getCategoryById(mockCategory.id).first()
 
         assertEquals(roomCategory?.name, "Category Cool")
     }
@@ -82,10 +82,10 @@ class RoomDaoTest {
     @Test
     @Throws(Exception::class)
     fun insertProduct() = runTest {
-        insertMockCategoryOn(categoryDao)
-        insertMockProductOn(productDao)
+        roomRepository.insertCategory(mockCategory)
+        roomRepository.insertProduct(mockProduct)
 
-        val roomProduct = productDao.getProductById(mockProduct.id).first()
+        val roomProduct = roomRepository.getProductById(mockProduct.id).first()
 
         assertEquals(mockProduct, roomProduct)
     }
@@ -93,12 +93,12 @@ class RoomDaoTest {
     @Test
     @Throws(Exception::class)
     fun removeProduct() = runTest {
-        insertMockCategoryOn(categoryDao)
-        insertMockProductOn(productDao)
+        roomRepository.insertCategory(mockCategory)
+        roomRepository.insertProduct(mockProduct)
 
-        productDao.deleteProductById(mockProduct.id)
+        roomRepository.deleteProductById(mockProduct.id)
 
-        val roomProduct = productDao.getProductById(mockProduct.id).first()
+        val roomProduct = roomRepository.getProductById(mockProduct.id).first()
 
         assertNull(roomProduct)
     }
@@ -106,10 +106,16 @@ class RoomDaoTest {
     @Test
     @Throws(Exception::class)
     fun fetchProducts() = runTest {
-        insertMockCategoryOn(categoryDao)
-        insertMockProductsOn(productDao)
+        roomRepository.insertCategory(mockCategory)
+        mockProducts.forEach {
+            roomRepository.insertProduct(it)
+        }
 
-        val roomProducts = productDao.fetchProductsFromCategory(mockCategory.id).first()
+        val roomProducts = roomRepository.fetchProductsFromCategory(
+            mockCategory.id,
+            firstDayOfMonth,
+            lastDayOfMonth
+        ).first()
 
         assertTrue(roomProducts.containsAll(mockProducts))
         assertTrue(mockProducts.containsAll(roomProducts))
@@ -118,11 +124,11 @@ class RoomDaoTest {
     @Test
     @Throws(Exception::class)
     fun updateProduct() = runTest {
-        insertMockCategoryOn(categoryDao)
-        insertMockProductOn(productDao)
+        roomRepository.insertCategory(mockCategory)
+        roomRepository.insertProduct(mockProduct)
 
-        productDao.updateProduct(mockProduct.copy(name = "Product Cool"))
-        val roomProduct = productDao.getProductById(mockProduct.id).first()
+        roomRepository.updateProduct(mockProduct.copy(name = "Product Cool"))
+        val roomProduct = roomRepository.getProductById(mockProduct.id).first()
 
         assertEquals(roomProduct?.id, mockProduct.id)
         assertEquals(roomProduct?.name, "Product Cool")
@@ -131,48 +137,90 @@ class RoomDaoTest {
     @Test
     @Throws(Exception::class)
     fun getTotalProductAmount() = runTest {
-        insertMockCategoryOn(categoryDao)
-        insertMockProductsOn(productDao)
+        roomRepository.insertCategory(mockCategory)
+        mockProducts.forEach {
+            roomRepository.insertProduct(it)
+        }
 
-        val totalAmount = productDao.getTotalAmountFromCategoryId(mockCategory.id).first()
+        val totalAmount = roomRepository.getTotalAmountFromCategoryId(
+            mockCategory.id,
+            firstDayOfMonth,
+            lastDayOfMonth
+        ).first()
         val expectedAmount = mockProducts.sumOf { it.totalPrice }
 
         assertTrue(totalAmount == expectedAmount)
     }
 
+    @Test
+    @Throws(Exception::class)
+    fun getTotalProductAmountWithoutCategory() = runTest {
+        roomRepository.insertCategory(mockCategory)
+        mockProductsNoCategory.forEach {
+            roomRepository.insertProduct(it)
+        }
+
+        val totalAmount = roomRepository.getTotalAmountWithoutCategory(
+            firstDayOfMonth,
+            lastDayOfMonth
+        ).first()
+        val expectedAmount = mockProductsNoCategory
+            .filter { it.categoryId == null }
+            .sumOf { it.totalPrice }
+
+        assertTrue(totalAmount == expectedAmount)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun fetchProductsOutsideOfDateRange() = runTest {
+        roomRepository.insertCategory(mockCategory)
+        mockProductsOutsideOfDateRange.forEach {
+            roomRepository.insertProduct(it)
+        }
+
+        val roomProducts = roomRepository.fetchProductsFromCategory(
+            mockCategory.id,
+            firstDayOfMonth,
+            lastDayOfMonth
+        ).first()
+
+        assertTrue(roomProducts.isEmpty())
+    }
+
     companion object {
-        val mockCategory = Category(
+        private val dateNow = LocalDateTime.now()
+        private val firstDayOfMonth = LocalDateTime.of(dateNow.year, dateNow.monthValue, 1, 0, 0, 1)
+        private val lastDayOfMonth = firstDayOfMonth.plusMonths(1).minusSeconds(2)
+        private val mockCategory = Category(
             id = "c-1",
             name = "Category One",
             emoji = "🍙"
         )
-        val mockProduct = Product(
+        private val mockProduct = Product(
             id = "p-1",
             name = "Product One",
             unity = Unity.UN,
             amount = 1.0,
             unityPrice = 5.0,
             totalPrice = 5.0,
-            issueAt = LocalDateTime.now(),
+            issueAt = dateNow,
             categoryId = "c-1",
         )
-        val mockProducts = listOf(
+        private val mockProducts = listOf(
             mockProduct,
             mockProduct.copy(id = "p-2", name = "Product Two"),
             mockProduct.copy(id = "p-3", name = "Product Three")
         )
-        suspend fun insertMockCategoryOn(categoryDao: CategoryDao) {
-            categoryDao.insertCategory(mockCategory)
-        }
-
-        suspend fun insertMockProductOn(productDao: ProductDao) {
-            productDao.insertProduct(mockProduct)
-        }
-
-        suspend fun insertMockProductsOn(productDao: ProductDao) {
-            mockProducts.forEach {
-                productDao.insertProduct(it)
-            }
-        }
+        private val mockProductsNoCategory = listOf(
+            mockProduct.copy(categoryId = null),
+            mockProduct.copy(id = "p-2", name = "Product Two"),
+            mockProduct.copy(id = "p-3", name = "Product Three")
+        )
+        private val mockProductsOutsideOfDateRange = listOf(
+            mockProduct.copy(issueAt = LocalDateTime.now().minusMonths(2)),
+            mockProduct.copy(id = "p-2", name = "Product Two", issueAt = LocalDateTime.now().minusMonths(2)),
+            mockProduct.copy(id = "p-3", name = "Product Three", issueAt = LocalDateTime.now().minusMonths(2))
+        )
     }
 }

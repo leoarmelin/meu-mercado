@@ -112,7 +112,7 @@ class MainViewModel @Inject constructor(
             values[category.id] = amount
         }
 
-        val othersAmount = roomRepository.getTotalAmountFromNoCategory(startDate, endDate).first() ?: 0.0
+        val othersAmount = roomRepository.getTotalAmountWithoutCategory(startDate, endDate).first() ?: 0.0
         values[Strings.OthersCategory.id] = othersAmount
 
         _categoriesValues.value = values
