@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 
 @Composable
 fun DateAndBigValue(
-    selectedDate: LocalDateTime,
+    date: LocalDateTime,
     totalValue: Double,
     onDateTap: () -> Unit
 ) {
@@ -20,7 +20,7 @@ fun DateAndBigValue(
         verticalAlignment = Alignment.CenterVertically
     ) {
         DateSelector(
-            date = selectedDate,
+            date = date,
             onTap = onDateTap
         )
     }

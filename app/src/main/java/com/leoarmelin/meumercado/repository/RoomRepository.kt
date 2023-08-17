@@ -29,14 +29,12 @@ class RoomRepository @Inject constructor(
 
     fun fetchProductsFromCategory(
         categoryId: String?,
-        startDate: LocalDateTime,
-        endDate: LocalDateTime
-    ) = productDao.fetchProductsFromCategory(categoryId, startDate, endDate)
+        dateInterval: Pair<LocalDateTime, LocalDateTime>
+    ) = productDao.fetchProductsFromCategory(categoryId, dateInterval.first, dateInterval.second)
 
     fun fetchProductsWithoutCategory(
-        startDate: LocalDateTime,
-        endDate: LocalDateTime
-    ) = productDao.fetchProductsWithoutCategory(startDate, endDate)
+        dateInterval: Pair<LocalDateTime, LocalDateTime>
+    ) = productDao.fetchProductsWithoutCategory(dateInterval.first, dateInterval.second)
 
     suspend fun deleteProductById(id: String) {
         productDao.deleteProductById(id)
@@ -48,14 +46,12 @@ class RoomRepository @Inject constructor(
 
     fun getTotalAmountFromCategoryId(
         categoryId: String,
-        startDate: LocalDateTime,
-        endDate: LocalDateTime
-    ) = productDao.getTotalAmountFromCategoryId(categoryId, startDate, endDate)
+        dateInterval: Pair<LocalDateTime, LocalDateTime>
+    ) = productDao.getTotalAmountFromCategoryId(categoryId, dateInterval.first, dateInterval.second)
 
     fun getTotalAmountWithoutCategory(
-        startDate: LocalDateTime,
-        endDate: LocalDateTime
-    ) = productDao.getTotalAmountFromNoCategory(startDate, endDate)
+        dateInterval: Pair<LocalDateTime, LocalDateTime>
+    ) = productDao.getTotalAmountFromNoCategory(dateInterval.first, dateInterval.second)
 
     suspend fun insertProduct(product: Product) {
         productDao.insertProduct(product)

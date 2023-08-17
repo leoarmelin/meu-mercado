@@ -79,7 +79,7 @@ fun HomeScreen(
 
 @Composable
 private fun Content(
-    selectedDate: LocalDateTime,
+    selectedDate: Pair<LocalDateTime, LocalDateTime>,
     totalValue: Double,
     isAddOrEditCategory: Boolean,
     category: Category?,
@@ -113,7 +113,7 @@ private fun Content(
             )
         } else {
             DateAndBigValue(
-                selectedDate = selectedDate,
+                date = selectedDate.first,
                 totalValue = totalValue,
                 onDateTap = onDateTap
             )

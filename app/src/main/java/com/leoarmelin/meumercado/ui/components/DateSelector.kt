@@ -18,6 +18,7 @@ import java.util.Locale
 fun DateSelector(date: LocalDateTime, onTap: () -> Unit) {
     val monthString = remember(date) { getMonthString(date) }
     val yearString = remember(date) { getYearString(date) }
+    
     Row(
         modifier = Modifier.clickable { onTap() },
         horizontalArrangement = Arrangement.spacedBy(8.dp),

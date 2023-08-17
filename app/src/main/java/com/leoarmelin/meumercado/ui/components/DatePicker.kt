@@ -42,15 +42,15 @@ import java.time.LocalDateTime
 fun DatePicker(
     modifier: Modifier,
     isOpen: Boolean,
-    currentDate: LocalDateTime,
+    dateInterval: Pair<LocalDateTime, LocalDateTime>,
     onApply: (month: Int, year: Int) -> Unit,
     onClose: () -> Unit
 ) {
-    var selectedMonth by remember(currentDate) {
-        mutableStateOf(currentDate.month.value)
+    var selectedMonth by remember(dateInterval.first) {
+        mutableStateOf(dateInterval.first.month.value)
     }
-    var selectedYear by remember(currentDate) {
-        mutableStateOf(currentDate.year)
+    var selectedYear by remember(dateInterval.first) {
+        mutableStateOf(dateInterval.first.year)
     }
 
     EnterExitAnimation(isOpen) {

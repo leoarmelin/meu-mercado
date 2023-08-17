@@ -14,16 +14,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
 class CategoryViewModel @Inject constructor(
     stateHandle: SavedStateHandle,
-    private val roomRepository: RoomRepository
+    private val roomRepository: RoomRepository,
+    private val sharedViewModel: SharedViewModel
 ) : ViewModel() {
-
-    private val _selectedDate = MutableStateFlow<LocalDateTime?>(null)
 
     private val _category = MutableStateFlow<Category?>(null)
     val category get() = _category.asStateFlow()
@@ -49,13 +47,11 @@ class CategoryViewModel @Inject constructor(
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            _selectedDate.combine(_category) { startDate, category ->
-                Pair(startDate, category)
-            }.collect { (startDate, category) ->
-                if (startDate == null) return@collect
-                val endDate = startDate.plusMonths(1).minusSeconds(2)
-
-                _products.value = roomRepository.fetchProductsFromCategory(category?.id, startDate, endDate).first()
+            sharedViewModel.dateInterval.combine(_category) { dateInterval, category ->
+                Pair(dateInterval, category)
+            }.collect { (dateInterval, category) ->
+                _products.value =
+                    roomRepository.fetchProductsFromCategory(category?.id, dateInterval).first()
             }
         }
     }
@@ -68,18 +64,9 @@ class CategoryViewModel @Inject constructor(
         )
 
         viewModelScope.launch(Dispatchers.IO) {
-            _selectedDate.collect { startDate ->
-                if (startDate == null) return@collect
-                val endDate = startDate.plusMonths(1).minusSeconds(2)
-
-                _products.value = roomRepository.fetchProductsWithoutCategory(startDate, endDate).first()
+            sharedViewModel.dateInterval.collect { dateInterval ->
+                _products.value = roomRepository.fetchProductsWithoutCategory(dateInterval).first()
             }
         }
-
-
-    }
-
-    fun setSelectedDate(value: LocalDateTime) {
-        _selectedDate.value = value
     }
 }

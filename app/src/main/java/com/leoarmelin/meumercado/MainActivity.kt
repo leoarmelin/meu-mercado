@@ -85,7 +85,7 @@ class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
                                 .padding(top = 24.dp, start = 12.dp)
                                 .align(Alignment.TopStart),
                             isOpen = isDatePickerOpen,
-                            currentDate = selectedDate,
+                            dateInterval = selectedDate,
                             onApply = mainViewModel::selectDate,
                             onClose = {
                                 mainViewModel.toggleDatePicker(false)

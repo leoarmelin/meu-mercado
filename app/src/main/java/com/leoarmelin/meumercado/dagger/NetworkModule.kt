@@ -1,16 +1,11 @@
 package com.leoarmelin.meumercado.dagger
 
-import android.content.Context
 import com.leoarmelin.meumercado.BuildConfig
-import com.leoarmelin.database.AppDatabase
-import com.leoarmelin.database.CategoryDao
-import com.leoarmelin.database.ProductDao
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -47,17 +42,4 @@ object NetworkModule {
         .client(okHttpClient)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()
-
-    @Singleton
-    @Provides
-    fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase =
-        AppDatabase.getDatabase(context)
-
-    @Singleton
-    @Provides
-    fun provideCategoryDao(appDatabase: AppDatabase): CategoryDao = appDatabase.categoryDao()
-
-    @Singleton
-    @Provides
-    fun provideProductDao(appDatabase: AppDatabase): ProductDao = appDatabase.productDao()
 }
