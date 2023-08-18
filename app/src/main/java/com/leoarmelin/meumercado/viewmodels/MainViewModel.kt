@@ -2,7 +2,6 @@ package com.leoarmelin.meumercado.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.leoarmelin.meumercado.useCases.FetchCategoriesValuesUseCase
 import com.leoarmelin.meumercado.useCases.GetNfceUseCase
 import com.leoarmelin.sharedmodels.Ticket
 import com.leoarmelin.sharedmodels.api.Result
@@ -17,7 +16,6 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val sharedViewModel: SharedViewModel,
     private val getNfceUseCase: GetNfceUseCase,
-    private val fetchCategoriesValuesUseCase: FetchCategoriesValuesUseCase,
 ) : ViewModel() {
 
     private val _isCameraPermissionDialogOpen = MutableStateFlow(false)
@@ -26,42 +24,18 @@ class MainViewModel @Inject constructor(
     private val _isCameraPermissionGranted = MutableStateFlow(false)
     val isCameraPermissionGranted get() = _isCameraPermissionGranted.asStateFlow()
 
+    val isDatePickerOpen = sharedViewModel.isDatePickerOpen
+    val selectedDate = sharedViewModel.dateInterval.asStateFlow()
+
     private val _ticketResult = MutableStateFlow<Result<Ticket>?>(null)
     val ticketResult get() = _ticketResult.asStateFlow()
 
-    private val _categoriesValues = MutableStateFlow<Map<String, Double>>(HashMap())
-    val categoriesValues get() = _categoriesValues.asStateFlow()
-
-    private val _totalValue = MutableStateFlow(0.0)
-    val totalValue get() = _totalValue.asStateFlow()
-
-    val isDatePickerOpen = sharedViewModel.isDatePickerOpen
-    val selectedDate = sharedViewModel.dateInterval.asStateFlow()
-    val categories = sharedViewModel.categories
     fun selectDate(month: Int, year: Int) {
         sharedViewModel.selectDate(month, year)
     }
 
     fun toggleDatePicker(state: Boolean) {
         sharedViewModel.toggleDatePicker(state)
-    }
-
-    init {
-        viewModelScope.launch(Dispatchers.IO) {
-            fetchCategoriesValuesUseCase.execute().collect { list ->
-                val map = _categoriesValues.value.toMutableMap()
-                list.forEach {
-                    map[it.first] = it.second
-                }
-                _categoriesValues.value = map
-            }
-        }
-
-        viewModelScope.launch(Dispatchers.IO) {
-            _categoriesValues.collect {
-                _totalValue.value = it.values.sum()
-            }
-        }
     }
 
     fun setCameraPermissionState(state: Boolean) {

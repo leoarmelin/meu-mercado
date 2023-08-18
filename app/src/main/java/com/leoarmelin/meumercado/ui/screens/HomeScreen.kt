@@ -42,11 +42,11 @@ fun HomeScreen(
     navigationViewModel: NavigationViewModel,
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
-    val totalValue by mainViewModel.totalValue.collectAsStateWithLifecycle()
     val selectedDate by mainViewModel.selectedDate.collectAsStateWithLifecycle()
-    val categories by mainViewModel.categories.collectAsStateWithLifecycle()
-    val categoriesValue by mainViewModel.categoriesValues.collectAsStateWithLifecycle()
     val currentRoute by navigationViewModel.currentRoute.collectAsStateWithLifecycle()
+    val totalValue by homeViewModel.totalValue.collectAsStateWithLifecycle()
+    val categories by homeViewModel.categories.collectAsStateWithLifecycle()
+    val categoriesValue by homeViewModel.categoriesValues.collectAsStateWithLifecycle()
     val categoryResult by homeViewModel.categoryResult.collectAsStateWithLifecycle()
 
     LaunchedEffect(categoryResult) {
