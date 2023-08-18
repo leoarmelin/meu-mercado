@@ -2,7 +2,6 @@ package com.leoarmelin.meumercado.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.leoarmelin.meumercado.repository.RoomRepository
 import com.leoarmelin.meumercado.useCases.FetchCategoriesValuesUseCase
 import com.leoarmelin.meumercado.useCases.GetNfceUseCase
 import com.leoarmelin.sharedmodels.Ticket
@@ -16,7 +15,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val roomRepository: RoomRepository,
     private val sharedViewModel: SharedViewModel,
     private val getNfceUseCase: GetNfceUseCase,
     private val fetchCategoriesValuesUseCase: FetchCategoriesValuesUseCase,

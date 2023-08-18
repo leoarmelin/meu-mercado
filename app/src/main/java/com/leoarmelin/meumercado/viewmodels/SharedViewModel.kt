@@ -59,7 +59,7 @@ class SharedViewModel @Inject constructor(
 
     suspend fun updateCategory(category: Category) = updateCategoryUseCase.execute(category)
 
-    suspend fun deleteCategory(id: String) = deleteCategoryUseCase.execute(id)
+    suspend fun deleteCategory(category: Category) = deleteCategoryUseCase.execute(category)
 
     suspend fun createProduct(
         emoji: String,

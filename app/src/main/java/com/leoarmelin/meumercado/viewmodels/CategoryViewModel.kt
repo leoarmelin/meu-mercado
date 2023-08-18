@@ -8,7 +8,6 @@ import com.leoarmelin.meumercado.ui.theme.Strings
 import com.leoarmelin.sharedmodels.Category
 import com.leoarmelin.sharedmodels.Product
 import com.leoarmelin.sharedmodels.Unity
-import com.leoarmelin.sharedmodels.api.Result
 import com.leoarmelin.sharedmodels.room.RoomResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -32,7 +31,7 @@ class CategoryViewModel @Inject constructor(
     private val _products = MutableStateFlow<List<Product>>(emptyList())
     val products get() = _products.asStateFlow()
 
-    private val _categoryResult = MutableStateFlow<Result<Any>?>(null)
+    private val _categoryResult = MutableStateFlow<RoomResult<Category>?>(null)
     val categoryResult get() = _categoryResult.asStateFlow()
 
     private val _productResult = MutableStateFlow<RoomResult<Product>?>(null)
@@ -87,9 +86,9 @@ class CategoryViewModel @Inject constructor(
         }
     }
 
-    fun deleteCategory(id: String) {
+    fun deleteCategory(category: Category) {
         viewModelScope.launch(Dispatchers.IO) {
-            sharedViewModel.deleteCategory(id).collect { result ->
+            sharedViewModel.deleteCategory(category).collect { result ->
                 _categoryResult.value = result
             }
         }

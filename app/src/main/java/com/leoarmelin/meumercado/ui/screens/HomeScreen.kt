@@ -32,8 +32,8 @@ import com.leoarmelin.meumercado.viewmodels.HomeViewModel
 import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 import com.leoarmelin.sharedmodels.Category
-import com.leoarmelin.sharedmodels.api.Result
 import com.leoarmelin.sharedmodels.navigation.NavDestination
+import com.leoarmelin.sharedmodels.room.RoomResult
 import java.time.LocalDateTime
 
 @Composable
@@ -51,7 +51,7 @@ fun HomeScreen(
 
     LaunchedEffect(categoryResult) {
         when (val result = categoryResult) {
-            is Result.Success -> {
+            is RoomResult.Success -> {
                 navigationViewModel.setRoute(NavDestination.Category(result.data.id))
             }
             else -> {}

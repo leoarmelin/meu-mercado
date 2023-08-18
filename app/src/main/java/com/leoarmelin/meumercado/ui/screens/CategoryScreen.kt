@@ -51,8 +51,8 @@ import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 import com.leoarmelin.sharedmodels.Category
 import com.leoarmelin.sharedmodels.Product
 import com.leoarmelin.sharedmodels.Unity
-import com.leoarmelin.sharedmodels.api.Result
 import com.leoarmelin.sharedmodels.navigation.NavDestination
+import com.leoarmelin.sharedmodels.room.RoomOperation
 import com.leoarmelin.sharedmodels.room.RoomResult
 import java.time.LocalDateTime
 
@@ -76,8 +76,8 @@ fun CategoryScreen(
     LaunchedEffect(categoryResult) {
         val result = categoryResult
         when {
-            result is Result.Success && result.data is String -> navigationViewModel.popAllBack()
-            result is Result.Success -> navigationViewModel.popBack()
+            result is RoomResult.Success && result.operation == RoomOperation.DELETE -> navigationViewModel.popAllBack()
+            result is RoomResult.Success && result.operation == RoomOperation.UPDATE -> navigationViewModel.popBack()
             else -> {}
         }
     }
@@ -91,14 +91,14 @@ fun CategoryScreen(
 
     ScreenBottomSheet(
         content = {
-            category?.let {
+            category?.let { category ->
                 Content(
                     selectedDate = selectedDate,
                     totalValue = totalValue,
                     isAddOrEditProduct = currentRoute is NavDestination.NewProduct,
                     product = (currentRoute as? NavDestination.NewProduct)?.product,
                     isEditCategory = currentRoute is NavDestination.NewCategory,
-                    category = it,
+                    category = category,
                     onDateTap = { mainViewModel.toggleDatePicker(true) },
                     onSaveProduct = { id, emoji, name, unity, amount, unityPrice ->
                         if (id == null) {
@@ -123,8 +123,8 @@ fun CategoryScreen(
                         )
                     },
                     onPopBack = navigationViewModel::popBack,
-                    onEditTap = { navigationViewModel.setRoute(NavDestination.NewCategory(it)) },
-                    onDeleteTap = { categoryViewModel.deleteCategory(it.id) }
+                    onEditTap = { navigationViewModel.setRoute(NavDestination.NewCategory(category)) },
+                    onDeleteTap = { categoryViewModel.deleteCategory(category) }
                 )
             }
         },

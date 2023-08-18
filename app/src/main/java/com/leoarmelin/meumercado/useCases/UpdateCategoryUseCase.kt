@@ -2,7 +2,8 @@ package com.leoarmelin.meumercado.useCases
 
 import com.leoarmelin.meumercado.repository.RoomRepository
 import com.leoarmelin.sharedmodels.Category
-import com.leoarmelin.sharedmodels.api.Result
+import com.leoarmelin.sharedmodels.room.RoomOperation
+import com.leoarmelin.sharedmodels.room.RoomResult
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -12,13 +13,13 @@ class UpdateCategoryUseCase @Inject constructor(
     suspend fun execute(
         category: Category
     ) = flow {
-        emit(Result.Loading)
+        emit(RoomResult.Loading)
 
         try {
             roomRepository.updateCategory(category)
-            emit(Result.Success(category))
+            emit(RoomResult.Success(category, RoomOperation.UPDATE))
         } catch (e: Exception) {
-            emit(Result.Error(e.message ?: "Error during $this"))
+            emit(RoomResult.Error(e.message ?: "Error during $this"))
         }
     }
 }

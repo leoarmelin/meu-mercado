@@ -3,7 +3,7 @@ package com.leoarmelin.meumercado.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.leoarmelin.sharedmodels.Category
-import com.leoarmelin.sharedmodels.api.Result
+import com.leoarmelin.sharedmodels.room.RoomResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +17,7 @@ class HomeViewModel @Inject constructor(
     private val sharedViewModel: SharedViewModel
 ) : ViewModel() {
 
-    private val _categoryResult = MutableStateFlow<Result<Category>?>(null)
+    private val _categoryResult = MutableStateFlow<RoomResult<Category>?>(null)
     val categoryResult get() = _categoryResult.asStateFlow()
 
     fun createCategory(

@@ -34,7 +34,7 @@ class FetchCategoriesValuesUseCase @Inject constructor(
         }
     }
 
-    suspend fun getTotalAmounts(
+    private suspend fun getTotalAmounts(
         categories: List<Category>,
         dateInterval: Pair<LocalDateTime, LocalDateTime>
     ): List<Pair<String, Double>> {
