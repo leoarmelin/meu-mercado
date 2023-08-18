@@ -174,8 +174,10 @@ private fun Content(
             ScreenHeader(
                 title = "${category.emoji} ${category.name}",
                 onBack = onPopBack,
-                onMoreOptions = {
-                    isMoreOptionsOpen = !isMoreOptionsOpen
+                onMoreOptions = if (category.id != Strings.OthersCategory.id) {
+                    { isMoreOptionsOpen = !isMoreOptionsOpen }
+                } else {
+                    null
                 }
             )
 
@@ -268,6 +270,7 @@ private fun Content(
                 onDeleteTap()
             }
         )
+
     }
 }
 

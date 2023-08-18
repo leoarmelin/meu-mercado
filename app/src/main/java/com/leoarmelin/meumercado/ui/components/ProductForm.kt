@@ -113,7 +113,8 @@ fun ProductForm(
                 value = unityPrice,
                 onValueChange = { onUnityPriceChange(it) },
                 placeholder = Strings.AddProduct.pricePlaceholder,
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                filter = { filterFloatValue(it) }
             )
         }
     }

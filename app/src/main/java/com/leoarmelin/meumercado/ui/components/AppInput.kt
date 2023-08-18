@@ -16,7 +16,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.leoarmelin.meumercado.extensions.stringValue
@@ -33,13 +32,19 @@ fun AppInput(
     onValueChange: (String) -> Unit,
     rightIcon: (@Composable () -> Unit)? = null,
     placeholder: String,
+    filter: ((String) -> String)? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
     TextField(
         modifier = modifier.border(1.dp, GrayThree, RoundedCornerShape(16.dp)),
         value = value,
-        onValueChange = onValueChange,
+        onValueChange = {
+            if (filter != null) {
+                onValueChange(filter(it))
+            } else {
+                onValueChange(it)
+            }
+        },
         placeholder = {
             Text(text = placeholder)
         },
@@ -53,7 +58,6 @@ fun AppInput(
         ),
         trailingIcon = rightIcon,
         keyboardOptions = keyboardOptions,
-        visualTransformation = visualTransformation,
         singleLine = true
     )
 }
@@ -83,7 +87,26 @@ fun AppInputWithQuantity(
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Number
         ),
+        filter = { filterFloatValue(it) }
     )
+}
+
+fun filterFloatValue(value: String): String {
+    var hasDot = false
+    var newString = ""
+    value.forEach {
+        if (it.isDigit()) {
+            newString += it
+        } else if (it == '.') {
+            if (hasDot) {
+                return@forEach
+            } else {
+                newString += it
+                hasDot = true
+            }
+        }
+    }
+    return newString
 }
 
 @Preview(
