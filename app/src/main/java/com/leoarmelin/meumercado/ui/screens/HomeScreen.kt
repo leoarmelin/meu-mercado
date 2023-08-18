@@ -43,6 +43,7 @@ fun HomeScreen(
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
     val selectedDate by mainViewModel.selectedDate.collectAsStateWithLifecycle()
+    val emoji by mainViewModel.emoji.collectAsStateWithLifecycle()
     val currentRoute by navigationViewModel.currentRoute.collectAsStateWithLifecycle()
     val totalValue by homeViewModel.totalValue.collectAsStateWithLifecycle()
     val categories by homeViewModel.categories.collectAsStateWithLifecycle()
@@ -63,8 +64,10 @@ fun HomeScreen(
             Content(
                 selectedDate = selectedDate,
                 totalValue = totalValue,
+                emoji = emoji,
                 isAddOrEditCategory = currentRoute is NavDestination.NewCategory,
                 onDateTap = { mainViewModel.toggleDatePicker(true) },
+                onEmojiTap = { mainViewModel.toggleEmojiPicker(true) },
                 onSaveCategory = { emoji, name ->
                     homeViewModel.createCategory(emoji, name)
                 },
@@ -84,16 +87,15 @@ fun HomeScreen(
 private fun Content(
     selectedDate: Pair<LocalDateTime, LocalDateTime>,
     totalValue: Double,
+    emoji: String,
     isAddOrEditCategory: Boolean,
     onDateTap: () -> Unit,
+    onEmojiTap: () -> Unit,
     onSaveCategory: (String, String) -> Unit,
     onBackTap: () -> Unit
 ) {
     ScreenColumn {
         if (isAddOrEditCategory) {
-            var emoji by remember {
-                mutableStateOf("")
-            }
             var name by remember {
                 mutableStateOf("")
             }
@@ -107,7 +109,7 @@ private fun Content(
                 emoji = emoji,
                 name = name,
                 isButtonEnabled = emoji.isNotEmpty() && name.isNotEmpty(),
-                onEmojiChange = { emoji = it },
+                onEmojiTap = onEmojiTap,
                 onNameChange = { name = it },
                 onSave = {
                     onSaveCategory(emoji, name)

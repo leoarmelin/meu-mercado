@@ -24,7 +24,7 @@ fun CategoryForm(
     emoji: String,
     name: String,
     isButtonEnabled: Boolean,
-    onEmojiChange: (String) -> Unit,
+    onEmojiTap: () -> Unit,
     onNameChange: (String) -> Unit,
     onSave: () -> Unit
 ) {
@@ -37,7 +37,7 @@ fun CategoryForm(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        EmojiTextField(value = emoji, onValueChange = onEmojiChange)
+        EmojiField(value = emoji, onTap = onEmojiTap)
 
         AppInput(
             modifier = Modifier.weight(1f),

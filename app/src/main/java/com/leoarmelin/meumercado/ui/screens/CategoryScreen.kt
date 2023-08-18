@@ -62,10 +62,11 @@ fun CategoryScreen(
     navigationViewModel: NavigationViewModel,
     categoryViewModel: CategoryViewModel = hiltViewModel()
 ) {
+    val selectedDate by mainViewModel.selectedDate.collectAsStateWithLifecycle()
+    val emoji by mainViewModel.emoji.collectAsStateWithLifecycle()
+    val currentRoute by navigationViewModel.currentRoute.collectAsStateWithLifecycle()
     val category by categoryViewModel.category.collectAsStateWithLifecycle()
     val products by categoryViewModel.products.collectAsStateWithLifecycle()
-    val selectedDate by mainViewModel.selectedDate.collectAsStateWithLifecycle()
-    val currentRoute by navigationViewModel.currentRoute.collectAsStateWithLifecycle()
     val categoryResult by categoryViewModel.categoryResult.collectAsStateWithLifecycle()
     val productResult by categoryViewModel.productResult.collectAsStateWithLifecycle()
 
@@ -80,6 +81,7 @@ fun CategoryScreen(
             result is RoomResult.Success && result.operation == RoomOperation.UPDATE -> navigationViewModel.popBack()
             else -> {}
         }
+        mainViewModel.clearEmoji()
     }
 
     LaunchedEffect(productResult) {
@@ -87,6 +89,7 @@ fun CategoryScreen(
             is RoomResult.Success -> navigationViewModel.popBack()
             else -> {}
         }
+        mainViewModel.clearEmoji()
     }
 
     ScreenBottomSheet(
@@ -95,6 +98,7 @@ fun CategoryScreen(
                 Content(
                     selectedDate = selectedDate,
                     totalValue = totalValue,
+                    emoji = emoji,
                     isAddOrEditProduct = currentRoute is NavDestination.NewProduct,
                     product = (currentRoute as? NavDestination.NewProduct)?.product,
                     isEditCategory = currentRoute is NavDestination.NewCategory,
@@ -124,6 +128,7 @@ fun CategoryScreen(
                     },
                     onPopBack = navigationViewModel::popBack,
                     onEditTap = { navigationViewModel.setRoute(NavDestination.NewCategory(category)) },
+                    onEmojiTap = { mainViewModel.toggleEmojiPicker(true) },
                     onDeleteTap = { categoryViewModel.deleteCategory(category) }
                 )
             }
@@ -148,6 +153,7 @@ fun CategoryScreen(
 private fun Content(
     selectedDate: Pair<LocalDateTime, LocalDateTime>,
     totalValue: Double,
+    emoji: String,
     isAddOrEditProduct: Boolean,
     product: Product?,
     category: Category,
@@ -158,6 +164,7 @@ private fun Content(
     onSaveCategory: (String, String, String) -> Unit,
     onPopBack: () -> Unit,
     onEditTap: () -> Unit,
+    onEmojiTap: () -> Unit,
     onDeleteTap: () -> Unit
 ) {
     var isMoreOptionsOpen by remember { mutableStateOf(false) }
@@ -173,8 +180,8 @@ private fun Content(
             )
 
             if (isAddOrEditProduct) {
-                var emoji by remember(category) {
-                    mutableStateOf(category.emoji)
+                val emojiField = remember(category, emoji) {
+                    emoji.ifEmpty { category.emoji }
                 }
                 var name by remember(product) {
                     mutableStateOf(product?.name ?: "")
@@ -191,7 +198,7 @@ private fun Content(
 
                 ProductForm(
                     id = product?.id,
-                    emoji = emoji,
+                    emoji = emojiField,
                     name = name,
                     unity = unity,
                     amount = amount,
@@ -199,7 +206,7 @@ private fun Content(
                     isButtonEnabled = name.isNotEmpty() &&
                             (amount.toDoubleOrNull() ?: 0.0) > 0 &&
                             ((unityPrice.toDoubleOrNull() ?: 0.0) > 0),
-                    onEmojiChange = { emoji = it },
+                    onEmojiTap = onEmojiTap,
                     onNameChange = { name = it },
                     onUnityChange = { unity = it },
                     onAmountChange = { amount = it },
@@ -207,7 +214,7 @@ private fun Content(
                     onSave = {
                         onSaveProduct(
                             product?.id,
-                            emoji,
+                            emojiField,
                             name,
                             unity,
                             amount.toDoubleOrNull() ?: return@ProductForm,
@@ -221,21 +228,21 @@ private fun Content(
                     }
                 )
             } else if (isEditCategory) {
-                var emoji by remember(category) {
-                    mutableStateOf(category.emoji)
+                val emojiField = remember(category, emoji) {
+                    emoji.ifEmpty { category.emoji }
                 }
                 var name by remember(category) {
                     mutableStateOf(category.name)
                 }
 
                 CategoryForm(
-                    emoji = emoji,
+                    emoji = emojiField,
                     name = name,
-                    isButtonEnabled = emoji.isNotEmpty() && name.isNotEmpty(),
-                    onEmojiChange = { emoji = it },
+                    isButtonEnabled = emojiField.isNotEmpty() && name.isNotEmpty(),
+                    onEmojiTap = onEmojiTap,
                     onNameChange = { name = it },
                     onSave = {
-                        onSaveCategory(category.id, emoji, name)
+                        onSaveCategory(category.id, emojiField, name)
                     }
                 )
             } else {

@@ -30,6 +30,12 @@ class MainViewModel @Inject constructor(
     private val _ticketResult = MutableStateFlow<Result<Ticket>?>(null)
     val ticketResult get() = _ticketResult.asStateFlow()
 
+    private val _isEmojiPickerOpen = MutableStateFlow(false)
+    val isEmojiPickerOpen get() = _isEmojiPickerOpen.asStateFlow()
+
+    private val _emoji = MutableStateFlow("")
+    val emoji get() = _emoji.asStateFlow()
+
     fun selectDate(month: Int, year: Int) {
         sharedViewModel.selectDate(month, year)
     }
@@ -56,5 +62,18 @@ class MainViewModel @Inject constructor(
 
     fun clearTicketResult() {
         _ticketResult.value = null
+    }
+
+    fun setEmoji(value: String) {
+        _emoji.value = value
+        toggleEmojiPicker(false)
+    }
+
+    fun clearEmoji() {
+        _emoji.value = ""
+    }
+
+    fun toggleEmojiPicker(value: Boolean) {
+        _isEmojiPickerOpen.value = value
     }
 }

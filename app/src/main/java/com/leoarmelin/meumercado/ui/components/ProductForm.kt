@@ -39,7 +39,7 @@ fun ProductForm(
     amount: String,
     unityPrice: String,
     isButtonEnabled: Boolean,
-    onEmojiChange: (String) -> Unit,
+    onEmojiTap: () -> Unit,
     onNameChange: (String) -> Unit,
     onUnityChange: (Unity) -> Unit,
     onAmountChange: (String) -> Unit,
@@ -57,7 +57,7 @@ fun ProductForm(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            EmojiTextField(value = emoji, onValueChange = onEmojiChange)
+            EmojiField(value = emoji, onTap = onEmojiTap)
 
             AppInput(
                 modifier = Modifier.weight(1f),

@@ -28,6 +28,7 @@ import com.leoarmelin.meumercado.ui.components.SheetColumn
 import com.leoarmelin.meumercado.ui.components.StoreHeader
 import com.leoarmelin.meumercado.ui.theme.CreamTwo
 import com.leoarmelin.meumercado.ui.theme.Strings
+import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 import com.leoarmelin.meumercado.viewmodels.TicketViewModel
 import com.leoarmelin.sharedmodels.Product
@@ -40,10 +41,12 @@ import com.leoarmelin.sharedmodels.room.RoomResult
 
 @Composable
 fun TicketScreen(
+    mainViewModel: MainViewModel,
     navigationViewModel: NavigationViewModel,
     ticketViewModel: TicketViewModel = hiltViewModel(),
     ticket: Ticket?
 ) {
+    val emoji by mainViewModel.emoji.collectAsStateWithLifecycle()
     val currentRoute by navigationViewModel.currentRoute.collectAsStateWithLifecycle()
     val products by ticketViewModel.products.collectAsStateWithLifecycle()
     val store by ticketViewModel.store.collectAsStateWithLifecycle()
@@ -72,12 +75,14 @@ fun TicketScreen(
             }
             else -> {}
         }
+        mainViewModel.clearEmoji()
     }
 
     ScreenBottomSheet(
         content = {
             Content(
                 totalValue = totalValue,
+                emoji = emoji,
                 product = editingProduct,
                 store = store,
                 onSaveProduct = { id, emoji, name, unity, amount, unityPrice ->
@@ -93,6 +98,7 @@ fun TicketScreen(
                 onDeleteProduct = {
                     ticketViewModel.deleteProduct(it)
                 },
+                onEmojiTap = { mainViewModel.toggleEmojiPicker(true) },
                 onPopBack = navigationViewModel::popBack,
             )
         },
@@ -115,17 +121,19 @@ fun TicketScreen(
 @Composable
 private fun Content(
     totalValue: Double,
+    emoji: String,
     product: Product?,
     store: Store?,
     onSaveProduct: (String, String, String, Unity, Double, Double) -> Unit,
     onDeleteProduct: (Product) -> Unit,
+    onEmojiTap: () -> Unit,
     onPopBack: () -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         ScreenColumn {
             if (product != null) {
-                var emoji by remember {
-                    mutableStateOf("")
+                val emojiField = remember(emoji) {
+                    emoji
                 }
                 var name by remember(product) {
                     mutableStateOf(product.name)
@@ -142,7 +150,7 @@ private fun Content(
 
                 ProductForm(
                     id = product.id,
-                    emoji = emoji,
+                    emoji = emojiField,
                     name = name,
                     unity = unity,
                     amount = amount,
@@ -150,7 +158,7 @@ private fun Content(
                     isButtonEnabled = name.isNotEmpty() &&
                             (amount.toDoubleOrNull() ?: 0.0) > 0 &&
                             ((unityPrice.toDoubleOrNull() ?: 0.0) > 0),
-                    onEmojiChange = { emoji = it },
+                    onEmojiTap = onEmojiTap,
                     onNameChange = { name = it },
                     onUnityChange = { unity = it },
                     onAmountChange = { amount = it },
@@ -158,7 +166,7 @@ private fun Content(
                     onSave = {
                         onSaveProduct(
                             product.id,
-                            emoji,
+                            emojiField,
                             name,
                             unity,
                             amount.toDoubleOrNull() ?: return@ProductForm,

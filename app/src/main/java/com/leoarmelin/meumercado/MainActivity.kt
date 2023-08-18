@@ -26,6 +26,7 @@ import com.leoarmelin.meumercado.handlers.PermissionsHandler
 import com.leoarmelin.meumercado.ui.components.AppFAB
 import com.leoarmelin.meumercado.ui.components.CameraPermissionDialog
 import com.leoarmelin.meumercado.ui.components.DatePicker
+import com.leoarmelin.meumercado.ui.components.EmojiPicker
 import com.leoarmelin.meumercado.ui.navigation.AppNavHost
 import com.leoarmelin.meumercado.ui.theme.CreamOne
 import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
@@ -59,7 +60,8 @@ class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
                 val isDatePickerOpen by mainViewModel.isDatePickerOpen.collectAsStateWithLifecycle()
                 val selectedDate by mainViewModel.selectedDate.collectAsStateWithLifecycle()
                 val fabDestinations by navigationViewModel.fabDestinations.collectAsStateWithLifecycle()
-                val isCameraPermissionGRanted by mainViewModel.isCameraPermissionGranted.collectAsStateWithLifecycle()
+                val isCameraPermissionGranted by mainViewModel.isCameraPermissionGranted.collectAsStateWithLifecycle()
+                val isEmojiPickerOpen by mainViewModel.isEmojiPickerOpen.collectAsStateWithLifecycle()
 
                 LaunchedEffect(Unit) {
                     systemUiController.setStatusBarColor(White)
@@ -100,7 +102,7 @@ class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
                             onSelect = { destination ->
                                 when (destination) {
                                     is NavDestination.Camera -> {
-                                        if (isCameraPermissionGRanted) {
+                                        if (isCameraPermissionGranted) {
                                             navigationViewModel.setRoute(NavDestination.Camera)
                                         } else {
                                             permissionsHandler.requestCameraPermission()
@@ -113,6 +115,10 @@ class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
                                 }
                             }
                         )
+
+                        if (isEmojiPickerOpen) {
+                            EmojiPicker(onEmojiTap = mainViewModel::setEmoji)
+                        }
 
                         CameraPermissionDialog(isPermissionDialogOpen) {
                             mainViewModel.togglePermissionDialog(false)

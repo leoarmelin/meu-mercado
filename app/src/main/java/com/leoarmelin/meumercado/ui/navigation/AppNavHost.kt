@@ -75,6 +75,7 @@ fun AppNavHost(
 
         composable(NavDestination.Ticket.route) {
             TicketScreen(
+                mainViewModel = mainViewModel,
                 navigationViewModel = navigationViewModel,
                 ticket = (currentRoute as? NavDestination.Ticket)?.ticket
             )
