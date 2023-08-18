@@ -18,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -67,7 +68,15 @@ class SharedViewModel @Inject constructor(
         unity: Unity,
         amount: Double,
         unityPrice: Double
-    ) = createProductUseCase.execute(emoji, name, unity, amount, unityPrice, categories.value)
+    ) = createProductUseCase.execute(
+        emoji,
+        name,
+        unity,
+        amount,
+        unityPrice,
+        categories.value,
+        dateInterval.value.first
+    )
 
     suspend fun updateProduct(
         id: String,
@@ -75,8 +84,18 @@ class SharedViewModel @Inject constructor(
         name: String,
         unity: Unity,
         amount: Double,
-        unityPrice: Double
-    ) = updateProductUseCase.execute(id, emoji, name, unity, amount, unityPrice, categories.value)
+        unityPrice: Double,
+        issueAt: LocalDateTime,
+    ) = updateProductUseCase.execute(
+        id,
+        emoji,
+        name,
+        unity,
+        amount,
+        unityPrice,
+        issueAt,
+        categories.value
+    )
 
     suspend fun deleteProduct(product: Product) = deleteProductUseCase.execute(product)
 }

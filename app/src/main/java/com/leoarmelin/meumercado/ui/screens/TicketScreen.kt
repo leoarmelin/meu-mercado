@@ -38,6 +38,7 @@ import com.leoarmelin.sharedmodels.Unity
 import com.leoarmelin.sharedmodels.navigation.NavDestination
 import com.leoarmelin.sharedmodels.room.RoomOperation
 import com.leoarmelin.sharedmodels.room.RoomResult
+import java.time.LocalDateTime
 
 @Composable
 fun TicketScreen(
@@ -85,14 +86,15 @@ fun TicketScreen(
                 emoji = emoji,
                 product = editingProduct,
                 store = store,
-                onSaveProduct = { id, emoji, name, unity, amount, unityPrice ->
+                onSaveProduct = { id, emoji, name, unity, amount, unityPrice, issueAt ->
                     ticketViewModel.updateProduct(
                         id,
                         emoji,
                         name,
                         unity,
                         amount,
-                        unityPrice
+                        unityPrice,
+                        issueAt
                     )
                 },
                 onDeleteProduct = {
@@ -124,7 +126,7 @@ private fun Content(
     emoji: String,
     product: Product?,
     store: Store?,
-    onSaveProduct: (String, String, String, Unity, Double, Double) -> Unit,
+    onSaveProduct: (String, String, String, Unity, Double, Double, LocalDateTime) -> Unit,
     onDeleteProduct: (Product) -> Unit,
     onEmojiTap: () -> Unit,
     onPopBack: () -> Unit,
@@ -171,6 +173,7 @@ private fun Content(
                             unity,
                             amount.toDoubleOrNull() ?: return@ProductForm,
                             unityPrice.toDoubleOrNull() ?: return@ProductForm,
+                            product.issueAt
                         )
                     },
                     onDelete = { onDeleteProduct(product) }

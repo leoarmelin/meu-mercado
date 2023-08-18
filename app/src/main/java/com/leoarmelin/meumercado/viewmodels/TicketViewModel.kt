@@ -13,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -77,10 +78,11 @@ class TicketViewModel @Inject constructor(
         name: String,
         unity: Unity,
         amount: Double,
-        unityPrice: Double
+        unityPrice: Double,
+        issueAt: LocalDateTime
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            sharedViewModel.updateProduct(id, emoji, name, unity, amount, unityPrice).collect {
+            sharedViewModel.updateProduct(id, emoji, name, unity, amount, unityPrice, issueAt).collect {
                 _productResult.value = it
             }
         }

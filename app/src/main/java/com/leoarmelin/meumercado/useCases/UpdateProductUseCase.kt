@@ -21,6 +21,7 @@ class UpdateProductUseCase @Inject constructor(
         unity: Unity,
         amount: Double,
         unityPrice: Double,
+        issueAt: LocalDateTime,
         categories: List<Category>
     ) = flow {
         emit(RoomResult.Loading)
@@ -34,7 +35,7 @@ class UpdateProductUseCase @Inject constructor(
                 amount = amount,
                 unityPrice = unityPrice,
                 totalPrice = amount * unityPrice,
-                issueAt = LocalDateTime.now(),
+                issueAt = issueAt,
                 categoryId = if (emoji == Strings.OthersCategory.emoji) null else category?.id
             )
 

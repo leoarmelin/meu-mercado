@@ -104,7 +104,7 @@ fun CategoryScreen(
                     isEditCategory = currentRoute is NavDestination.NewCategory,
                     category = category,
                     onDateTap = { mainViewModel.toggleDatePicker(true) },
-                    onSaveProduct = { id, emoji, name, unity, amount, unityPrice ->
+                    onSaveProduct = { id, emoji, name, unity, amount, unityPrice, issueAt ->
                         if (id == null) {
                             categoryViewModel.createProduct(emoji, name, unity, amount, unityPrice)
                         } else {
@@ -114,7 +114,8 @@ fun CategoryScreen(
                                 name,
                                 unity,
                                 amount,
-                                unityPrice
+                                unityPrice,
+                                issueAt ?: return@Content
                             )
                         }
                     },
@@ -159,7 +160,7 @@ private fun Content(
     category: Category,
     isEditCategory: Boolean,
     onDateTap: () -> Unit,
-    onSaveProduct: (String?, String, String, Unity, Double, Double) -> Unit,
+    onSaveProduct: (String?, String, String, Unity, Double, Double, LocalDateTime?) -> Unit,
     onDeleteProduct: (Product) -> Unit,
     onSaveCategory: (String, String, String) -> Unit,
     onPopBack: () -> Unit,
@@ -221,6 +222,7 @@ private fun Content(
                             unity,
                             amount.toDoubleOrNull() ?: return@ProductForm,
                             unityPrice.toDoubleOrNull() ?: return@ProductForm,
+                            product?.issueAt
                         )
                     },
                     onDelete = {
