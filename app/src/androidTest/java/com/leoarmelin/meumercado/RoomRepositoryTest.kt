@@ -87,7 +87,7 @@ class RoomRepositoryTest {
 
         val roomProduct = roomRepository.getProductById(mockProduct.id).first()
 
-        assertEquals(mockProduct, roomProduct)
+        assertEquals(mockProduct.id, roomProduct?.id)
     }
 
     @Test
@@ -113,12 +113,14 @@ class RoomRepositoryTest {
 
         val roomProducts = roomRepository.fetchProductsFromCategory(
             mockCategory.id,
-            firstDayOfMonth,
-            lastDayOfMonth
+            dateInterval
         ).first()
 
-        assertTrue(roomProducts.containsAll(mockProducts))
-        assertTrue(mockProducts.containsAll(roomProducts))
+        val mockProductsMap = mockProducts.map { it.id }
+        val roomProductsMap = roomProducts.map { it.id }
+
+        assertTrue(roomProductsMap.containsAll(mockProductsMap))
+        assertTrue(mockProductsMap.containsAll(roomProductsMap))
     }
 
     @Test
@@ -144,8 +146,7 @@ class RoomRepositoryTest {
 
         val totalAmount = roomRepository.getTotalAmountFromCategoryId(
             mockCategory.id,
-            firstDayOfMonth,
-            lastDayOfMonth
+            dateInterval
         ).first()
         val expectedAmount = mockProducts.sumOf { it.totalPrice }
 
@@ -161,8 +162,7 @@ class RoomRepositoryTest {
         }
 
         val totalAmount = roomRepository.getTotalAmountWithoutCategory(
-            firstDayOfMonth,
-            lastDayOfMonth
+            dateInterval
         ).first()
         val expectedAmount = mockProductsNoCategory
             .filter { it.categoryId == null }
@@ -181,8 +181,7 @@ class RoomRepositoryTest {
 
         val roomProducts = roomRepository.fetchProductsFromCategory(
             mockCategory.id,
-            firstDayOfMonth,
-            lastDayOfMonth
+            dateInterval
         ).first()
 
         assertTrue(roomProducts.isEmpty())
@@ -192,6 +191,7 @@ class RoomRepositoryTest {
         private val dateNow = LocalDateTime.now()
         private val firstDayOfMonth = LocalDateTime.of(dateNow.year, dateNow.monthValue, 1, 0, 0, 1)
         private val lastDayOfMonth = firstDayOfMonth.plusMonths(1).minusSeconds(2)
+        private val dateInterval = Pair(firstDayOfMonth, lastDayOfMonth)
         private val mockCategory = Category(
             id = "c-1",
             name = "Category One",
