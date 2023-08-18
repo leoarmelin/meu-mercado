@@ -12,12 +12,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
@@ -55,11 +55,11 @@ class MainActivity : ComponentActivity(), PermissionsHandler.AccessListener {
             MeuMercadoTheme {
                 val snackbarHostState = remember { SnackbarHostState() }
                 val systemUiController = rememberSystemUiController()
-                val isPermissionDialogOpen by mainViewModel.isCameraPermissionDialogOpen.collectAsState()
-                val isDatePickerOpen by mainViewModel.isDatePickerOpen.collectAsState()
-                val selectedDate by mainViewModel.selectedDate.collectAsState()
-                val fabDestinations by navigationViewModel.fabDestinations.collectAsState()
-                val isCameraPermissionGRanted by mainViewModel.isCameraPermissionGranted.collectAsState()
+                val isPermissionDialogOpen by mainViewModel.isCameraPermissionDialogOpen.collectAsStateWithLifecycle()
+                val isDatePickerOpen by mainViewModel.isDatePickerOpen.collectAsStateWithLifecycle()
+                val selectedDate by mainViewModel.selectedDate.collectAsStateWithLifecycle()
+                val fabDestinations by navigationViewModel.fabDestinations.collectAsStateWithLifecycle()
+                val isCameraPermissionGRanted by mainViewModel.isCameraPermissionGranted.collectAsStateWithLifecycle()
 
                 LaunchedEffect(Unit) {
                     systemUiController.setStatusBarColor(White)

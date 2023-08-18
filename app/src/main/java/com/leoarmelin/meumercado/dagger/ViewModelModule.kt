@@ -1,10 +1,13 @@
 package com.leoarmelin.meumercado.dagger
 
 import com.leoarmelin.meumercado.useCases.CreateCategoryUseCase
+import com.leoarmelin.meumercado.useCases.CreateProductUseCase
 import com.leoarmelin.meumercado.useCases.DeleteCategoryUseCase
+import com.leoarmelin.meumercado.useCases.DeleteProductUseCase
 import com.leoarmelin.meumercado.useCases.GetDateIntervalUseCase
 import com.leoarmelin.meumercado.useCases.ObserveAllCategoriesUseCase
 import com.leoarmelin.meumercado.useCases.UpdateCategoryUseCase
+import com.leoarmelin.meumercado.useCases.UpdateProductUseCase
 import com.leoarmelin.meumercado.viewmodels.SharedViewModel
 import dagger.Module
 import dagger.Provides
@@ -23,12 +26,18 @@ object ViewModelModule {
         getDateIntervalUseCase: GetDateIntervalUseCase,
         createCategoryUseCase: CreateCategoryUseCase,
         updateCategoryUseCase: UpdateCategoryUseCase,
-        deleteCategoryUseCase: DeleteCategoryUseCase
+        deleteCategoryUseCase: DeleteCategoryUseCase,
+        createProductUseCase: CreateProductUseCase,
+        updateProductUseCase: UpdateProductUseCase,
+        deleteProductUseCase: DeleteProductUseCase
     ): SharedViewModel = SharedViewModel(
         observeAllCategoriesUseCase,
         getDateIntervalUseCase,
         createCategoryUseCase,
         updateCategoryUseCase,
-        deleteCategoryUseCase
+        deleteCategoryUseCase,
+        createProductUseCase,
+        updateProductUseCase,
+        deleteProductUseCase
     )
 }

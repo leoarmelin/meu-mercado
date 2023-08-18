@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.leoarmelin.meumercado.ui.components.BigTotalValue
 import com.leoarmelin.meumercado.ui.components.ProductForm
 import com.leoarmelin.meumercado.ui.components.ProductItem
@@ -28,7 +28,6 @@ import com.leoarmelin.meumercado.ui.components.SheetColumn
 import com.leoarmelin.meumercado.ui.components.StoreHeader
 import com.leoarmelin.meumercado.ui.theme.CreamTwo
 import com.leoarmelin.meumercado.ui.theme.Strings
-import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
 import com.leoarmelin.meumercado.viewmodels.TicketViewModel
 import com.leoarmelin.sharedmodels.Product
@@ -36,26 +35,43 @@ import com.leoarmelin.sharedmodels.Store
 import com.leoarmelin.sharedmodels.Ticket
 import com.leoarmelin.sharedmodels.Unity
 import com.leoarmelin.sharedmodels.navigation.NavDestination
+import com.leoarmelin.sharedmodels.room.RoomOperation
+import com.leoarmelin.sharedmodels.room.RoomResult
 
 @Composable
 fun TicketScreen(
-    mainViewModel: MainViewModel,
     navigationViewModel: NavigationViewModel,
     ticketViewModel: TicketViewModel = hiltViewModel(),
     ticket: Ticket?
 ) {
-    val currentRoute by navigationViewModel.currentRoute.collectAsState()
-    val products by ticketViewModel.products.collectAsState()
-    val store by ticketViewModel.store.collectAsState()
+    val currentRoute by navigationViewModel.currentRoute.collectAsStateWithLifecycle()
+    val products by ticketViewModel.products.collectAsStateWithLifecycle()
+    val store by ticketViewModel.store.collectAsStateWithLifecycle()
+    val editingProduct by ticketViewModel.editingProduct.collectAsStateWithLifecycle()
+    val productResult by ticketViewModel.productResult.collectAsStateWithLifecycle()
 
     val totalValue = remember(products) {
         products.sumOf { it.totalPrice }
     }
-    var editingProduct by remember { mutableStateOf<Product?>(null) }
 
     LaunchedEffect(ticket) {
         if (ticket == null) return@LaunchedEffect
         ticketViewModel.setTicket(ticket)
+    }
+
+    LaunchedEffect(productResult) {
+        val result = productResult
+        when {
+            result is RoomResult.Success && result.operation == RoomOperation.UPDATE -> {
+                ticketViewModel.onUpdateProduct(result.data)
+                ticketViewModel.clearEditingProduct()
+            }
+            result is RoomResult.Success && result.operation == RoomOperation.DELETE -> {
+                ticketViewModel.onDeleteProduct(result.data.id)
+                ticketViewModel.clearEditingProduct()
+            }
+            else -> {}
+        }
     }
 
     ScreenBottomSheet(
@@ -65,24 +81,17 @@ fun TicketScreen(
                 product = editingProduct,
                 store = store,
                 onSaveProduct = { id, emoji, name, unity, amount, unityPrice ->
-                    mainViewModel.createOrUpdateProduct(
+                    ticketViewModel.updateProduct(
                         id,
                         emoji,
                         name,
                         unity,
                         amount,
-                        unityPrice,
-                        onSuccess = {
-                            ticketViewModel.onUpdateProduct(it)
-                            editingProduct = null
-                        }
+                        unityPrice
                     )
                 },
                 onDeleteProduct = {
-                    mainViewModel.deleteProduct(it, onSuccess = { id ->
-                        ticketViewModel.onDeleteProduct(id)
-                        editingProduct = null
-                    })
+                    ticketViewModel.deleteProduct(it)
                 },
                 onPopBack = navigationViewModel::popBack,
             )
@@ -91,8 +100,12 @@ fun TicketScreen(
             SheetContent(
                 products = products,
                 selectedProduct = (currentRoute as? NavDestination.NewProduct)?.product,
-                onProductSelect = { product ->
-                    editingProduct = product
+                onProductSelect = {
+                    if (it == null) {
+                        ticketViewModel.clearEditingProduct()
+                    } else {
+                        ticketViewModel.setEditingProduct(it)
+                    }
                 }
             )
         }
@@ -104,8 +117,8 @@ private fun Content(
     totalValue: Double,
     product: Product?,
     store: Store?,
-    onSaveProduct: (String?, String, String, Unity, Double, Double) -> Unit,
-    onDeleteProduct: (String) -> Unit,
+    onSaveProduct: (String, String, String, Unity, Double, Double) -> Unit,
+    onDeleteProduct: (Product) -> Unit,
     onPopBack: () -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
@@ -115,7 +128,7 @@ private fun Content(
                     mutableStateOf("")
                 }
                 var name by remember(product) {
-                    mutableStateOf(product.name ?: "")
+                    mutableStateOf(product.name)
                 }
                 var unity by remember(product) {
                     mutableStateOf(product.unity)
@@ -152,7 +165,7 @@ private fun Content(
                             unityPrice.toDoubleOrNull() ?: return@ProductForm,
                         )
                     },
-                    onDelete = onDeleteProduct
+                    onDelete = { onDeleteProduct(product) }
                 )
             } else {
                 store?.let {

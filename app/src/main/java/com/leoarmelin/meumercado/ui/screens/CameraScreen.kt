@@ -29,7 +29,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,6 +42,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.leoarmelin.cameraview.CameraView
 import com.leoarmelin.meumercado.R
 import com.leoarmelin.meumercado.extensions.getActivity
@@ -67,8 +67,8 @@ fun CameraScreen(
     val searchCoroutineScope = rememberCoroutineScope()
     val activity = LocalContext.current.getActivity()
 
-    val ticketResult by mainViewModel.ticketResult.collectAsState()
-    val isPermissionGranted by mainViewModel.isCameraPermissionGranted.collectAsState()
+    val ticketResult by mainViewModel.ticketResult.collectAsStateWithLifecycle()
+    val isPermissionGranted by mainViewModel.isCameraPermissionGranted.collectAsStateWithLifecycle()
     val openIntentResult = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
         onResult = {}

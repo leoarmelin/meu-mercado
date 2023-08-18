@@ -7,10 +7,11 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.leoarmelin.database.converters.ProductDataConverter
 import com.leoarmelin.database.converters.StoreDataConverter
+import com.leoarmelin.database.migrations.MIGRATION_1_2
 import com.leoarmelin.sharedmodels.Category
 import com.leoarmelin.sharedmodels.Product
 
-@Database(entities = [Category::class, Product::class], version = 1, exportSchema = false)
+@Database(entities = [Category::class, Product::class], version = 2, exportSchema = false)
 @TypeConverters(
     ProductDataConverter::class,
     StoreDataConverter::class,
@@ -32,7 +33,7 @@ abstract class AppDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java, "jetpack"
-                ).fallbackToDestructiveMigration()
+                ).addMigrations(MIGRATION_1_2)
                     .build()
                 INSTANCE = instance
                 return instance

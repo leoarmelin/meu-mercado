@@ -19,7 +19,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +30,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.leoarmelin.meumercado.ui.components.CategoryForm
 import com.leoarmelin.meumercado.ui.components.DateAndBigValue
 import com.leoarmelin.meumercado.ui.components.ProductForm
@@ -53,6 +53,7 @@ import com.leoarmelin.sharedmodels.Product
 import com.leoarmelin.sharedmodels.Unity
 import com.leoarmelin.sharedmodels.api.Result
 import com.leoarmelin.sharedmodels.navigation.NavDestination
+import com.leoarmelin.sharedmodels.room.RoomResult
 import java.time.LocalDateTime
 
 @Composable
@@ -61,11 +62,12 @@ fun CategoryScreen(
     navigationViewModel: NavigationViewModel,
     categoryViewModel: CategoryViewModel = hiltViewModel()
 ) {
-    val category by categoryViewModel.category.collectAsState()
-    val products by categoryViewModel.products.collectAsState()
-    val selectedDate by mainViewModel.selectedDate.collectAsState()
-    val currentRoute by navigationViewModel.currentRoute.collectAsState()
-    val categoryResult by categoryViewModel.categoryResult.collectAsState()
+    val category by categoryViewModel.category.collectAsStateWithLifecycle()
+    val products by categoryViewModel.products.collectAsStateWithLifecycle()
+    val selectedDate by mainViewModel.selectedDate.collectAsStateWithLifecycle()
+    val currentRoute by navigationViewModel.currentRoute.collectAsStateWithLifecycle()
+    val categoryResult by categoryViewModel.categoryResult.collectAsStateWithLifecycle()
+    val productResult by categoryViewModel.productResult.collectAsStateWithLifecycle()
 
     val totalValue = remember(products) {
         products.sumOf { it.totalPrice }
@@ -76,6 +78,13 @@ fun CategoryScreen(
         when {
             result is Result.Success && result.data is String -> navigationViewModel.popAllBack()
             result is Result.Success -> navigationViewModel.popBack()
+            else -> {}
+        }
+    }
+
+    LaunchedEffect(productResult) {
+        when (productResult) {
+            is RoomResult.Success -> navigationViewModel.popBack()
             else -> {}
         }
     }
@@ -92,21 +101,20 @@ fun CategoryScreen(
                     category = it,
                     onDateTap = { mainViewModel.toggleDatePicker(true) },
                     onSaveProduct = { id, emoji, name, unity, amount, unityPrice ->
-                        mainViewModel.createOrUpdateProduct(
-                            id,
-                            emoji,
-                            name,
-                            unity,
-                            amount,
-                            unityPrice,
-                            onSuccess = { navigationViewModel.popBack() }
-                        )
+                        if (id == null) {
+                            categoryViewModel.createProduct(emoji, name, unity, amount, unityPrice)
+                        } else {
+                            categoryViewModel.updateProduct(
+                                id,
+                                emoji,
+                                name,
+                                unity,
+                                amount,
+                                unityPrice
+                            )
+                        }
                     },
-                    onDeleteProduct = {
-                        mainViewModel.deleteProduct(it, onSuccess = {
-                            navigationViewModel.popBack()
-                        })
-                    },
+                    onDeleteProduct = { categoryViewModel.deleteProduct(it) },
                     onSaveCategory = { id, emoji, name ->
                         categoryViewModel.updateCategory(
                             id = id,
@@ -116,9 +124,7 @@ fun CategoryScreen(
                     },
                     onPopBack = navigationViewModel::popBack,
                     onEditTap = { navigationViewModel.setRoute(NavDestination.NewCategory(it)) },
-                    onDeleteTap = {
-                        categoryViewModel.deleteCategory(it.id)
-                    }
+                    onDeleteTap = { categoryViewModel.deleteCategory(it.id) }
                 )
             }
         },
@@ -148,7 +154,7 @@ private fun Content(
     isEditCategory: Boolean,
     onDateTap: () -> Unit,
     onSaveProduct: (String?, String, String, Unity, Double, Double) -> Unit,
-    onDeleteProduct: (String) -> Unit,
+    onDeleteProduct: (Product) -> Unit,
     onSaveCategory: (String, String, String) -> Unit,
     onPopBack: () -> Unit,
     onEditTap: () -> Unit,
@@ -208,7 +214,11 @@ private fun Content(
                             unityPrice.toDoubleOrNull() ?: return@ProductForm,
                         )
                     },
-                    onDelete = onDeleteProduct
+                    onDelete = {
+                        if (product == null) return@ProductForm
+
+                        onDeleteProduct(product)
+                    }
                 )
             } else if (isEditCategory) {
                 var emoji by remember(category) {

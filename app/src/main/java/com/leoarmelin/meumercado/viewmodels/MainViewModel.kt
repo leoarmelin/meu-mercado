@@ -3,20 +3,15 @@ package com.leoarmelin.meumercado.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.leoarmelin.meumercado.repository.RoomRepository
-import com.leoarmelin.meumercado.ui.theme.Strings
 import com.leoarmelin.meumercado.useCases.FetchCategoriesValuesUseCase
 import com.leoarmelin.meumercado.useCases.GetNfceUseCase
-import com.leoarmelin.sharedmodels.Product
 import com.leoarmelin.sharedmodels.Ticket
-import com.leoarmelin.sharedmodels.Unity
 import com.leoarmelin.sharedmodels.api.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
-import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -89,44 +84,5 @@ class MainViewModel @Inject constructor(
 
     fun clearTicketResult() {
         _ticketResult.value = null
-    }
-
-    fun createOrUpdateProduct(
-        id: String?,
-        emoji: String,
-        name: String,
-        unity: Unity,
-        amount: Double,
-        unityPrice: Double,
-        onSuccess: (Product) -> Unit
-    ) {
-        val category = sharedViewModel.categories.value.find { it.emoji == emoji }
-        val product = Product(
-            id = id ?: UUID.randomUUID().toString(),
-            name = name,
-            unity = unity,
-            amount = amount,
-            unityPrice = unityPrice,
-            totalPrice = amount * unityPrice,
-            issueAt = LocalDateTime.now(),
-            categoryId = if (emoji == Strings.OthersCategory.emoji) null else category?.id
-        )
-
-        viewModelScope.launch(Dispatchers.IO) {
-            if (id == null) {
-                roomRepository.insertProduct(product)
-            } else {
-                roomRepository.updateProduct(product)
-            }
-
-            onSuccess(product)
-        }
-    }
-
-    fun deleteProduct(id: String, onSuccess: (String) -> Unit) {
-        viewModelScope.launch(Dispatchers.IO) {
-            roomRepository.deleteProductById(id)
-            onSuccess(id)
-        }
     }
 }

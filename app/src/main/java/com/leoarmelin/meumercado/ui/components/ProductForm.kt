@@ -45,7 +45,7 @@ fun ProductForm(
     onAmountChange: (String) -> Unit,
     onUnityPriceChange: (String) -> Unit,
     onSave: () -> Unit,
-    onDelete: (String) -> Unit
+    onDelete: () -> Unit
 ) {
     val checkColor by animateColorAsState(
         targetValue = if (isButtonEnabled) Blue else GrayOne,
@@ -83,7 +83,7 @@ fun ProductForm(
                     modifier = Modifier
                         .size(32.dp)
                         .clip(CircleShape)
-                        .clickable { onDelete(id) }
+                        .clickable { onDelete() }
                         .background(Red)
                         .padding(3.dp),
                     imageVector = Icons.Filled.Delete,

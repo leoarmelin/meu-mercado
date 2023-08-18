@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.leoarmelin.meumercado.ui.components.CategoryForm
 import com.leoarmelin.meumercado.ui.components.CategoryRow
 import com.leoarmelin.meumercado.ui.components.DateAndBigValue
@@ -42,12 +42,12 @@ fun HomeScreen(
     navigationViewModel: NavigationViewModel,
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
-    val totalValue by mainViewModel.totalValue.collectAsState()
-    val selectedDate by mainViewModel.selectedDate.collectAsState()
-    val categories by mainViewModel.categories.collectAsState()
-    val categoriesValue by mainViewModel.categoriesValues.collectAsState()
-    val currentRoute by navigationViewModel.currentRoute.collectAsState()
-    val categoryResult by homeViewModel.categoryResult.collectAsState()
+    val totalValue by mainViewModel.totalValue.collectAsStateWithLifecycle()
+    val selectedDate by mainViewModel.selectedDate.collectAsStateWithLifecycle()
+    val categories by mainViewModel.categories.collectAsStateWithLifecycle()
+    val categoriesValue by mainViewModel.categoriesValues.collectAsStateWithLifecycle()
+    val currentRoute by navigationViewModel.currentRoute.collectAsStateWithLifecycle()
+    val categoryResult by homeViewModel.categoryResult.collectAsStateWithLifecycle()
 
     LaunchedEffect(categoryResult) {
         when (val result = categoryResult) {

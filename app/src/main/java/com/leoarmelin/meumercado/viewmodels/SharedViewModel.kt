@@ -3,11 +3,16 @@ package com.leoarmelin.meumercado.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.leoarmelin.meumercado.useCases.CreateCategoryUseCase
+import com.leoarmelin.meumercado.useCases.CreateProductUseCase
 import com.leoarmelin.meumercado.useCases.DeleteCategoryUseCase
+import com.leoarmelin.meumercado.useCases.DeleteProductUseCase
 import com.leoarmelin.meumercado.useCases.GetDateIntervalUseCase
 import com.leoarmelin.meumercado.useCases.ObserveAllCategoriesUseCase
 import com.leoarmelin.meumercado.useCases.UpdateCategoryUseCase
+import com.leoarmelin.meumercado.useCases.UpdateProductUseCase
 import com.leoarmelin.sharedmodels.Category
+import com.leoarmelin.sharedmodels.Product
+import com.leoarmelin.sharedmodels.Unity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,8 +26,11 @@ class SharedViewModel @Inject constructor(
     private val getDateIntervalUseCase: GetDateIntervalUseCase,
     private val createCategoryUseCase: CreateCategoryUseCase,
     private val updateCategoryUseCase: UpdateCategoryUseCase,
-    private val deleteCategoryUseCase: DeleteCategoryUseCase
-): ViewModel() {
+    private val deleteCategoryUseCase: DeleteCategoryUseCase,
+    private val createProductUseCase: CreateProductUseCase,
+    private val updateProductUseCase: UpdateProductUseCase,
+    private val deleteProductUseCase: DeleteProductUseCase
+) : ViewModel() {
     val categories = MutableStateFlow<List<Category>>(emptyList())
 
     val dateInterval = MutableStateFlow(getDateIntervalUseCase.initialInterval())
@@ -52,4 +60,23 @@ class SharedViewModel @Inject constructor(
     suspend fun updateCategory(category: Category) = updateCategoryUseCase.execute(category)
 
     suspend fun deleteCategory(id: String) = deleteCategoryUseCase.execute(id)
+
+    suspend fun createProduct(
+        emoji: String,
+        name: String,
+        unity: Unity,
+        amount: Double,
+        unityPrice: Double
+    ) = createProductUseCase.execute(emoji, name, unity, amount, unityPrice, categories.value)
+
+    suspend fun updateProduct(
+        id: String,
+        emoji: String,
+        name: String,
+        unity: Unity,
+        amount: Double,
+        unityPrice: Double
+    ) = updateProductUseCase.execute(id, emoji, name, unity, amount, unityPrice, categories.value)
+
+    suspend fun deleteProduct(product: Product) = deleteProductUseCase.execute(product)
 }

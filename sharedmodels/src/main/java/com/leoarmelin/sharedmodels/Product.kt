@@ -26,7 +26,7 @@ data class Product(
     val id: String,
     @ColumnInfo(name = "name")
     @Json(name = "name")
-    val name: String? = null,
+    val name: String,
     @ColumnInfo(name = "unity")
     @Json(name = "unity")
     val unity: Unity,

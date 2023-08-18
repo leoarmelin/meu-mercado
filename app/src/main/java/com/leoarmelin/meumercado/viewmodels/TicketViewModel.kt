@@ -6,6 +6,8 @@ import com.leoarmelin.meumercado.repository.RoomRepository
 import com.leoarmelin.sharedmodels.Product
 import com.leoarmelin.sharedmodels.Store
 import com.leoarmelin.sharedmodels.Ticket
+import com.leoarmelin.sharedmodels.Unity
+import com.leoarmelin.sharedmodels.room.RoomResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TicketViewModel @Inject constructor(
-    private val roomRepository: RoomRepository
+    private val roomRepository: RoomRepository,
+    private val sharedViewModel: SharedViewModel
 ) : ViewModel() {
     private val _ticket = MutableStateFlow<Ticket?>(null)
 
@@ -24,6 +27,12 @@ class TicketViewModel @Inject constructor(
 
     private val _store = MutableStateFlow<Store?>(null)
     val store get() = _store.asStateFlow()
+
+    private val _productResult = MutableStateFlow<RoomResult<Product>?>(null)
+    val productResult get() = _productResult.asStateFlow()
+
+    private val _editingProduct = MutableStateFlow<Product?>(null)
+    val editingProduct get() = _editingProduct.asStateFlow()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -59,6 +68,37 @@ class TicketViewModel @Inject constructor(
     private suspend fun saveAllProducts(products: List<Product>) {
         products.forEach { product ->
             roomRepository.insertProduct(product)
+        }
+    }
+
+    fun updateProduct(
+        id: String,
+        emoji: String,
+        name: String,
+        unity: Unity,
+        amount: Double,
+        unityPrice: Double
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            sharedViewModel.updateProduct(id, emoji, name, unity, amount, unityPrice).collect {
+                _productResult.value = it
+            }
+        }
+    }
+
+    fun setEditingProduct(value: Product) {
+        _editingProduct.value = value
+    }
+
+    fun clearEditingProduct() {
+        _editingProduct.value = null
+    }
+
+    fun deleteProduct(product: Product) {
+        viewModelScope.launch(Dispatchers.IO) {
+            sharedViewModel.deleteProduct(product).collect {
+                _productResult.value = it
+            }
         }
     }
 }

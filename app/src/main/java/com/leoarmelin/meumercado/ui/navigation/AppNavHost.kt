@@ -5,9 +5,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -31,8 +31,8 @@ fun AppNavHost(
 ) {
     val navController = rememberAnimatedNavController()
 
-    val nfceState by mainViewModel.ticketResult.collectAsState()
-    val currentRoute by navigationViewModel.currentRoute.collectAsState()
+    val nfceState by mainViewModel.ticketResult.collectAsStateWithLifecycle()
+    val currentRoute by navigationViewModel.currentRoute.collectAsStateWithLifecycle()
 
     AppBackHandler(
         currentRoute = currentRoute,
@@ -75,7 +75,6 @@ fun AppNavHost(
 
         composable(NavDestination.Ticket.route) {
             TicketScreen(
-                mainViewModel = mainViewModel,
                 navigationViewModel = navigationViewModel,
                 ticket = (currentRoute as? NavDestination.Ticket)?.ticket
             )
