@@ -55,7 +55,7 @@ fun ProductItem(
                 .weight(1f)
         ) {
             Text(
-                text = product.name ?: "Unknown",
+                text = product.name,
                 style = MaterialTheme.typography.h5,
                 color = Black
             )

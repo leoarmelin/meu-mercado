@@ -50,6 +50,7 @@ import com.leoarmelin.meumercado.extensions.gradientBackground
 import com.leoarmelin.meumercado.extensions.noRippleClickable
 import com.leoarmelin.meumercado.ui.components.LoadingDialog
 import com.leoarmelin.meumercado.ui.theme.Black
+import com.leoarmelin.meumercado.ui.theme.Pink
 import com.leoarmelin.meumercado.ui.theme.White
 import com.leoarmelin.meumercado.viewmodels.MainViewModel
 import com.leoarmelin.meumercado.viewmodels.NavigationViewModel
@@ -233,13 +234,13 @@ fun CameraScreen(
                         },
                         shape = RoundedCornerShape(50.dp),
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = White,
+                            backgroundColor = Pink,
                         )
                     ) {
                         Text(
                             text = stringResource(R.string.ir_para_configuracoes),
                             style = MaterialTheme.typography.h5,
-                            color = Color.White
+                            color = White
                         )
                     }
                 }
