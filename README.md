@@ -1,5 +1,7 @@
 # Expense Control App
 
+[See on Play Store](https://play.google.com/store/apps/details?id=com.leoarmelin.meumercado)
+
 The Expense Control App helps users manage expenses with categories and products. It simplifies expense tracking and includes a unique feature: web scraping for retrieving invoice data from the Brazilian government website (optimized for Paraná state). Even with large item lists, the app processes this quickly, providing a user-friendly experience.
 
 ## Key Features
