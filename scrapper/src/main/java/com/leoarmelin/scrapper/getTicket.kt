@@ -1,6 +1,7 @@
 package com.leoarmelin.scrapper
 
 import com.leoarmelin.scrapper.constants.AppCssSelectors
+import com.leoarmelin.scrapper.extensions.stringToUnityOrElse
 import com.leoarmelin.scrapper.extensions.toMoney
 import com.leoarmelin.scrapper.extensions.toTicket
 import com.leoarmelin.scrapper.models.ScrapperProduct
@@ -52,7 +53,7 @@ fun getTicket(websiteUrl: String): Ticket {
                         }
                         span(AppCssSelectors.PRODUCT_UNITY.stringValue) {
                             findFirst {
-                                scrapperProduct.unity = Unity.valueOf(ownText)
+                                scrapperProduct.unity = stringToUnityOrElse(ownText) { Unity.UN }
                             }
                         }
                         span(AppCssSelectors.PRODUCT_UNITY_VALUE.stringValue) {

@@ -21,7 +21,7 @@ class ScrapperTest {
 
     @Test
     fun successResult() = runTest {
-        val url = "http://www.fazenda.pr.gov.br/nfce/qrcode?p=41230876189406002099651010000588351003610271|2|1|1|E5049B3D3F65118B024A3D1F11DE83AABF19276A"
+        val url = "http://www.fazenda.pr.gov.br/nfce/qrcode?p=TICKET_ID" // Change `TICKET_ID` to test
         val result = scrapperRepository.getNfce(url).last()
 
         assertTrue(result is Result.Success)
