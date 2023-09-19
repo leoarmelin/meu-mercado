@@ -6,5 +6,4 @@ import com.squareup.moshi.JsonClass
 enum class Unity {
     KG,
     UN,
-    DZ
 }
