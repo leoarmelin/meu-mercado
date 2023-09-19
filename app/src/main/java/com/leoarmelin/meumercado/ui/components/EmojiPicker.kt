@@ -16,6 +16,8 @@ fun EmojiPicker(onEmojiTap: (String) -> Unit) {
             view.setOnEmojiPickedListener { onEmojiTap(it.emoji) }
             return@AndroidView view
         },
-        modifier = Modifier.fillMaxSize().background(White),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(White),
     )
 }

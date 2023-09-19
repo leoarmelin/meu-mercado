@@ -19,4 +19,12 @@ data class Category(
     @ColumnInfo(name = "emoji")
     @Json(name = "emoji")
     val emoji: String
+) {
+    companion object
+}
+
+val Category.Companion.mock get() = Category(
+    id = "id-1",
+    name = "TestCategory",
+    emoji = "\uD83C\uDF63"
 )

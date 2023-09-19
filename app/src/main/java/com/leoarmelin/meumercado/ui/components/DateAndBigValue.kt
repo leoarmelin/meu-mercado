@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 import java.time.LocalDateTime
 
 @Composable
@@ -26,4 +28,18 @@ fun DateAndBigValue(
     }
 
     BigTotalValue(value = totalValue)
+}
+
+@Preview(
+    showBackground = true
+)
+@Composable
+private fun PreviewOne() {
+    MeuMercadoTheme {
+        DateAndBigValue(
+            date = LocalDateTime.now(),
+            totalValue = 20.0,
+            onDateTap = {}
+        )
+    }
 }

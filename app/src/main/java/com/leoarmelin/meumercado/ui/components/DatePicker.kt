@@ -31,9 +31,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.leoarmelin.meumercado.ui.theme.Black
 import com.leoarmelin.meumercado.ui.theme.Blue
+import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 import com.leoarmelin.meumercado.ui.theme.Pink
 import com.leoarmelin.meumercado.ui.theme.White
 import java.time.LocalDateTime
@@ -114,7 +116,12 @@ fun DatePicker(
 fun EnterExitAnimation(isOpen: Boolean, content: @Composable () -> Unit) {
     AnimatedVisibility(
         visible = isOpen,
-        enter = slideInHorizontally(spring(Spring.DampingRatioMediumBouncy, Spring.StiffnessMediumLow)) { -400 },
+        enter = slideInHorizontally(
+            spring(
+                Spring.DampingRatioMediumBouncy,
+                Spring.StiffnessMediumLow
+            )
+        ) { -400 },
         exit = slideOutHorizontally(spring()) { -500 }
     ) {
         content()
@@ -122,7 +129,12 @@ fun EnterExitAnimation(isOpen: Boolean, content: @Composable () -> Unit) {
 }
 
 @Composable
-private fun ItemColumn(modifier: Modifier, items: List<Int>, selectedValue: Int, onSelect: (Int) -> Unit) {
+private fun ItemColumn(
+    modifier: Modifier,
+    items: List<Int>,
+    selectedValue: Int,
+    onSelect: (Int) -> Unit
+) {
     LazyColumn(
         modifier = Modifier.fillMaxHeight()
     ) {
@@ -154,4 +166,20 @@ private fun getMonthName(month: Int): String = when (month) {
     11 -> "Nov"
     12 -> "Dez"
     else -> month.toString()
+}
+
+@Preview(
+    showBackground = true
+)
+@Composable
+private fun PreviewOne() {
+    MeuMercadoTheme {
+        DatePicker(
+            modifier = Modifier,
+            isOpen = true,
+            dateInterval = Pair(LocalDateTime.now(), LocalDateTime.now()),
+            onApply = { _, _ -> },
+            onClose = {}
+        )
+    }
 }

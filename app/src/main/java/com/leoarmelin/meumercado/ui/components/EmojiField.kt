@@ -8,9 +8,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.TagFaces
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.leoarmelin.meumercado.ui.theme.GrayOne
+import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 
 @Composable
 fun EmojiField(
@@ -35,6 +37,28 @@ fun EmojiField(
             imageVector = Icons.Filled.TagFaces,
             contentDescription = "",
             tint = GrayOne
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewOne() {
+    MeuMercadoTheme {
+        EmojiField(
+            value = "",
+            onTap = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewTwo() {
+    MeuMercadoTheme {
+        EmojiField(
+            value = "\uD83C\uDF63",
+            onTap = {}
         )
     }
 }

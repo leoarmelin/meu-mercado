@@ -10,11 +10,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.leoarmelin.meumercado.extensions.toMoney
 import com.leoarmelin.meumercado.ui.theme.Black
+import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 import com.leoarmelin.sharedmodels.Category
+import com.leoarmelin.sharedmodels.mock
 
 @Composable
 fun CategoryRow(category: Category, amount: Double, onTap: (Category) -> Unit) {
@@ -45,6 +48,20 @@ fun CategoryRow(category: Category, amount: Double, onTap: (Category) -> Unit) {
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
             color = Black
+        )
+    }
+}
+
+@Preview(
+    showBackground = true
+)
+@Composable
+private fun PreviewOne() {
+    MeuMercadoTheme {
+        CategoryRow(
+            category = Category.mock,
+            amount = 20.0,
+            onTap = {}
         )
     }
 }

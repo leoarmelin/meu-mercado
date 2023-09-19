@@ -45,4 +45,17 @@ data class Product(
     @ColumnInfo(name = "category_id", index = true)
     @Json(name = "categoryId")
     val categoryId: String? = null,
-)
+) {
+    companion object
+}
+
+val Product.Companion.mock
+    get() = Product(
+        id = "p-1",
+        name = "ProductTest",
+        unity = Unity.UN,
+        amount = 2.0,
+        unityPrice = 6.0,
+        totalPrice = 12.0,
+        issueAt = LocalDateTime.now()
+    )

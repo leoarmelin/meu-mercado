@@ -8,8 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -37,3 +39,16 @@ private fun getMonthString(date: LocalDateTime) = date.format(
 private fun getYearString(date: LocalDateTime) = date.format(
     DateTimeFormatter.ofPattern("yyyy")
 )
+
+@Preview(
+    showBackground = true
+)
+@Composable
+private fun PreviewOne() {
+    MeuMercadoTheme {
+        DateSelector(
+            date = LocalDateTime.now(),
+            onTap = {}
+        )
+    }
+}

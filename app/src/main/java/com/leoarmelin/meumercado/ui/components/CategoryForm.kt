@@ -11,12 +11,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.leoarmelin.meumercado.ui.theme.Blue
 import com.leoarmelin.meumercado.ui.theme.GrayOne
+import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 import com.leoarmelin.meumercado.ui.theme.Strings
 
 @Composable
@@ -56,6 +61,26 @@ fun CategoryForm(
             imageVector = Icons.Filled.CheckCircle,
             contentDescription = Strings.AddCategory.save,
             tint = checkColor
+        )
+    }
+}
+
+@Preview(
+    showBackground = true
+)
+@Composable
+private fun PreviewOne() {
+    val emoji = "\uD83C\uDF63"
+    var name by remember { mutableStateOf("") }
+
+    MeuMercadoTheme {
+        CategoryForm(
+            emoji = emoji,
+            name = name,
+            isButtonEnabled = name.isNotEmpty(),
+            onEmojiTap = {},
+            onNameChange = { name = it },
+            onSave = {},
         )
     }
 }

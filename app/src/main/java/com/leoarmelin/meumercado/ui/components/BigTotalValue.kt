@@ -10,9 +10,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.leoarmelin.meumercado.ui.theme.Black
+import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 
 @Composable
 fun BigTotalValue(value: Double) {
@@ -51,4 +53,14 @@ private fun getDecimalString(value: Double): String {
     val decimalValue = ((value - value.toInt()) * 100).toInt()
 
     return if (decimalValue < 10) ",0${decimalValue}" else ",${decimalValue}"
+}
+
+@Preview(
+    showBackground = true
+)
+@Composable
+private fun PreviewOne() {
+    MeuMercadoTheme {
+        BigTotalValue(22.0)
+    }
 }

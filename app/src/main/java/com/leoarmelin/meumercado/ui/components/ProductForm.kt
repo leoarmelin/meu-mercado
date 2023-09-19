@@ -17,14 +17,19 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.leoarmelin.meumercado.ui.theme.Blue
 import com.leoarmelin.meumercado.ui.theme.GrayOne
+import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 import com.leoarmelin.meumercado.ui.theme.Red
 import com.leoarmelin.meumercado.ui.theme.Strings
 import com.leoarmelin.meumercado.ui.theme.White
@@ -117,5 +122,44 @@ fun ProductForm(
                 filter = { filterFloatValue(it) }
             )
         }
+    }
+}
+
+@Preview(
+    showBackground = true
+)
+@Composable
+private fun PreviewTwo() {
+    val emojiField = ""
+    var name by remember {
+        mutableStateOf("")
+    }
+    var unity by remember {
+        mutableStateOf(Unity.UN)
+    }
+    var amount by remember {
+        mutableStateOf("")
+    }
+    var unityPrice by remember {
+        mutableStateOf("")
+    }
+
+    MeuMercadoTheme {
+        ProductForm(
+            id = "p-1",
+            emoji = emojiField,
+            name = name,
+            unity = unity,
+            amount = amount,
+            unityPrice = unityPrice,
+            isButtonEnabled = name.isNotEmpty() && amount.isNotEmpty() && unityPrice.isNotEmpty(),
+            onEmojiTap = { },
+            onNameChange = { name = it },
+            onUnityChange = { unity = it },
+            onAmountChange = { amount = it },
+            onUnityPriceChange = { unityPrice = it },
+            onSave = { },
+            onDelete = { }
+        )
     }
 }

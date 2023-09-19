@@ -12,9 +12,13 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.leoarmelin.meumercado.R
 import com.leoarmelin.meumercado.extensions.toMoney
@@ -22,7 +26,9 @@ import com.leoarmelin.meumercado.extensions.unityAmount
 import com.leoarmelin.meumercado.ui.theme.Black
 import com.leoarmelin.meumercado.ui.theme.CreamOne
 import com.leoarmelin.meumercado.ui.theme.CreamTwo
+import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 import com.leoarmelin.sharedmodels.Product
+import com.leoarmelin.sharedmodels.mock
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -75,6 +81,20 @@ fun ProductItem(
             text = product.totalPrice.toMoney(),
             style = MaterialTheme.typography.h5,
             color = Black
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewOne() {
+    var isSelected by remember { mutableStateOf(false) }
+    MeuMercadoTheme {
+        ProductItem(
+            product = Product.mock,
+            isSelected = isSelected,
+            onLongPress = { isSelected = !isSelected },
+            onTap = {}
         )
     }
 }

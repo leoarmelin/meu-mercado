@@ -7,12 +7,16 @@ import androidx.compose.material.BottomSheetScaffold
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Text
 import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.leoarmelin.meumercado.ui.theme.CreamOne
+import com.leoarmelin.meumercado.ui.theme.MeuMercadoTheme
 import com.leoarmelin.meumercado.ui.theme.White
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -36,4 +40,22 @@ fun ScreenBottomSheet(
         backgroundColor = White,
         content = content
     )
+}
+
+@Preview(
+    showBackground = true,
+    device = Devices.NEXUS_5
+)
+@Composable
+private fun PreviewOne() {
+    MeuMercadoTheme {
+        ScreenBottomSheet(
+            content = {
+                Text(text = "Content")
+            },
+            sheetContent = {
+                Text(text = "Sheet Content")
+            }
+        )
+    }
 }
